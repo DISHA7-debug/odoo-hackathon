@@ -1,4 +1,6 @@
 const express = require('express');
+const helmet = require('helmet');
+const cors = require('cors');
 const env = require('./config/env');
 const errorHandler = require('./middleware/errorHandler');
 
@@ -12,6 +14,8 @@ const reportsRoutes = require('./routes/reports');
 
 const app = express();
 
+app.use(helmet());
+app.use(cors({ origin: env.frontendUrl, credentials: true }));
 app.use(express.json());
 
 app.get('/health', (req, res) => {

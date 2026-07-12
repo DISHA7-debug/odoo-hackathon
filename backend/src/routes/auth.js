@@ -1,4 +1,5 @@
 const express = require('express');
+const rateLimit = require('express-rate-limit');
 const db = require('../config/db');
 const AppError = require('../utils/AppError');
 const { hashPassword, comparePassword } = require('../utils/password');
@@ -10,7 +11,13 @@ const { signupSchema, loginSchema } = require('../utils/validators');
 
 const router = express.Router();
 
-router.post('/signup', validateBody(signupSchema), async (req, res, next) => {
+const authLimiter = rateLimit({
+  windowMs: 60 * 1000,
+  max: 10,
+  message: { error: true, message: 'Too many attempts, try again shortly' },
+});
+
+router.post('/signup', authLimiter, validateBody(signupSchema), async (req, res, next) => {
   try {
     const { name, email, password } = req.body;
 
@@ -30,7 +37,7 @@ router.post('/signup', validateBody(signupSchema), async (req, res, next) => {
   }
 });
 
-router.post('/login', validateBody(loginSchema), async (req, res, next) => {
+router.post('/login', authLimiter, validateBody(loginSchema), async (req, res, next) => {
   try {
     const { email, password } = req.body;
 
