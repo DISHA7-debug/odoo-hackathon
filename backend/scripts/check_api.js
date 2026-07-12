@@ -41,7 +41,7 @@ async function run() {
     // We need to fetch an audit cycle via direct DB because there might not be a GET /audit-cycles endpoint
     // Actually wait, let's look if GET /audit-cycles exists. If not, I'll just use Knex to get cycle ID.
     // Let me just require db directly for IDs that aren't easily listed via API, since this is a quick script.
-    const db = require('./src/config/db');
+    const db = require('../src/config/db');
     const cycle = await db('audit_cycles').first();
     const cycleId = cycle.id;
     

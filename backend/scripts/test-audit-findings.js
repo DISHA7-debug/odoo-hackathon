@@ -1,10 +1,10 @@
 require('dotenv').config();
 
-const db = require('./src/config/db');
-const AppError = require('./src/utils/AppError');
+const db = require('../src/config/db');
+const AppError = require('../src/utils/AppError');
 const {
   addFinding
-} = require('./src/services/auditService');
+} = require('../src/services/auditService');
 
 async function assertThrows(fn, expectedStatus, label) {
   try {

@@ -1,14 +1,14 @@
 require('dotenv').config();
 
-const db = require('./src/config/db');
-const AppError = require('./src/utils/AppError');
+const db = require('../src/config/db');
+const AppError = require('../src/utils/AppError');
 const {
   findOverlappingBooking,
   createBooking,
   formatTimeRange,
-} = require('./src/services/bookingService');
+} = require('../src/services/bookingService');
 
-const RESOURCE_ASSET_ID = 13; // Boardroom Alpha (bookable meeting room from seed)
+let RESOURCE_ASSET_ID; // Dynamically resolved Boardroom Alpha
 
 async function assertThrows(fn, expectedStatus, label) {
   try {
@@ -48,6 +48,13 @@ async function assertRawInsertRejected(label, userId) {
 
 async function runTests() {
   console.log('Running booking overlap tests...');
+
+  const boardroom = await db('assets').where({ asset_tag: 'AF-0013' }).first();
+  if (!boardroom) {
+    console.error('FAIL: Boardroom Alpha (AF-0013) not found');
+    process.exit(1);
+  }
+  RESOURCE_ASSET_ID = boardroom.id;
 
   const constraint = await db.raw(`
     SELECT 1
