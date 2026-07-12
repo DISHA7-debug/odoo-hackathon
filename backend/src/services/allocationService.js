@@ -107,7 +107,7 @@ async function createTransferRequest(assetId, toUserId, fromUserId) {
 
   const active = await getActiveAllocation(assetId);
   if (!active) {
-    throw new AppError('Asset has no active allocation to transfer', 400);
+    throw new AppError('Asset is not currently allocated, nothing to transfer', 400);
   }
 
   if (active.employee_id !== fromUserId) {
@@ -147,7 +147,7 @@ async function resolveTransferRequest(requestId, decision, approvedByUserId) {
     throw new AppError('Transfer request not found', 404);
   }
   if (request.status !== 'Requested') {
-    throw new AppError('Transfer request has already been resolved', 400);
+    throw new AppError('Transfer request already resolved', 409);
   }
 
   await assertUserExists(request.to_user_id, 'to_user_id');
