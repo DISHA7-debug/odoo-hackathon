@@ -1,0 +1,97 @@
+<!-- ======================================================
+     AssetFlow — Global Loader
+     File: frontend/components/loader.html
+     Loaded dynamically through js/loader.js
+     ====================================================== -->
+
+<div
+  class="full-page-loader"
+  id="globalPageLoader"
+  role="status"
+  aria-live="polite"
+  aria-hidden="true"
+>
+  <div class="global-loader-card">
+    <!-- Brand icon -->
+
+    <div
+      class="global-loader-logo"
+      aria-hidden="true"
+    >
+      <svg
+        width="34"
+        height="34"
+        viewBox="0 0 32 32"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <rect
+          x="4"
+          y="4"
+          width="10"
+          height="10"
+          rx="3"
+          fill="currentColor"
+        ></rect>
+
+        <rect
+          x="18"
+          y="4"
+          width="10"
+          height="10"
+          rx="3"
+          fill="currentColor"
+          opacity="0.75"
+        ></rect>
+
+        <rect
+          x="4"
+          y="18"
+          width="10"
+          height="10"
+          rx="3"
+          fill="currentColor"
+          opacity="0.75"
+        ></rect>
+
+        <path
+          d="M18 23C18 20.2386 20.2386 18 23 18C25.7614 18 28 20.2386 28 23C28 25.7614 25.7614 28 23 28H18V23Z"
+          fill="currentColor"
+        ></path>
+      </svg>
+    </div>
+
+    <!-- Spinner -->
+
+    <div
+      class="loader-spinner"
+      aria-hidden="true"
+    ></div>
+
+    <!-- Loader content -->
+
+    <div class="global-loader-content">
+      <h2 class="global-loader-title">
+        AssetFlow
+      </h2>
+
+      <p
+        class="global-loader-message"
+        data-loader-message
+      >
+        Loading your workspace...
+      </p>
+    </div>
+
+    <!-- Animated dots -->
+
+    <div
+      class="loader-dots"
+      aria-hidden="true"
+    >
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+  </div>
+</div>
