@@ -8,6 +8,7 @@ const categoryRoutes = require('./routes/assetCategories');
 const employeeRoutes = require('./routes/employees');
 const { assetsRouter, transferRouter } = require('./routes/assets');
 const dashboardRoutes = require('./routes/dashboard');
+const reportsRoutes = require('./routes/reports');
 
 const app = express();
 
@@ -24,6 +25,7 @@ app.use('/api/v1/employees', employeeRoutes);
 app.use('/api/v1/assets', assetsRouter);
 app.use('/api/v1/transfer-requests', transferRouter);
 app.use('/api/v1/dashboard', dashboardRoutes);
+app.use('/api/v1/reports', reportsRoutes);
 
 app.use((req, res) => {
   res.status(404).json({ error: true, message: 'Route not found' });
