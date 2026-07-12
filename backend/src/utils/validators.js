@@ -12,7 +12,21 @@ const ASSET_STATUSES = [
 ];
 const TRANSFER_DECISIONS = ['Approved', 'Rejected'];
 
-const dateString = z.string().regex(/^\d{4}-\d{2}-\d{2}$/, 'Invalid date format, use YYYY-MM-DD');
+function isValidCalendarDate(val) {
+  const [year, month, day] = val.split('-').map(Number);
+  const date = new Date(year, month - 1, day);
+  return (
+    date.getFullYear() === year
+    && date.getMonth() === month - 1
+    && date.getDate() === day
+  );
+}
+
+const dateString = z
+  .string()
+  .min(1, 'Date is required')
+  .regex(/^\d{4}-\d{2}-\d{2}$/, 'Invalid date format, use YYYY-MM-DD')
+  .refine(isValidCalendarDate, 'Invalid date value');
 
 const signupSchema = z.object({
   name: z.string().min(1, 'Name is required').max(120),
@@ -58,7 +72,7 @@ const assetCreateSchema = z.object({
   category_id: z.number().int().positive('category_id is required'),
   serial_number: z.string().max(80).optional(),
   acquisition_date: dateString.optional(),
-  acquisition_cost: z.number().nonnegative().optional(),
+  acquisition_cost: z.number({ invalid_type_error: 'acquisition_cost must be a number' }).nonnegative('acquisition_cost cannot be negative').optional(),
   condition: z.enum(ASSET_CONDITIONS).optional(),
   location: z.string().max(160).optional(),
   photo_url: z.string().url().optional().or(z.literal('')),

@@ -1,7 +1,12 @@
 const express = require('express');
 const db = require('../config/db');
 const AppError = require('../utils/AppError');
-const { findDepartmentById, findUserById } = require('../utils/dbHelpers');
+const {
+  findDepartmentById,
+  assertDepartmentExists,
+  assertUserExists,
+  assertNoDepartmentCycle,
+} = require('../utils/dbHelpers');
 const validateBody = require('../middleware/validateBody');
 const requireAuth = require('../middleware/requireAuth');
 const requireRole = require('../middleware/requireRole');
@@ -31,8 +36,10 @@ router.post(
     try {
       const { name, head_user_id, parent_department_id, status } = req.body;
 
-      if (head_user_id) await findUserById(head_user_id);
-      if (parent_department_id) await findDepartmentById(parent_department_id);
+      if (head_user_id != null) await assertUserExists(head_user_id, 'head_user_id');
+      if (parent_department_id != null) {
+        await assertDepartmentExists(parent_department_id, 'parent_department_id');
+      }
 
       const [department] = await db('departments')
         .insert({
@@ -60,12 +67,10 @@ router.put(
       await findDepartmentById(id);
 
       const { head_user_id, parent_department_id } = req.body;
-      if (head_user_id) await findUserById(head_user_id);
-      if (parent_department_id) {
-        if (parent_department_id === id) {
-          throw new AppError('Department cannot be its own parent', 400, 'parent_department_id');
-        }
-        await findDepartmentById(parent_department_id);
+      if (head_user_id != null) await assertUserExists(head_user_id, 'head_user_id');
+      if (parent_department_id != null) {
+        await assertNoDepartmentCycle(id, parent_department_id);
+        await assertDepartmentExists(parent_department_id, 'parent_department_id');
       }
 
       const [department] = await db('departments')

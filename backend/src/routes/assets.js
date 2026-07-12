@@ -1,7 +1,8 @@
 const express = require('express');
 const db = require('../config/db');
 const AppError = require('../utils/AppError');
-const { findCategoryById } = require('../utils/dbHelpers');
+const { assertCategoryExists } = require('../utils/dbHelpers');
+const { parsePagination } = require('../utils/pagination');
 const validateBody = require('../middleware/validateBody');
 const requireAuth = require('../middleware/requireAuth');
 const requireRole = require('../middleware/requireRole');
@@ -22,40 +23,55 @@ router.use(requireAuth);
 router.get('/', async (req, res, next) => {
   try {
     const { search, category_id, status, department_id, location } = req.query;
+    const { page, limit, offset } = parsePagination(req.query);
 
-    let query = db('assets as a')
-      .leftJoin('asset_categories as c', 'a.category_id', 'c.id')
-      .select('a.*', 'c.name as category_name');
-
-    if (search) {
-      query = query.where(function whereSearch() {
-        this.whereILike('a.name', `%${search}%`)
-          .orWhereILike('a.asset_tag', `%${search}%`)
-          .orWhereILike('a.serial_number', `%${search}%`);
-      });
-    }
-    if (category_id) {
-      query = query.where('a.category_id', parseInt(category_id, 10));
-    }
-    if (status) {
-      if (!ASSET_STATUSES.includes(status)) {
-        throw new AppError('Invalid status value', 400, 'status');
+    function applyFilters(query) {
+      if (search) {
+        query.where(function whereSearch() {
+          this.whereILike('a.name', `%${search}%`)
+            .orWhereILike('a.asset_tag', `%${search}%`)
+            .orWhereILike('a.serial_number', `%${search}%`);
+        });
       }
-      query = query.where('a.status', status);
-    }
-    if (location) {
-      query = query.whereILike('a.location', `%${location}%`);
-    }
-    if (department_id) {
-      query = query
-        .join('asset_allocations as aa', function joinActive() {
-          this.on('aa.asset_id', '=', 'a.id').andOn('aa.status', '=', db.raw("'Active'"));
-        })
-        .where('aa.department_id', parseInt(department_id, 10));
+      if (category_id) {
+        query.where('a.category_id', parseInt(category_id, 10));
+      }
+      if (status) {
+        if (!ASSET_STATUSES.includes(status)) {
+          throw new AppError('Invalid status value', 400, 'status');
+        }
+        query.where('a.status', status);
+      }
+      if (location) {
+        query.whereILike('a.location', `%${location}%`);
+      }
+      if (department_id) {
+        query
+          .join('asset_allocations as aa', function joinActive() {
+            this.on('aa.asset_id', '=', 'a.id').andOn('aa.status', '=', db.raw("'Active'"));
+          })
+          .where('aa.department_id', parseInt(department_id, 10));
+      }
+      return query;
     }
 
-    const assets = await query.orderBy('a.id');
-    res.json(assets);
+    const countQuery = applyFilters(db('assets as a'));
+    const [{ count }] = await countQuery.countDistinct('a.id as count');
+
+    let dataQuery = applyFilters(
+      db('assets as a')
+        .leftJoin('asset_categories as c', 'a.category_id', 'c.id')
+        .select('a.*', 'c.name as category_name')
+    );
+
+    const assets = await dataQuery.orderBy('a.id').limit(limit).offset(offset);
+
+    res.json({
+      data: assets,
+      page,
+      limit,
+      total: parseInt(count, 10),
+    });
   } catch (err) {
     next(err);
   }
@@ -68,7 +84,7 @@ router.post(
   async (req, res, next) => {
     try {
       const { category_id, photo_url, ...rest } = req.body;
-      await findCategoryById(category_id);
+      await assertCategoryExists(category_id);
 
       const asset = await db.transaction(async (trx) => {
         const asset_tag = await generateAssetTag(trx);

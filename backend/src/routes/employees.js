@@ -2,6 +2,7 @@ const express = require('express');
 const db = require('../config/db');
 const AppError = require('../utils/AppError');
 const { findUserById, sanitizeUser } = require('../utils/dbHelpers');
+const { parsePagination } = require('../utils/pagination');
 const validateBody = require('../middleware/validateBody');
 const requireAuth = require('../middleware/requireAuth');
 const requireRole = require('../middleware/requireRole');
@@ -13,19 +14,31 @@ router.use(requireAuth);
 
 router.get('/', async (req, res, next) => {
   try {
-    let query = db('users')
-      .select('id', 'name', 'email', 'role', 'department_id', 'status', 'created_at')
-      .orderBy('name');
+    const { page, limit, offset } = parsePagination(req.query);
+
+    let query = db('users');
 
     if (req.user.role !== 'Admin') {
       if (!req.user.department_id) {
-        return res.json([]);
+        return res.json({ data: [], page, limit, total: 0 });
       }
       query = query.where({ department_id: req.user.department_id });
     }
 
-    const employees = await query;
-    res.json(employees);
+    const [{ count }] = await query.clone().count('* as count');
+
+    const employees = await query
+      .select('id', 'name', 'email', 'role', 'department_id', 'status', 'created_at')
+      .orderBy('name')
+      .limit(limit)
+      .offset(offset);
+
+    res.json({
+      data: employees,
+      page,
+      limit,
+      total: parseInt(count, 10),
+    });
   } catch (err) {
     next(err);
   }

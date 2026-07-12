@@ -2,7 +2,7 @@ const db = require('../config/db');
 const AppError = require('../utils/AppError');
 const { transitionAssetStatus } = require('./assetStatusService');
 const { logActivity } = require('./activityLogService');
-const { findAssetById, findUserById, findDepartmentById } = require('../utils/dbHelpers');
+const { findAssetById, assertUserExists, assertDepartmentExists } = require('../utils/dbHelpers');
 
 async function generateAssetTag(trx) {
   const result = await trx('assets')
@@ -26,8 +26,8 @@ async function getActiveAllocation(assetId, trx = db) {
 
 async function allocateAsset(assetId, { employee_id, department_id, expected_return_date }, triggeredByUserId) {
   await findAssetById(assetId);
-  await findUserById(employee_id);
-  if (department_id) await findDepartmentById(department_id);
+  await assertUserExists(employee_id, 'employee_id');
+  if (department_id) await assertDepartmentExists(department_id, 'department_id');
 
   const existing = await getActiveAllocation(assetId);
   if (existing) {
@@ -103,7 +103,7 @@ async function returnAsset(assetId, { condition_checkin_notes }, triggeredByUser
 
 async function createTransferRequest(assetId, toUserId, fromUserId) {
   await findAssetById(assetId);
-  await findUserById(toUserId);
+  await assertUserExists(toUserId, 'to_user_id');
 
   const active = await getActiveAllocation(assetId);
   if (!active) {
@@ -150,7 +150,7 @@ async function resolveTransferRequest(requestId, decision, approvedByUserId) {
     throw new AppError('Transfer request has already been resolved', 400);
   }
 
-  await findUserById(request.to_user_id);
+  await assertUserExists(request.to_user_id, 'to_user_id');
 
   if (decision === 'Rejected') {
     const [updated] = await db('transfer_requests')
