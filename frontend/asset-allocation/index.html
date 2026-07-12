@@ -1,0 +1,2390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  />
+
+  <meta
+    name="description"
+    content="Allocate, transfer and return organizational assets in AssetFlow."
+  />
+
+  <meta
+    name="theme-color"
+    content="#ff4f78"
+  />
+
+  <title>Asset Allocation | AssetFlow</title>
+
+  <!-- ====================================================
+       GLOBAL STYLES
+       ==================================================== -->
+
+  <link
+    rel="stylesheet"
+    href="../css/variables.css"
+  />
+
+  <link
+    rel="stylesheet"
+    href="../css/global.css"
+  />
+
+  <link
+    rel="stylesheet"
+    href="../css/layout.css"
+  />
+
+  <link
+    rel="stylesheet"
+    href="../css/components.css"
+  />
+
+  <link
+    rel="stylesheet"
+    href="../css/animations.css"
+  />
+
+  <link
+    rel="stylesheet"
+    href="../css/responsive.css"
+  />
+
+  <!-- Page-specific styles -->
+
+  <link
+    rel="stylesheet"
+    href="asset-allocation.css"
+  />
+</head>
+
+<body
+  data-auth="required"
+  class="page-transition"
+>
+  <a
+    class="skip-link"
+    href="#assetAllocationMain"
+  >
+    Skip to asset allocation
+  </a>
+
+  <!-- ====================================================
+       APPLICATION SHELL
+       ==================================================== -->
+
+  <div
+    class="app-shell"
+    id="appShell"
+  >
+    <!-- Shared sidebar -->
+
+    <div
+      id="sidebar-container"
+      data-component="sidebar"
+      data-required="true"
+    ></div>
+
+    <!-- Main application content -->
+
+    <div class="app-content">
+      <!-- Shared navbar -->
+
+      <div
+        id="navbar-container"
+        data-component="navbar"
+        data-required="true"
+      ></div>
+
+      <!-- ==================================================
+           PAGE CONTENT
+           ================================================== -->
+
+      <main
+        class="main-content"
+        id="assetAllocationMain"
+      >
+        <div class="page-container">
+          <!-- Page header -->
+
+          <header class="page-header">
+            <div class="page-header-content">
+              <div class="breadcrumbs">
+                <span class="breadcrumb-item">
+                  <a
+                    class="breadcrumb-link"
+                    href="../dashboard/index.html"
+                  >
+                    AssetFlow
+                  </a>
+
+                  <svg
+                    class="breadcrumb-separator"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    aria-hidden="true"
+                  >
+                    <path d="m9 18 6-6-6-6"></path>
+                  </svg>
+                </span>
+
+                <span
+                  class="breadcrumb-current"
+                  aria-current="page"
+                >
+                  Asset Allocation
+                </span>
+              </div>
+
+              <h1 class="page-title">
+                Asset Allocation
+              </h1>
+
+              <p class="page-description">
+                Assign available assets, process transfers and
+                record returns without creating duplicate active
+                allocations.
+              </p>
+            </div>
+
+            <div class="page-actions">
+              <button
+                type="button"
+                class="btn btn-outline"
+                id="refreshAllocationsButton"
+                data-refresh-allocations
+              >
+                <svg
+                  width="18"
+                  height="18"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  aria-hidden="true"
+                >
+                  <path d="M20 11a8.1 8.1 0 0 0-15.5-2M4 4v5h5"></path>
+                  <path d="M4 13a8.1 8.1 0 0 0 15.5 2M20 20v-5h-5"></path>
+                </svg>
+
+                Refresh
+              </button>
+
+              <button
+                type="button"
+                class="btn btn-primary"
+                data-modal-open="#allocateAssetModal"
+                data-start-allocation
+                data-roles="Admin,AssetManager"
+              >
+                <svg
+                  width="18"
+                  height="18"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  aria-hidden="true"
+                >
+                  <circle
+                    cx="9"
+                    cy="7"
+                    r="4"
+                  ></circle>
+
+                  <path d="M3 21v-2a6 6 0 0 1 6-6"></path>
+                  <path d="M17 8v6"></path>
+                  <path d="M14 11h6"></path>
+                </svg>
+
+                Allocate Asset
+              </button>
+            </div>
+          </header>
+
+          <!-- ==================================================
+               PAGE ERROR
+               ================================================== -->
+
+          <div
+            class="alert alert-danger allocation-page-alert"
+            id="allocationPageErrorAlert"
+            role="alert"
+            hidden
+          >
+            <div class="alert-icon">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                aria-hidden="true"
+              >
+                <circle
+                  cx="12"
+                  cy="12"
+                  r="10"
+                ></circle>
+
+                <path d="M12 8v4"></path>
+                <path d="M12 16h.01"></path>
+              </svg>
+            </div>
+
+            <div class="alert-content">
+              <h2 class="alert-title">
+                Unable to load allocations
+              </h2>
+
+              <p
+                class="alert-message"
+                id="allocationPageErrorMessage"
+              >
+                Please refresh the page and try again.
+              </p>
+            </div>
+
+            <div class="alert-actions">
+              <button
+                type="button"
+                class="btn btn-danger btn-sm"
+                data-retry-allocations
+              >
+                Retry
+              </button>
+            </div>
+          </div>
+
+          <!-- ==================================================
+               SUMMARY
+               ================================================== -->
+
+          <section
+            class="page-section"
+            aria-labelledby="allocationSummaryTitle"
+          >
+            <div class="section-header">
+              <div class="section-title-group">
+                <h2
+                  class="section-title"
+                  id="allocationSummaryTitle"
+                >
+                  Allocation Summary
+                </h2>
+
+                <p class="section-description">
+                  Current asset assignment and return status.
+                </p>
+              </div>
+
+              <span
+                class="allocation-last-updated"
+                data-allocation-last-updated
+              >
+                Updating...
+              </span>
+            </div>
+
+            <div
+              class="content-grid allocation-summary-grid stagger-container"
+            >
+              <!-- Active -->
+
+              <article class="kpi-card info">
+                <div class="kpi-card-header">
+                  <p class="kpi-card-label">
+                    Active Allocations
+                  </p>
+
+                  <div
+                    class="kpi-card-icon"
+                    aria-hidden="true"
+                  >
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="1.9"
+                    >
+                      <circle
+                        cx="9"
+                        cy="7"
+                        r="4"
+                      ></circle>
+
+                      <path d="M3 21v-2a6 6 0 0 1 6-6"></path>
+                      <path d="M16 11h6"></path>
+                      <path d="m19 8 3 3-3 3"></path>
+                    </svg>
+                  </div>
+                </div>
+
+                <div
+                  class="kpi-card-value"
+                  data-allocation-summary="active"
+                >
+                  <span class="skeleton skeleton-title"></span>
+                </div>
+
+                <div class="kpi-card-footer">
+                  <span>
+                    Assets currently assigned
+                  </span>
+                </div>
+              </article>
+
+              <!-- Available -->
+
+              <article class="kpi-card success">
+                <div class="kpi-card-header">
+                  <p class="kpi-card-label">
+                    Assets Available
+                  </p>
+
+                  <div
+                    class="kpi-card-icon"
+                    aria-hidden="true"
+                  >
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="1.9"
+                    >
+                      <path d="M21 16V8"></path>
+                      <path d="m3.5 7 8.5 5 8.5-5"></path>
+                      <path d="M12 22V12"></path>
+                      <path d="M3 7l9-5 9 5v10l-9 5-9-5V7Z"></path>
+                    </svg>
+                  </div>
+                </div>
+
+                <div
+                  class="kpi-card-value"
+                  data-allocation-summary="available"
+                >
+                  <span class="skeleton skeleton-title"></span>
+                </div>
+
+                <div class="kpi-card-footer">
+                  <span>
+                    Ready to allocate
+                  </span>
+                </div>
+              </article>
+
+              <!-- Due soon -->
+
+              <article class="kpi-card warning">
+                <div class="kpi-card-header">
+                  <p class="kpi-card-label">
+                    Due Soon
+                  </p>
+
+                  <div
+                    class="kpi-card-icon"
+                    aria-hidden="true"
+                  >
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="1.9"
+                    >
+                      <circle
+                        cx="12"
+                        cy="12"
+                        r="9"
+                      ></circle>
+
+                      <path d="M12 7v5l3 2"></path>
+                    </svg>
+                  </div>
+                </div>
+
+                <div
+                  class="kpi-card-value"
+                  data-allocation-summary="due_soon"
+                >
+                  <span class="skeleton skeleton-title"></span>
+                </div>
+
+                <div class="kpi-card-footer">
+                  <span>
+                    Due within seven days
+                  </span>
+                </div>
+              </article>
+
+              <!-- Overdue -->
+
+              <article class="kpi-card danger">
+                <div class="kpi-card-header">
+                  <p class="kpi-card-label">
+                    Overdue Returns
+                  </p>
+
+                  <div
+                    class="kpi-card-icon"
+                    aria-hidden="true"
+                  >
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="1.9"
+                    >
+                      <circle
+                        cx="12"
+                        cy="12"
+                        r="9"
+                      ></circle>
+
+                      <path d="M12 8v4"></path>
+                      <path d="M12 16h.01"></path>
+                    </svg>
+                  </div>
+                </div>
+
+                <div
+                  class="kpi-card-value"
+                  data-allocation-summary="overdue"
+                >
+                  <span class="skeleton skeleton-title"></span>
+                </div>
+
+                <div class="kpi-card-footer">
+                  <span>
+                    Require follow-up
+                  </span>
+                </div>
+              </article>
+
+              <!-- Transfers -->
+
+              <article class="kpi-card">
+                <div class="kpi-card-header">
+                  <p class="kpi-card-label">
+                    Pending Transfers
+                  </p>
+
+                  <div
+                    class="kpi-card-icon"
+                    aria-hidden="true"
+                  >
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="1.9"
+                    >
+                      <path d="M17 3h4v4"></path>
+                      <path d="m21 3-7 7"></path>
+                      <path d="M7 21H3v-4"></path>
+                      <path d="m3 21 7-7"></path>
+                    </svg>
+                  </div>
+                </div>
+
+                <div
+                  class="kpi-card-value"
+                  data-allocation-summary="pending_transfers"
+                >
+                  <span class="skeleton skeleton-title"></span>
+                </div>
+
+                <div class="kpi-card-footer">
+                  <span>
+                    Awaiting approval
+                  </span>
+                </div>
+              </article>
+            </div>
+          </section>
+
+          <!-- ==================================================
+               ALLOCATION MANAGEMENT
+               ================================================== -->
+
+          <section
+            class="page-section"
+            aria-labelledby="allocationManagementTitle"
+          >
+            <article class="card allocation-management-card">
+              <header class="card-header allocation-card-header">
+                <div class="card-header-content">
+                  <h2
+                    class="card-title"
+                    id="allocationManagementTitle"
+                  >
+                    Allocation Management
+                  </h2>
+
+                  <p class="card-subtitle">
+                    Monitor active assignments and process transfer
+                    requests.
+                  </p>
+                </div>
+              </header>
+
+              <!-- Tabs -->
+
+              <div
+                class="allocation-tabs"
+                role="tablist"
+                aria-label="Allocation management sections"
+              >
+                <button
+                  type="button"
+                  class="allocation-tab active"
+                  id="activeAllocationsTab"
+                  data-allocation-tab="active"
+                  role="tab"
+                  aria-selected="true"
+                  aria-controls="activeAllocationsPanel"
+                >
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.9"
+                    aria-hidden="true"
+                  >
+                    <circle
+                      cx="9"
+                      cy="7"
+                      r="4"
+                    ></circle>
+
+                    <path d="M3 21v-2a6 6 0 0 1 6-6"></path>
+                    <path d="M16 11h6"></path>
+                  </svg>
+
+                  Active Allocations
+
+                  <span
+                    class="allocation-tab-count"
+                    data-allocation-tab-count="active"
+                  >
+                    0
+                  </span>
+                </button>
+
+                <button
+                  type="button"
+                  class="allocation-tab"
+                  id="transferRequestsTab"
+                  data-allocation-tab="transfers"
+                  role="tab"
+                  aria-selected="false"
+                  aria-controls="transferRequestsPanel"
+                  tabindex="-1"
+                >
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.9"
+                    aria-hidden="true"
+                  >
+                    <path d="M17 3h4v4"></path>
+                    <path d="m21 3-7 7"></path>
+                    <path d="M7 21H3v-4"></path>
+                    <path d="m3 21 7-7"></path>
+                  </svg>
+
+                  Transfer Requests
+
+                  <span
+                    class="allocation-tab-count"
+                    data-allocation-tab-count="transfers"
+                  >
+                    0
+                  </span>
+                </button>
+
+                <button
+                  type="button"
+                  class="allocation-tab"
+                  id="allocationHistoryTab"
+                  data-allocation-tab="history"
+                  role="tab"
+                  aria-selected="false"
+                  aria-controls="allocationHistoryPanel"
+                  tabindex="-1"
+                >
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.9"
+                    aria-hidden="true"
+                  >
+                    <path d="M3 12a9 9 0 1 0 3-6.7"></path>
+                    <path d="M3 4v5h5"></path>
+                    <path d="M12 7v5l3 2"></path>
+                  </svg>
+
+                  Return History
+                </button>
+              </div>
+
+              <!-- ==============================================
+                   ACTIVE ALLOCATIONS PANEL
+                   ============================================== -->
+
+              <section
+                class="allocation-panel active"
+                id="activeAllocationsPanel"
+                data-allocation-panel="active"
+                role="tabpanel"
+                aria-labelledby="activeAllocationsTab"
+              >
+                <!-- Filters -->
+
+                <div class="allocation-filter-panel">
+                  <div class="allocation-search-field">
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      aria-hidden="true"
+                    >
+                      <circle
+                        cx="11"
+                        cy="11"
+                        r="8"
+                      ></circle>
+
+                      <path d="m21 21-4.35-4.35"></path>
+                    </svg>
+
+                    <input
+                      type="search"
+                      id="allocationSearchInput"
+                      placeholder="Search asset, holder, tag or department..."
+                      autocomplete="off"
+                      aria-label="Search allocations"
+                      data-allocation-search
+                    />
+                  </div>
+
+                  <select
+                    id="allocationStatusFilter"
+                    data-allocation-status-filter
+                    aria-label="Filter allocation status"
+                  >
+                    <option value="">
+                      All return statuses
+                    </option>
+
+                    <option value="Active">
+                      Active
+                    </option>
+
+                    <option value="DueSoon">
+                      Due Soon
+                    </option>
+
+                    <option value="Overdue">
+                      Overdue
+                    </option>
+                  </select>
+
+                  <select
+                    id="allocationDepartmentFilter"
+                    data-allocation-department-filter
+                    aria-label="Filter by department"
+                  >
+                    <option value="">
+                      All departments
+                    </option>
+                  </select>
+
+                  <select
+                    id="allocationHolderFilter"
+                    data-allocation-holder-filter
+                    aria-label="Filter by asset holder"
+                  >
+                    <option value="">
+                      All holders
+                    </option>
+                  </select>
+
+                  <button
+                    type="button"
+                    class="btn btn-outline"
+                    data-reset-allocation-filters
+                  >
+                    Reset
+                  </button>
+                </div>
+
+                <!-- Table -->
+
+                <div
+                  class="table-container allocation-table-container"
+                >
+                  <table class="data-table allocation-table">
+                    <thead>
+                      <tr>
+                        <th scope="col">
+                          Asset
+                        </th>
+
+                        <th scope="col">
+                          Assigned To
+                        </th>
+
+                        <th scope="col">
+                          Department
+                        </th>
+
+                        <th scope="col">
+                          Allocated On
+                        </th>
+
+                        <th scope="col">
+                          Expected Return
+                        </th>
+
+                        <th scope="col">
+                          Return Status
+                        </th>
+
+                        <th
+                          scope="col"
+                          class="text-right"
+                        >
+                          Actions
+                        </th>
+                      </tr>
+                    </thead>
+
+                    <tbody id="activeAllocationsTableBody">
+                      <tr>
+                        <td colspan="7">
+                          <div class="skeleton skeleton-text"></div>
+                        </td>
+                      </tr>
+
+                      <tr>
+                        <td colspan="7">
+                          <div class="skeleton skeleton-text"></div>
+                        </td>
+                      </tr>
+
+                      <tr>
+                        <td colspan="7">
+                          <div class="skeleton skeleton-text"></div>
+                        </td>
+                      </tr>
+
+                      <tr>
+                        <td colspan="7">
+                          <div class="skeleton skeleton-text"></div>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+
+                <!-- Empty state -->
+
+                <div
+                  id="activeAllocationsEmptyState"
+                  hidden
+                >
+                  <div class="state-container">
+                    <div class="state-icon">
+                      <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="1.9"
+                        aria-hidden="true"
+                      >
+                        <circle
+                          cx="9"
+                          cy="7"
+                          r="4"
+                        ></circle>
+
+                        <path d="M3 21v-2a6 6 0 0 1 6-6"></path>
+                        <path d="M16 11h6"></path>
+                      </svg>
+                    </div>
+
+                    <h3 class="state-title">
+                      No active allocations
+                    </h3>
+
+                    <p class="state-description">
+                      No asset assignments match the selected
+                      search and filter criteria.
+                    </p>
+
+                    <div class="state-action">
+                      <button
+                        type="button"
+                        class="btn btn-outline"
+                        data-reset-allocation-filters
+                      >
+                        Clear Filters
+                      </button>
+
+                      <button
+                        type="button"
+                        class="btn btn-primary"
+                        data-modal-open="#allocateAssetModal"
+                        data-start-allocation
+                        data-roles="Admin,AssetManager"
+                      >
+                        Allocate Asset
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Pagination -->
+
+                <footer class="allocation-pagination">
+                  <p
+                    class="pagination-summary"
+                    data-allocation-pagination-summary
+                  >
+                    Showing 0 allocations
+                  </p>
+
+                  <div
+                    class="pagination"
+                    data-allocation-pagination
+                  ></div>
+                </footer>
+              </section>
+
+              <!-- ==============================================
+                   TRANSFER REQUESTS PANEL
+                   ============================================== -->
+
+              <section
+                class="allocation-panel"
+                id="transferRequestsPanel"
+                data-allocation-panel="transfers"
+                role="tabpanel"
+                aria-labelledby="transferRequestsTab"
+                hidden
+              >
+                <div class="allocation-panel-toolbar">
+                  <div>
+                    <h3 class="allocation-panel-title">
+                      Pending Transfer Requests
+                    </h3>
+
+                    <p class="allocation-panel-description">
+                      Review asset handover requests before changing
+                      the active holder.
+                    </p>
+                  </div>
+
+                  <select
+                    id="transferStatusFilter"
+                    data-transfer-status-filter
+                    aria-label="Filter transfer requests"
+                  >
+                    <option value="">
+                      All requests
+                    </option>
+
+                    <option value="Pending">
+                      Pending
+                    </option>
+
+                    <option value="Approved">
+                      Approved
+                    </option>
+
+                    <option value="Rejected">
+                      Rejected
+                    </option>
+                  </select>
+                </div>
+
+                <div
+                  class="table-container transfer-table-container"
+                >
+                  <table class="data-table transfer-table">
+                    <thead>
+                      <tr>
+                        <th scope="col">
+                          Asset
+                        </th>
+
+                        <th scope="col">
+                          Current Holder
+                        </th>
+
+                        <th scope="col">
+                          Requested Holder
+                        </th>
+
+                        <th scope="col">
+                          Requested On
+                        </th>
+
+                        <th scope="col">
+                          Reason
+                        </th>
+
+                        <th scope="col">
+                          Status
+                        </th>
+
+                        <th
+                          scope="col"
+                          class="text-right"
+                        >
+                          Actions
+                        </th>
+                      </tr>
+                    </thead>
+
+                    <tbody id="transferRequestsTableBody">
+                      <tr>
+                        <td colspan="7">
+                          <div class="skeleton skeleton-text"></div>
+                        </td>
+                      </tr>
+
+                      <tr>
+                        <td colspan="7">
+                          <div class="skeleton skeleton-text"></div>
+                        </td>
+                      </tr>
+
+                      <tr>
+                        <td colspan="7">
+                          <div class="skeleton skeleton-text"></div>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+
+                <div
+                  id="transferRequestsEmptyState"
+                  hidden
+                >
+                  <div class="state-container">
+                    <div class="state-icon">
+                      <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="1.9"
+                        aria-hidden="true"
+                      >
+                        <path d="M17 3h4v4"></path>
+                        <path d="m21 3-7 7"></path>
+                        <path d="M7 21H3v-4"></path>
+                        <path d="m3 21 7-7"></path>
+                      </svg>
+                    </div>
+
+                    <h3 class="state-title">
+                      No transfer requests
+                    </h3>
+
+                    <p class="state-description">
+                      Asset transfer requests will appear here for
+                      review.
+                    </p>
+                  </div>
+                </div>
+              </section>
+
+              <!-- ==============================================
+                   RETURN HISTORY PANEL
+                   ============================================== -->
+
+              <section
+                class="allocation-panel"
+                id="allocationHistoryPanel"
+                data-allocation-panel="history"
+                role="tabpanel"
+                aria-labelledby="allocationHistoryTab"
+                hidden
+              >
+                <div class="allocation-panel-toolbar">
+                  <div>
+                    <h3 class="allocation-panel-title">
+                      Returned Assets
+                    </h3>
+
+                    <p class="allocation-panel-description">
+                      Historical allocation records that have been
+                      completed.
+                    </p>
+                  </div>
+
+                  <div class="allocation-history-filters">
+                    <input
+                      type="date"
+                      id="returnHistoryFromDate"
+                      data-return-history-from
+                      aria-label="Return history start date"
+                    />
+
+                    <input
+                      type="date"
+                      id="returnHistoryToDate"
+                      data-return-history-to
+                      aria-label="Return history end date"
+                    />
+                  </div>
+                </div>
+
+                <div
+                  class="table-container return-history-table-container"
+                >
+                  <table class="data-table return-history-table">
+                    <thead>
+                      <tr>
+                        <th scope="col">
+                          Asset
+                        </th>
+
+                        <th scope="col">
+                          Previous Holder
+                        </th>
+
+                        <th scope="col">
+                          Allocated On
+                        </th>
+
+                        <th scope="col">
+                          Returned On
+                        </th>
+
+                        <th scope="col">
+                          Return Condition
+                        </th>
+
+                        <th scope="col">
+                          Processed By
+                        </th>
+
+                        <th
+                          scope="col"
+                          class="text-right"
+                        >
+                          Action
+                        </th>
+                      </tr>
+                    </thead>
+
+                    <tbody id="returnHistoryTableBody">
+                      <tr>
+                        <td colspan="7">
+                          <div class="skeleton skeleton-text"></div>
+                        </td>
+                      </tr>
+
+                      <tr>
+                        <td colspan="7">
+                          <div class="skeleton skeleton-text"></div>
+                        </td>
+                      </tr>
+
+                      <tr>
+                        <td colspan="7">
+                          <div class="skeleton skeleton-text"></div>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+
+                <div
+                  id="returnHistoryEmptyState"
+                  hidden
+                >
+                  <div class="state-container">
+                    <div class="state-icon">
+                      <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="1.9"
+                        aria-hidden="true"
+                      >
+                        <path d="M9 14 4 9l5-5"></path>
+                        <path d="M4 9h10a6 6 0 0 1 6 6v4"></path>
+                      </svg>
+                    </div>
+
+                    <h3 class="state-title">
+                      No return history
+                    </h3>
+
+                    <p class="state-description">
+                      Completed asset returns will appear here.
+                    </p>
+                  </div>
+                </div>
+              </section>
+            </article>
+          </section>
+        </div>
+      </main>
+
+      <!-- Shared footer -->
+
+      <div
+        id="footer-container"
+        data-component="footer"
+      ></div>
+    </div>
+  </div>
+
+  <!-- ====================================================
+       ALLOCATE ASSET MODAL
+       ==================================================== -->
+
+  <div
+    class="modal-overlay"
+    id="allocateAssetModal"
+    aria-hidden="true"
+    data-close-on-overlay="false"
+  >
+    <section
+      class="modal allocation-form-modal"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="allocateAssetModalTitle"
+      aria-describedby="allocateAssetModalDescription"
+    >
+      <header class="modal-header">
+        <div class="modal-header-content">
+          <h2
+            class="modal-title"
+            id="allocateAssetModalTitle"
+          >
+            Allocate Asset
+          </h2>
+
+          <p
+            class="modal-subtitle"
+            id="allocateAssetModalDescription"
+          >
+            Assign one available asset to an active employee.
+          </p>
+        </div>
+
+        <button
+          type="button"
+          class="modal-close"
+          data-modal-close
+          aria-label="Close asset allocation form"
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            aria-hidden="true"
+          >
+            <path d="M18 6 6 18"></path>
+            <path d="m6 6 12 12"></path>
+          </svg>
+        </button>
+      </header>
+
+      <form
+        id="allocateAssetForm"
+        data-allocate-asset-form
+        novalidate
+      >
+        <div class="modal-body">
+          <div
+            class="alert alert-danger"
+            data-allocation-form-error
+            role="alert"
+            hidden
+          ></div>
+
+          <!-- Conflict warning -->
+
+          <div
+            class="allocation-conflict-warning"
+            id="allocationConflictWarning"
+            role="alert"
+            hidden
+          >
+            <div
+              class="allocation-conflict-icon"
+              aria-hidden="true"
+            >
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <circle
+                  cx="12"
+                  cy="12"
+                  r="9"
+                ></circle>
+
+                <path d="M12 8v4"></path>
+                <path d="M12 16h.01"></path>
+              </svg>
+            </div>
+
+            <div>
+              <h3>
+                Active allocation detected
+              </h3>
+
+              <p data-allocation-conflict-message>
+                This asset is already assigned to another employee.
+              </p>
+            </div>
+          </div>
+
+          <!-- Selection -->
+
+          <fieldset class="allocation-form-section">
+            <legend class="allocation-form-section-title">
+              Assignment Details
+            </legend>
+
+            <div class="form-group">
+              <label
+                class="form-label-required"
+                for="allocationAssetId"
+              >
+                Available Asset
+              </label>
+
+              <select
+                id="allocationAssetId"
+                name="asset_id"
+                required
+              >
+                <option value="">
+                  Select an available asset
+                </option>
+              </select>
+
+              <p class="form-helper">
+                Only assets without an active allocation are shown.
+              </p>
+
+              <div class="form-error"></div>
+            </div>
+
+            <div
+              class="allocation-asset-preview"
+              id="allocationAssetPreview"
+              hidden
+            >
+              <div
+                class="allocation-preview-icon"
+                aria-hidden="true"
+              >
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.9"
+                >
+                  <path d="M21 16V8"></path>
+                  <path d="m3.5 7 8.5 5 8.5-5"></path>
+                  <path d="M12 22V12"></path>
+                  <path d="M3 7l9-5 9 5v10l-9 5-9-5V7Z"></path>
+                </svg>
+              </div>
+
+              <div class="allocation-preview-content">
+                <h3 data-allocation-preview-name>
+                  Asset Name
+                </h3>
+
+                <p data-allocation-preview-tag>
+                  Asset tag
+                </p>
+              </div>
+
+              <span
+                class="badge badge-success badge-dot"
+              >
+                Available
+              </span>
+            </div>
+
+            <div class="form-group">
+              <label
+                class="form-label-required"
+                for="allocationEmployeeId"
+              >
+                Assign To
+              </label>
+
+              <select
+                id="allocationEmployeeId"
+                name="employee_id"
+                required
+              >
+                <option value="">
+                  Select employee
+                </option>
+              </select>
+
+              <div class="form-error"></div>
+            </div>
+          </fieldset>
+
+          <!-- Dates -->
+
+          <fieldset class="allocation-form-section">
+            <legend class="allocation-form-section-title">
+              Allocation Period
+            </legend>
+
+            <div class="form-grid form-grid-2">
+              <div class="form-group">
+                <label
+                  class="form-label-required"
+                  for="allocationDate"
+                >
+                  Allocation Date
+                </label>
+
+                <input
+                  class="form-control"
+                  type="date"
+                  id="allocationDate"
+                  name="allocation_date"
+                  required
+                />
+
+                <div class="form-error"></div>
+              </div>
+
+              <div class="form-group">
+                <label for="allocationExpectedReturn">
+                  Expected Return
+                </label>
+
+                <input
+                  class="form-control"
+                  type="date"
+                  id="allocationExpectedReturn"
+                  name="expected_return_date"
+                />
+
+                <p class="form-helper">
+                  Leave empty for a long-term allocation.
+                </p>
+
+                <div class="form-error"></div>
+              </div>
+            </div>
+          </fieldset>
+
+          <!-- Notes -->
+
+          <fieldset class="allocation-form-section">
+            <legend class="allocation-form-section-title">
+              Handover Information
+            </legend>
+
+            <div class="form-group">
+              <label for="allocationCondition">
+                Condition at Handover
+              </label>
+
+              <select
+                id="allocationCondition"
+                name="condition_at_allocation"
+              >
+                <option value="Excellent">
+                  Excellent
+                </option>
+
+                <option
+                  value="Good"
+                  selected
+                >
+                  Good
+                </option>
+
+                <option value="Fair">
+                  Fair
+                </option>
+
+                <option value="NeedsAttention">
+                  Needs Attention
+                </option>
+              </select>
+
+              <div class="form-error"></div>
+            </div>
+
+            <div class="form-group">
+              <label for="allocationNotes">
+                Allocation Notes
+              </label>
+
+              <textarea
+                id="allocationNotes"
+                name="notes"
+                rows="4"
+                maxlength="600"
+                placeholder="Add handover details, accessories or usage instructions..."
+              ></textarea>
+
+              <div class="form-character-count">
+                <span data-allocation-notes-count>
+                  0
+                </span>
+                / 600
+              </div>
+
+              <div class="form-error"></div>
+            </div>
+
+            <label class="allocation-confirmation">
+              <input
+                type="checkbox"
+                id="allocationAcknowledgement"
+                name="acknowledged"
+                required
+              />
+
+              <span>
+                I confirm that the asset and employee details are
+                correct and that no active allocation should exist
+                for this asset.
+              </span>
+            </label>
+
+            <div class="form-error"></div>
+          </fieldset>
+        </div>
+
+        <footer class="modal-footer">
+          <button
+            type="button"
+            class="btn btn-outline"
+            data-modal-close
+          >
+            Cancel
+          </button>
+
+          <button
+            type="submit"
+            class="btn btn-primary"
+            id="allocateAssetSubmitButton"
+          >
+            Confirm Allocation
+          </button>
+        </footer>
+      </form>
+    </section>
+  </div>
+
+  <!-- ====================================================
+       RETURN ASSET MODAL
+       ==================================================== -->
+
+  <div
+    class="modal-overlay"
+    id="returnAssetModal"
+    aria-hidden="true"
+    data-close-on-overlay="false"
+  >
+    <section
+      class="modal"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="returnAssetModalTitle"
+      aria-describedby="returnAssetModalDescription"
+    >
+      <header class="modal-header">
+        <div class="modal-header-content">
+          <h2
+            class="modal-title"
+            id="returnAssetModalTitle"
+          >
+            Record Asset Return
+          </h2>
+
+          <p
+            class="modal-subtitle"
+            id="returnAssetModalDescription"
+          >
+            Complete the active allocation and record the returned
+            condition.
+          </p>
+        </div>
+
+        <button
+          type="button"
+          class="modal-close"
+          data-modal-close
+          aria-label="Close asset return form"
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            aria-hidden="true"
+          >
+            <path d="M18 6 6 18"></path>
+            <path d="m6 6 12 12"></path>
+          </svg>
+        </button>
+      </header>
+
+      <form
+        id="returnAssetForm"
+        data-return-asset-form
+        novalidate
+      >
+        <input
+          type="hidden"
+          id="returnAllocationId"
+          name="allocation_id"
+        />
+
+        <div class="modal-body">
+          <div
+            class="alert alert-danger"
+            data-return-form-error
+            role="alert"
+            hidden
+          ></div>
+
+          <div class="allocation-return-preview">
+            <div
+              class="allocation-return-icon"
+              aria-hidden="true"
+            >
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.9"
+              >
+                <path d="M9 14 4 9l5-5"></path>
+                <path d="M4 9h10a6 6 0 0 1 6 6v4"></path>
+              </svg>
+            </div>
+
+            <div>
+              <h3 data-return-asset-name>
+                Asset Name
+              </h3>
+
+              <p>
+                Assigned to
+                <strong data-return-holder-name>
+                  Employee
+                </strong>
+              </p>
+            </div>
+          </div>
+
+          <div class="form-grid form-grid-2">
+            <div class="form-group">
+              <label
+                class="form-label-required"
+                for="actualReturnDate"
+              >
+                Return Date
+              </label>
+
+              <input
+                class="form-control"
+                type="date"
+                id="actualReturnDate"
+                name="actual_return_date"
+                required
+              />
+
+              <div class="form-error"></div>
+            </div>
+
+            <div class="form-group">
+              <label
+                class="form-label-required"
+                for="returnCondition"
+              >
+                Return Condition
+              </label>
+
+              <select
+                id="returnCondition"
+                name="return_condition"
+                required
+              >
+                <option value="">
+                  Select condition
+                </option>
+
+                <option value="Excellent">
+                  Excellent
+                </option>
+
+                <option value="Good">
+                  Good
+                </option>
+
+                <option value="Fair">
+                  Fair
+                </option>
+
+                <option value="Damaged">
+                  Damaged
+                </option>
+
+                <option value="Lost">
+                  Lost
+                </option>
+              </select>
+
+              <div class="form-error"></div>
+            </div>
+          </div>
+
+          <div
+            class="alert alert-warning"
+            id="returnConditionWarning"
+            hidden
+          >
+            Damaged or lost assets may require a maintenance or
+            audit workflow after the return is recorded.
+          </div>
+
+          <div class="form-group">
+            <label for="returnNotes">
+              Return Notes
+            </label>
+
+            <textarea
+              id="returnNotes"
+              name="return_notes"
+              rows="4"
+              maxlength="600"
+              placeholder="Record damage, missing accessories or other return information..."
+            ></textarea>
+
+            <div class="form-character-count">
+              <span data-return-notes-count>
+                0
+              </span>
+              / 600
+            </div>
+
+            <div class="form-error"></div>
+          </div>
+
+          <label class="switch-label">
+            <span>
+              <strong>Make Asset Available</strong>
+
+              <small>
+                Return the asset to the available inventory after
+                this allocation is completed.
+              </small>
+            </span>
+
+            <span class="switch">
+              <input
+                type="checkbox"
+                id="makeAssetAvailable"
+                name="make_available"
+                checked
+              />
+
+              <span class="switch-slider"></span>
+            </span>
+          </label>
+        </div>
+
+        <footer class="modal-footer">
+          <button
+            type="button"
+            class="btn btn-outline"
+            data-modal-close
+          >
+            Cancel
+          </button>
+
+          <button
+            type="submit"
+            class="btn btn-primary"
+            id="returnAssetSubmitButton"
+          >
+            Complete Return
+          </button>
+        </footer>
+      </form>
+    </section>
+  </div>
+
+  <!-- ====================================================
+       TRANSFER ASSET MODAL
+       ==================================================== -->
+
+  <div
+    class="modal-overlay"
+    id="transferAssetModal"
+    aria-hidden="true"
+    data-close-on-overlay="false"
+  >
+    <section
+      class="modal"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="transferAssetModalTitle"
+      aria-describedby="transferAssetModalDescription"
+    >
+      <header class="modal-header">
+        <div class="modal-header-content">
+          <h2
+            class="modal-title"
+            id="transferAssetModalTitle"
+          >
+            Transfer Asset
+          </h2>
+
+          <p
+            class="modal-subtitle"
+            id="transferAssetModalDescription"
+          >
+            Request or approve a change to the current asset holder.
+          </p>
+        </div>
+
+        <button
+          type="button"
+          class="modal-close"
+          data-modal-close
+          aria-label="Close transfer form"
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            aria-hidden="true"
+          >
+            <path d="M18 6 6 18"></path>
+            <path d="m6 6 12 12"></path>
+          </svg>
+        </button>
+      </header>
+
+      <form
+        id="transferAssetForm"
+        data-transfer-asset-form
+        novalidate
+      >
+        <input
+          type="hidden"
+          id="transferAllocationId"
+          name="allocation_id"
+        />
+
+        <div class="modal-body">
+          <div
+            class="alert alert-danger"
+            data-transfer-form-error
+            role="alert"
+            hidden
+          ></div>
+
+          <div class="allocation-transfer-flow">
+            <div class="allocation-transfer-person">
+              <span class="allocation-transfer-label">
+                Current Holder
+              </span>
+
+              <div
+                class="allocation-transfer-avatar"
+                data-transfer-current-initials
+              >
+                CH
+              </div>
+
+              <strong data-transfer-current-holder>
+                Current Holder
+              </strong>
+            </div>
+
+            <div
+              class="allocation-transfer-arrow"
+              aria-hidden="true"
+            >
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path d="M5 12h14"></path>
+                <path d="m13 6 6 6-6 6"></path>
+              </svg>
+            </div>
+
+            <div class="allocation-transfer-person">
+              <span class="allocation-transfer-label">
+                New Holder
+              </span>
+
+              <div
+                class="allocation-transfer-avatar pending"
+                data-transfer-new-initials
+              >
+                ?
+              </div>
+
+              <strong data-transfer-new-holder>
+                Select Employee
+              </strong>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label
+              class="form-label-required"
+              for="transferEmployeeId"
+            >
+              Transfer To
+            </label>
+
+            <select
+              id="transferEmployeeId"
+              name="new_employee_id"
+              required
+            >
+              <option value="">
+                Select new holder
+              </option>
+            </select>
+
+            <div class="form-error"></div>
+          </div>
+
+          <div class="form-group">
+            <label for="transferExpectedReturnDate">
+              New Expected Return Date
+            </label>
+
+            <input
+              class="form-control"
+              type="date"
+              id="transferExpectedReturnDate"
+              name="expected_return_date"
+            />
+
+            <div class="form-error"></div>
+          </div>
+
+          <div class="form-group">
+            <label
+              class="form-label-required"
+              for="transferReason"
+            >
+              Transfer Reason
+            </label>
+
+            <textarea
+              id="transferReason"
+              name="reason"
+              rows="4"
+              maxlength="500"
+              placeholder="Explain why this asset should be transferred..."
+              required
+            ></textarea>
+
+            <div class="form-character-count">
+              <span data-transfer-reason-count>
+                0
+              </span>
+              / 500
+            </div>
+
+            <div class="form-error"></div>
+          </div>
+        </div>
+
+        <footer class="modal-footer">
+          <button
+            type="button"
+            class="btn btn-outline"
+            data-modal-close
+          >
+            Cancel
+          </button>
+
+          <button
+            type="submit"
+            class="btn btn-primary"
+            id="transferAssetSubmitButton"
+          >
+            Submit Transfer
+          </button>
+        </footer>
+      </form>
+    </section>
+  </div>
+
+  <!-- ====================================================
+       ALLOCATION DETAILS MODAL
+       ==================================================== -->
+
+  <div
+    class="modal-overlay"
+    id="allocationDetailsModal"
+    aria-hidden="true"
+    data-close-on-overlay="true"
+  >
+    <section
+      class="modal allocation-details-modal"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="allocationDetailsTitle"
+    >
+      <header class="modal-header">
+        <div class="allocation-details-heading">
+          <div
+            class="allocation-details-icon"
+            aria-hidden="true"
+          >
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.9"
+            >
+              <circle
+                cx="9"
+                cy="7"
+                r="4"
+              ></circle>
+
+              <path d="M3 21v-2a6 6 0 0 1 6-6"></path>
+              <path d="M16 11h6"></path>
+            </svg>
+          </div>
+
+          <div>
+            <h2
+              class="modal-title"
+              id="allocationDetailsTitle"
+              data-allocation-detail-asset
+            >
+              Allocation Details
+            </h2>
+
+            <p
+              class="modal-subtitle"
+              data-allocation-detail-tag
+            >
+              Loading allocation information...
+            </p>
+          </div>
+        </div>
+
+        <button
+          type="button"
+          class="modal-close"
+          data-modal-close
+          aria-label="Close allocation details"
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            aria-hidden="true"
+          >
+            <path d="M18 6 6 18"></path>
+            <path d="m6 6 12 12"></path>
+          </svg>
+        </button>
+      </header>
+
+      <div class="modal-body">
+        <div class="allocation-detail-status-row">
+          <span
+            class="badge badge-info badge-dot"
+            data-allocation-detail-status
+          >
+            Active
+          </span>
+
+          <span
+            class="badge badge-neutral"
+            data-allocation-detail-return-status
+          >
+            On Schedule
+          </span>
+        </div>
+
+        <div class="allocation-detail-grid">
+          <div class="allocation-detail-item">
+            <span class="allocation-detail-label">
+              Current Holder
+            </span>
+
+            <span
+              class="allocation-detail-value"
+              data-allocation-detail-holder
+            >
+              —
+            </span>
+          </div>
+
+          <div class="allocation-detail-item">
+            <span class="allocation-detail-label">
+              Department
+            </span>
+
+            <span
+              class="allocation-detail-value"
+              data-allocation-detail-department
+            >
+              —
+            </span>
+          </div>
+
+          <div class="allocation-detail-item">
+            <span class="allocation-detail-label">
+              Allocation Date
+            </span>
+
+            <span
+              class="allocation-detail-value"
+              data-allocation-detail-date
+            >
+              —
+            </span>
+          </div>
+
+          <div class="allocation-detail-item">
+            <span class="allocation-detail-label">
+              Expected Return
+            </span>
+
+            <span
+              class="allocation-detail-value"
+              data-allocation-detail-expected-return
+            >
+              —
+            </span>
+          </div>
+
+          <div class="allocation-detail-item">
+            <span class="allocation-detail-label">
+              Condition
+            </span>
+
+            <span
+              class="allocation-detail-value"
+              data-allocation-detail-condition
+            >
+              —
+            </span>
+          </div>
+
+          <div class="allocation-detail-item">
+            <span class="allocation-detail-label">
+              Allocated By
+            </span>
+
+            <span
+              class="allocation-detail-value"
+              data-allocation-detail-created-by
+            >
+              —
+            </span>
+          </div>
+        </div>
+
+        <div class="allocation-details-notes">
+          <h3>
+            Allocation Notes
+          </h3>
+
+          <p data-allocation-detail-notes>
+            No notes were provided.
+          </p>
+        </div>
+
+        <div class="allocation-details-section">
+          <div class="allocation-details-section-header">
+            <h3>
+              Allocation Activity
+            </h3>
+
+            <span
+              class="text-muted"
+              data-allocation-history-count
+            >
+              0 events
+            </span>
+          </div>
+
+          <div
+            class="allocation-activity-timeline"
+            data-allocation-activity-timeline
+          >
+            <div class="timeline-item">
+              <div class="skeleton skeleton-avatar"></div>
+
+              <div class="timeline-content">
+                <div class="skeleton skeleton-text"></div>
+                <div class="skeleton skeleton-text-sm mt-2"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <footer class="modal-footer allocation-details-footer">
+        <button
+          type="button"
+          class="btn btn-outline"
+          data-modal-close
+        >
+          Close
+        </button>
+
+        <button
+          type="button"
+          class="btn btn-outline"
+          data-transfer-current-allocation
+        >
+          Transfer
+        </button>
+
+        <button
+          type="button"
+          class="btn btn-primary"
+          data-return-current-allocation
+          data-roles="Admin,AssetManager"
+        >
+          Record Return
+        </button>
+      </footer>
+    </section>
+  </div>
+
+  <!-- ====================================================
+       TRANSFER REVIEW MODAL
+       ==================================================== -->
+
+  <div
+    class="modal-overlay"
+    id="transferReviewModal"
+    aria-hidden="true"
+    data-close-on-overlay="false"
+  >
+    <section
+      class="modal"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="transferReviewModalTitle"
+    >
+      <header class="modal-header">
+        <div>
+          <h2
+            class="modal-title"
+            id="transferReviewModalTitle"
+          >
+            Review Transfer Request
+          </h2>
+
+          <p class="modal-subtitle">
+            Approving the request will close the current allocation
+            and create a new active allocation.
+          </p>
+        </div>
+
+        <button
+          type="button"
+          class="modal-close"
+          data-modal-close
+          aria-label="Close transfer review"
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            aria-hidden="true"
+          >
+            <path d="M18 6 6 18"></path>
+            <path d="m6 6 12 12"></path>
+          </svg>
+        </button>
+      </header>
+
+      <div class="modal-body">
+        <input
+          type="hidden"
+          id="reviewTransferRequestId"
+        />
+
+        <div
+          class="alert alert-danger"
+          data-transfer-review-error
+          hidden
+        ></div>
+
+        <div class="transfer-review-card">
+          <h3 data-transfer-review-asset>
+            Asset
+          </h3>
+
+          <p data-transfer-review-tag>
+            Asset tag
+          </p>
+
+          <div class="transfer-review-route">
+            <div>
+              <span>
+                Current holder
+              </span>
+
+              <strong data-transfer-review-current>
+                —
+              </strong>
+            </div>
+
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              aria-hidden="true"
+            >
+              <path d="M5 12h14"></path>
+              <path d="m13 6 6 6-6 6"></path>
+            </svg>
+
+            <div>
+              <span>
+                Requested holder
+              </span>
+
+              <strong data-transfer-review-new>
+                —
+              </strong>
+            </div>
+          </div>
+
+          <div class="transfer-review-reason">
+            <span>
+              Reason
+            </span>
+
+            <p data-transfer-review-reason>
+              —
+            </p>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="transferReviewComment">
+            Review Comment
+          </label>
+
+          <textarea
+            id="transferReviewComment"
+            rows="3"
+            maxlength="400"
+            placeholder="Add an approval or rejection comment..."
+          ></textarea>
+        </div>
+      </div>
+
+      <footer class="modal-footer">
+        <button
+          type="button"
+          class="btn btn-danger-outline"
+          id="rejectTransferButton"
+          data-reject-transfer
+        >
+          Reject
+        </button>
+
+        <button
+          type="button"
+          class="btn btn-primary"
+          id="approveTransferButton"
+          data-approve-transfer
+        >
+          Approve Transfer
+        </button>
+      </footer>
+    </section>
+  </div>
+
+  <!-- ====================================================
+       SHARED COMPONENTS
+       ==================================================== -->
+
+  <div
+    id="loader-container"
+    data-component="loader"
+  ></div>
+
+  <div
+    id="modal-container"
+    data-component="modal"
+  ></div>
+
+  <div
+    class="sidebar-overlay"
+    id="sidebarOverlay"
+    aria-hidden="true"
+  ></div>
+
+  <div
+    class="toast-container"
+    aria-live="polite"
+    aria-label="Notifications"
+  ></div>
+
+  <!-- ====================================================
+       JAVASCRIPT
+       ==================================================== -->
+
+  <script src="../js/api.js"></script>
+  <script src="../js/utils.js"></script>
+  <script src="../js/auth.js"></script>
+  <script src="../js/loader.js"></script>
+  <script src="../js/sidebar.js"></script>
+
+  <script src="asset-allocation.js"></script>
+</body>
+</html>
