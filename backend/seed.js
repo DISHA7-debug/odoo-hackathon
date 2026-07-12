@@ -10,6 +10,12 @@ async function seed() {
 
   await db.transaction(async (trx) => {
     // Clear existing data (order matters for FKs)
+    await trx('notifications').del();
+    await trx('audit_findings').del();
+    await trx('audit_assignments').del();
+    await trx('audit_cycles').del();
+    await trx('maintenance_requests').del();
+    await trx('bookings').del();
     await trx('activity_logs').del();
     await trx('transfer_requests').del();
     await trx('asset_allocations').del();
@@ -132,6 +138,16 @@ async function seed() {
       status: 'Requested',
     });
 
+    const boardroom = assets.find((a) => a.asset_tag === 'AF-0013');
+
+    await trx('bookings').insert({
+      resource_asset_id: boardroom.id,
+      booked_by: priya.id,
+      start_time: new Date('2026-07-13T09:00:00'),
+      end_time: new Date('2026-07-13T10:00:00'),
+      status: 'Upcoming',
+    });
+
     await trx('activity_logs').insert({
       user_id: admin.id,
       action: 'SEED_COMPLETED',
@@ -144,6 +160,7 @@ async function seed() {
   console.log('Seed complete.');
   console.log(`Default password for all users: ${DEFAULT_PASSWORD}`);
   console.log('Demo double-allocation: POST /api/v1/assets/25/allocate (AF-0025 held by Priya Shah)');
+  console.log('Demo booking overlap: POST /api/v1/bookings on AF-0013 — 09:30-10:30 rejected, 10:00-11:00 accepted');
   console.log('Admin login: ananya.admin@assetflow.com');
 }
 

@@ -8,7 +8,9 @@
     "dev": "node --watch src/index.js",
     "migrate": "knex migrate:latest",
     "migrate:rollback": "knex migrate:rollback",
-    "seed": "node seed.js"
+    "seed": "node seed.js",
+    "test:booking-overlap": "node test-booking-overlap.js",
+    "test:maintenance-workflow": "node test-maintenance-workflow.js"
   },
   "dependencies": {
     "bcrypt": "^5.1.1",
