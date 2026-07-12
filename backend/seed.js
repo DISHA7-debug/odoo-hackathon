@@ -15,6 +15,7 @@ async function seed() {
     await trx('asset_allocations').del();
     await trx('assets').del();
     await trx('asset_categories').del();
+    await trx('departments').update({ head_user_id: null, parent_department_id: null });
     await trx('users').del();
     await trx('departments').del();
 
@@ -116,13 +117,19 @@ async function seed() {
     pastDate.setDate(pastDate.getDate() - 5);
     const pastStr = pastDate.toISOString().slice(0, 10);
 
+    const daysAgo = (n) => {
+      const d = new Date(today);
+      d.setDate(d.getDate() - n);
+      return d.toISOString().slice(0, 10);
+    };
+
     await trx('asset_allocations').insert([
-      { asset_id: demoAsset.id, employee_id: priya.id, department_id: engineering.id, expected_return_date: futureStr, status: 'Active' },
-      { asset_id: laptop2.id, employee_id: arjun.id, department_id: engineering.id, expected_return_date: futureStr, status: 'Active' },
-      { asset_id: monitor.id, employee_id: kavya.id, department_id: engineering.id, expected_return_date: pastStr, status: 'Active' },
-      { asset_id: chair.id, employee_id: priya.id, department_id: engineering.id, expected_return_date: futureStr, status: 'Active' },
+      { asset_id: demoAsset.id, employee_id: priya.id, department_id: engineering.id, allocated_date: daysAgo(15), expected_return_date: futureStr, status: 'Active' },
+      { asset_id: laptop2.id, employee_id: arjun.id, department_id: engineering.id, allocated_date: daysAgo(12), expected_return_date: futureStr, status: 'Active' },
+      { asset_id: monitor.id, employee_id: kavya.id, department_id: engineering.id, allocated_date: daysAgo(20), expected_return_date: pastStr, status: 'Active' },
+      { asset_id: chair.id, employee_id: priya.id, department_id: engineering.id, allocated_date: daysAgo(8), expected_return_date: futureStr, status: 'Active' },
       // Deliberate active allocation for double-allocation demo (AF-0025 held by Priya)
-      { asset_id: demoConflictAsset.id, employee_id: priya.id, department_id: engineering.id, expected_return_date: futureStr, status: 'Active' },
+      { asset_id: demoConflictAsset.id, employee_id: priya.id, department_id: engineering.id, allocated_date: daysAgo(5), expected_return_date: futureStr, status: 'Active' },
     ]);
 
     await trx('transfer_requests').insert({
