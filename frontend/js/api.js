@@ -13,7 +13,7 @@ const API_CONFIG = Object.freeze({
   BASE_URL:
     window.ASSETFLOW_API_BASE_URL ||
     localStorage.getItem("assetflow_api_url") ||
-    "http://localhost:5000/api/v1",
+    "http://localhost:3000/api/v1",
 
   TOKEN_KEY: "assetflow_token",
   USER_KEY: "assetflow_user",
