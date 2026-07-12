@@ -1,0 +1,1455 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  />
+
+  <meta
+    name="description"
+    content="AssetFlow enterprise asset and resource management system."
+  />
+
+  <meta
+    name="theme-color"
+    content="#ff4f78"
+  />
+
+  <title>Sign In | AssetFlow</title>
+
+  <!-- ====================================================
+       STYLESHEETS
+       ==================================================== -->
+
+  <link
+    rel="stylesheet"
+    href="css/variables.css"
+  />
+
+  <link
+    rel="stylesheet"
+    href="css/global.css"
+  />
+
+  <link
+    rel="stylesheet"
+    href="css/layout.css"
+  />
+
+  <link
+    rel="stylesheet"
+    href="css/components.css"
+  />
+
+  <link
+    rel="stylesheet"
+    href="css/animations.css"
+  />
+
+  <link
+    rel="stylesheet"
+    href="css/responsive.css"
+  />
+
+  <!-- ====================================================
+       LOGIN PAGE-SPECIFIC STYLES
+       ==================================================== -->
+
+  <style>
+    .auth-visual-content {
+      max-width: 820px;
+    }
+
+    .auth-feature-list {
+      display: grid;
+      grid-template-columns:
+        repeat(3, minmax(0, 1fr));
+      gap: var(--space-3);
+
+      max-width: 720px;
+      margin-top: var(--space-8);
+    }
+
+    .auth-feature-item {
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+
+      padding: var(--space-4);
+
+      background:
+        rgba(255, 255, 255, 0.13);
+
+      border:
+        1px solid
+        rgba(255, 255, 255, 0.18);
+
+      border-radius: var(--radius-lg);
+
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+
+    .auth-feature-icon {
+      display: grid;
+      flex-shrink: 0;
+      place-items: center;
+
+      width: 38px;
+      height: 38px;
+
+      color: #ff4f78;
+      background: #ffffff;
+      border-radius: var(--radius-md);
+    }
+
+    .auth-feature-icon svg {
+      width: 19px;
+      height: 19px;
+    }
+
+    .auth-feature-text {
+      color:
+        rgba(255, 255, 255, 0.92);
+
+      font-size: var(--font-size-xs);
+      font-weight: var(--font-weight-semibold);
+      line-height: 1.35;
+    }
+
+    .auth-visual-stats {
+      display: flex;
+      align-items: center;
+      gap: var(--space-6);
+      flex-wrap: wrap;
+
+      margin-top: var(--space-8);
+    }
+
+    .auth-stat {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .auth-stat-value {
+      color: #ffffff;
+      font-size: var(--font-size-xl);
+      font-weight: var(--font-weight-extrabold);
+    }
+
+    .auth-stat-label {
+      margin-top: 2px;
+
+      color:
+        rgba(255, 255, 255, 0.68);
+
+      font-size: var(--font-size-xs);
+    }
+
+    .auth-panel-card {
+      width: 100%;
+
+      padding:
+        clamp(
+          1.5rem,
+          3vw,
+          2.25rem
+        );
+
+      background:
+        rgba(255, 255, 255, 0.94);
+
+      border:
+        1px solid
+        var(--color-border);
+
+      border-radius:
+        var(--radius-2xl);
+
+      box-shadow:
+        var(--shadow-xl);
+
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+    }
+
+    .auth-welcome-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-2);
+
+      min-height: 30px;
+      margin-bottom: var(--space-4);
+      padding:
+        0
+        var(--space-3);
+
+      color:
+        var(--color-primary-dark);
+
+      font-size:
+        var(--font-size-xs);
+
+      font-weight:
+        var(--font-weight-semibold);
+
+      background:
+        var(--color-primary-soft);
+
+      border:
+        1px solid
+        var(--color-primary-border);
+
+      border-radius:
+        var(--radius-pill);
+    }
+
+    .auth-welcome-badge::before {
+      width: 7px;
+      height: 7px;
+
+      content: "";
+
+      background:
+        var(--color-primary);
+
+      border-radius:
+        var(--radius-circle);
+    }
+
+    .auth-form-panel {
+      display: none;
+    }
+
+    .auth-form-panel.active {
+      display: block;
+      animation:
+        authFormEnter
+        260ms ease both;
+    }
+
+    @keyframes authFormEnter {
+      from {
+        opacity: 0;
+        transform:
+          translateY(8px);
+      }
+
+      to {
+        opacity: 1;
+        transform:
+          translateY(0);
+      }
+    }
+
+    .auth-security-note {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-2);
+
+      margin-top: var(--space-5);
+
+      color:
+        var(--color-text-muted);
+
+      font-size:
+        var(--font-size-xs);
+    }
+
+    .auth-security-note svg {
+      width: 15px;
+      height: 15px;
+
+      color:
+        var(--color-success);
+    }
+
+    .password-requirement {
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+
+      margin-top:
+        var(--space-1);
+
+      color:
+        var(--color-text-muted);
+
+      font-size:
+        var(--font-size-xs);
+    }
+
+    .password-requirement svg {
+      width: 14px;
+      height: 14px;
+
+      color:
+        var(--color-primary);
+    }
+
+    .auth-terms {
+      display: flex;
+      align-items: flex-start;
+      gap: var(--space-2);
+
+      color:
+        var(--color-text-secondary);
+
+      font-size:
+        var(--font-size-xs);
+      line-height: 1.6;
+    }
+
+    .auth-terms input {
+      flex-shrink: 0;
+      margin-top: 3px;
+    }
+
+    .auth-terms a {
+      font-weight:
+        var(--font-weight-semibold);
+    }
+
+    .forgot-password-link {
+      color:
+        var(--color-primary);
+
+      font-size:
+        var(--font-size-sm);
+
+      font-weight:
+        var(--font-weight-semibold);
+    }
+
+    .auth-form-alert {
+      margin-bottom:
+        var(--space-5);
+    }
+
+    [data-form-error][hidden] {
+      display: none;
+    }
+
+    @media (max-width: 1199px) {
+      .auth-feature-list {
+        grid-template-columns: 1fr;
+        max-width: 480px;
+      }
+
+      .auth-visual-stats {
+        gap: var(--space-4);
+      }
+    }
+
+    @media (max-width: 991px) {
+      .auth-panel {
+        background:
+          radial-gradient(
+            circle at 90% 0%,
+            rgba(255, 79, 120, 0.12),
+            transparent 34%
+          ),
+          radial-gradient(
+            circle at 0% 100%,
+            rgba(139, 77, 232, 0.1),
+            transparent 32%
+          ),
+          var(--color-page-background);
+      }
+    }
+
+    @media (max-width: 575px) {
+      .auth-panel-card {
+        padding:
+          var(--space-5)
+          var(--space-4);
+
+        border-radius:
+          var(--radius-xl);
+      }
+
+      .auth-options {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+
+<body data-auth="guest">
+  <!-- Accessibility skip link -->
+
+  <a
+    class="skip-link"
+    href="#authMain"
+  >
+    Skip to authentication form
+  </a>
+
+  <!-- ====================================================
+       AUTHENTICATION LAYOUT
+       ==================================================== -->
+
+  <main
+    class="auth-layout"
+    id="authMain"
+  >
+    <!-- ==================================================
+         LEFT BRAND PANEL
+         ================================================== -->
+
+    <section
+      class="auth-visual"
+      aria-label="AssetFlow introduction"
+    >
+      <div class="auth-visual-content">
+        <!-- Brand -->
+
+        <div class="auth-visual-brand">
+          <div
+            class="auth-visual-logo"
+            aria-hidden="true"
+          >
+            <svg
+              width="27"
+              height="27"
+              viewBox="0 0 32 32"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <rect
+                x="4"
+                y="4"
+                width="10"
+                height="10"
+                rx="3"
+                fill="currentColor"
+              ></rect>
+
+              <rect
+                x="18"
+                y="4"
+                width="10"
+                height="10"
+                rx="3"
+                fill="currentColor"
+                opacity="0.75"
+              ></rect>
+
+              <rect
+                x="4"
+                y="18"
+                width="10"
+                height="10"
+                rx="3"
+                fill="currentColor"
+                opacity="0.75"
+              ></rect>
+
+              <path
+                d="M18 23C18 20.2386 20.2386 18 23 18C25.7614 18 28 20.2386 28 23C28 25.7614 25.7614 28 23 28H18V23Z"
+                fill="currentColor"
+              ></path>
+            </svg>
+          </div>
+
+          <div>
+            <div class="auth-visual-brand-name">
+              AssetFlow
+            </div>
+
+            <div
+              style="
+                color: rgba(255, 255, 255, 0.7);
+                font-size: 0.72rem;
+                font-weight: 600;
+                letter-spacing: 0.08em;
+                text-transform: uppercase;
+              "
+            >
+              Enterprise Asset Management
+            </div>
+          </div>
+        </div>
+
+        <!-- Hero content -->
+
+        <h1 class="auth-visual-title">
+          Everything your organization owns.
+          <br />
+          One intelligent workspace.
+        </h1>
+
+        <p class="auth-visual-description">
+          Register, allocate, book, maintain and audit
+          organizational assets through one structured,
+          transparent lifecycle.
+        </p>
+
+        <!-- Feature cards -->
+
+        <div class="auth-feature-list">
+          <div class="auth-feature-item">
+            <div
+              class="auth-feature-icon"
+              aria-hidden="true"
+            >
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.9"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path d="M21 16V8"></path>
+                <path d="m3.5 7 8.5 5 8.5-5"></path>
+                <path d="M12 22V12"></path>
+                <path d="M3 7l9-5 9 5v10l-9 5-9-5V7Z"></path>
+              </svg>
+            </div>
+
+            <span class="auth-feature-text">
+              Complete asset lifecycle tracking
+            </span>
+          </div>
+
+          <div class="auth-feature-item">
+            <div
+              class="auth-feature-icon"
+              aria-hidden="true"
+            >
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.9"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <rect
+                  x="3"
+                  y="5"
+                  width="18"
+                  height="16"
+                  rx="2"
+                ></rect>
+
+                <path d="M16 3v4"></path>
+                <path d="M8 3v4"></path>
+                <path d="M3 10h18"></path>
+                <path d="m9 16 2 2 4-4"></path>
+              </svg>
+            </div>
+
+            <span class="auth-feature-text">
+              Conflict-free resource booking
+            </span>
+          </div>
+
+          <div class="auth-feature-item">
+            <div
+              class="auth-feature-icon"
+              aria-hidden="true"
+            >
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.9"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path d="M9 5H6a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-3"></path>
+
+                <rect
+                  x="9"
+                  y="3"
+                  width="6"
+                  height="4"
+                  rx="1"
+                ></rect>
+
+                <path d="m9 14 2 2 5-5"></path>
+              </svg>
+            </div>
+
+            <span class="auth-feature-text">
+              Audits and discrepancy reporting
+            </span>
+          </div>
+        </div>
+
+        <!-- Small product indicators -->
+
+        <div class="auth-visual-stats">
+          <div class="auth-stat">
+            <span class="auth-stat-value">
+              360°
+            </span>
+
+            <span class="auth-stat-label">
+              Asset visibility
+            </span>
+          </div>
+
+          <div class="auth-stat">
+            <span class="auth-stat-value">
+              Real-time
+            </span>
+
+            <span class="auth-stat-label">
+              Workflow updates
+            </span>
+          </div>
+
+          <div class="auth-stat">
+            <span class="auth-stat-value">
+              Role-based
+            </span>
+
+            <span class="auth-stat-label">
+              Secure access
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <footer class="auth-visual-footer">
+        <span>
+          Built for the Odoo Hiring Hackathon
+        </span>
+      </footer>
+    </section>
+
+    <!-- ==================================================
+         RIGHT AUTHENTICATION PANEL
+         ================================================== -->
+
+    <section
+      class="auth-panel"
+      aria-label="Account access"
+    >
+      <div class="auth-panel-inner">
+        <!-- Mobile brand -->
+
+        <div class="auth-mobile-brand">
+          <div
+            class="auth-mobile-logo"
+            aria-hidden="true"
+          >
+            <svg
+              width="24"
+              height="24"
+              viewBox="0 0 32 32"
+              fill="none"
+            >
+              <rect
+                x="4"
+                y="4"
+                width="10"
+                height="10"
+                rx="3"
+                fill="currentColor"
+              ></rect>
+
+              <rect
+                x="18"
+                y="4"
+                width="10"
+                height="10"
+                rx="3"
+                fill="currentColor"
+                opacity="0.75"
+              ></rect>
+
+              <rect
+                x="4"
+                y="18"
+                width="10"
+                height="10"
+                rx="3"
+                fill="currentColor"
+                opacity="0.75"
+              ></rect>
+
+              <path
+                d="M18 23C18 20.2386 20.2386 18 23 18C25.7614 18 28 20.2386 28 23C28 25.7614 25.7614 28 23 28H18V23Z"
+                fill="currentColor"
+              ></path>
+            </svg>
+          </div>
+
+          <span class="auth-mobile-name">
+            AssetFlow
+          </span>
+        </div>
+
+        <!-- Authentication card -->
+
+        <div class="auth-panel-card">
+          <div class="auth-welcome-badge">
+            Enterprise workspace
+          </div>
+
+          <h2 class="auth-heading">
+            Welcome to AssetFlow
+          </h2>
+
+          <p class="auth-subheading">
+            Sign in to manage your organization's
+            assets and resources.
+          </p>
+
+          <!-- Login/signup tabs -->
+
+          <div
+            class="auth-tabs"
+            role="tablist"
+            aria-label="Authentication options"
+          >
+            <button
+              type="button"
+              class="auth-tab active"
+              id="loginTab"
+              data-auth-tab="login"
+              role="tab"
+              aria-selected="true"
+              aria-controls="loginPanel"
+            >
+              Sign In
+            </button>
+
+            <button
+              type="button"
+              class="auth-tab"
+              id="signupTab"
+              data-auth-tab="signup"
+              role="tab"
+              aria-selected="false"
+              aria-controls="signupPanel"
+              tabindex="-1"
+            >
+              Create Account
+            </button>
+          </div>
+
+          <!-- ==============================================
+               LOGIN FORM
+               ============================================== -->
+
+          <div
+            class="auth-form-panel active"
+            id="loginPanel"
+            data-auth-panel="login"
+            role="tabpanel"
+            aria-labelledby="loginTab"
+          >
+            <form
+              class="auth-form"
+              id="loginForm"
+              data-login-form
+              novalidate
+            >
+              <div
+                class="alert alert-danger auth-form-alert"
+                data-form-error
+                role="alert"
+                hidden
+              ></div>
+
+              <!-- Email -->
+
+              <div class="form-group">
+                <label
+                  class="form-label-required"
+                  for="loginEmail"
+                >
+                  Email address
+                </label>
+
+                <div class="form-input-wrapper">
+                  <svg
+                    class="form-input-icon"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.9"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    aria-hidden="true"
+                  >
+                    <rect
+                      x="3"
+                      y="5"
+                      width="18"
+                      height="14"
+                      rx="2"
+                    ></rect>
+
+                    <path d="m3 7 9 6 9-6"></path>
+                  </svg>
+
+                  <input
+                    class="form-control"
+                    type="email"
+                    id="loginEmail"
+                    name="email"
+                    placeholder="name@company.com"
+                    autocomplete="email"
+                    inputmode="email"
+                    required
+                  />
+                </div>
+
+                <div
+                  class="form-error"
+                  aria-live="polite"
+                ></div>
+              </div>
+
+              <!-- Password -->
+
+              <div class="form-group">
+                <div class="form-label-row">
+                  <label
+                    class="form-label-required"
+                    for="loginPassword"
+                  >
+                    Password
+                  </label>
+
+                  <a
+                    class="forgot-password-link"
+                    href="#"
+                    id="forgotPasswordLink"
+                  >
+                    Forgot password?
+                  </a>
+                </div>
+
+                <div class="form-input-wrapper">
+                  <svg
+                    class="form-input-icon"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.9"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    aria-hidden="true"
+                  >
+                    <rect
+                      x="4"
+                      y="10"
+                      width="16"
+                      height="11"
+                      rx="2"
+                    ></rect>
+
+                    <path d="M8 10V7a4 4 0 0 1 8 0v3"></path>
+                  </svg>
+
+                  <input
+                    class="form-control"
+                    type="password"
+                    id="loginPassword"
+                    name="password"
+                    placeholder="Enter your password"
+                    autocomplete="current-password"
+                    data-password
+                    required
+                  />
+
+                  <button
+                    type="button"
+                    class="form-input-action"
+                    data-password-toggle="#loginPassword"
+                    aria-label="Show password"
+                    aria-pressed="false"
+                  >
+                    <svg
+                      data-icon-show
+                      width="18"
+                      height="18"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="1.9"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      aria-hidden="true"
+                    >
+                      <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z"></path>
+                      <circle
+                        cx="12"
+                        cy="12"
+                        r="3"
+                      ></circle>
+                    </svg>
+
+                    <svg
+                      data-icon-hide
+                      width="18"
+                      height="18"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="1.9"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      aria-hidden="true"
+                      hidden
+                    >
+                      <path d="m3 3 18 18"></path>
+                      <path d="M10.6 10.6a2 2 0 0 0 2.8 2.8"></path>
+                      <path d="M9.8 4.2A10.8 10.8 0 0 1 12 4c6.5 0 10 8 10 8a18.5 18.5 0 0 1-2.1 3.2"></path>
+                      <path d="M6.6 6.6C3.5 8.5 2 12 2 12s3.5 8 10 8a9.8 9.8 0 0 0 4.4-1"></path>
+                    </svg>
+                  </button>
+                </div>
+
+                <div
+                  class="form-error"
+                  aria-live="polite"
+                ></div>
+              </div>
+
+              <!-- Remember me -->
+
+              <div class="auth-options">
+                <label class="checkbox-label">
+                  <input
+                    type="checkbox"
+                    id="rememberMe"
+                    name="remember_me"
+                  />
+
+                  <span>
+                    Keep me signed in
+                  </span>
+                </label>
+              </div>
+
+              <!-- Submit -->
+
+              <button
+                type="submit"
+                class="btn btn-primary btn-lg btn-block btn-ripple btn-shine"
+              >
+                <span>Sign In</span>
+
+                <svg
+                  width="18"
+                  height="18"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  aria-hidden="true"
+                >
+                  <path d="M5 12h14"></path>
+                  <path d="m13 6 6 6-6 6"></path>
+                </svg>
+              </button>
+            </form>
+          </div>
+
+          <!-- ==============================================
+               SIGNUP FORM
+               ============================================== -->
+
+          <div
+            class="auth-form-panel"
+            id="signupPanel"
+            data-auth-panel="signup"
+            role="tabpanel"
+            aria-labelledby="signupTab"
+            hidden
+          >
+            <form
+              class="auth-form"
+              id="signupForm"
+              data-signup-form
+              novalidate
+            >
+              <div
+                class="alert alert-danger auth-form-alert"
+                data-form-error
+                role="alert"
+                hidden
+              ></div>
+
+              <!-- Full name -->
+
+              <div class="form-group">
+                <label
+                  class="form-label-required"
+                  for="signupName"
+                >
+                  Full name
+                </label>
+
+                <div class="form-input-wrapper">
+                  <svg
+                    class="form-input-icon"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.9"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    aria-hidden="true"
+                  >
+                    <circle
+                      cx="12"
+                      cy="8"
+                      r="4"
+                    ></circle>
+
+                    <path d="M4 21a8 8 0 0 1 16 0"></path>
+                  </svg>
+
+                  <input
+                    class="form-control"
+                    type="text"
+                    id="signupName"
+                    name="name"
+                    placeholder="Enter your full name"
+                    autocomplete="name"
+                    minlength="2"
+                    required
+                  />
+                </div>
+
+                <div
+                  class="form-error"
+                  aria-live="polite"
+                ></div>
+              </div>
+
+              <!-- Email -->
+
+              <div class="form-group">
+                <label
+                  class="form-label-required"
+                  for="signupEmail"
+                >
+                  Work email
+                </label>
+
+                <div class="form-input-wrapper">
+                  <svg
+                    class="form-input-icon"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.9"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    aria-hidden="true"
+                  >
+                    <rect
+                      x="3"
+                      y="5"
+                      width="18"
+                      height="14"
+                      rx="2"
+                    ></rect>
+
+                    <path d="m3 7 9 6 9-6"></path>
+                  </svg>
+
+                  <input
+                    class="form-control"
+                    type="email"
+                    id="signupEmail"
+                    name="email"
+                    placeholder="name@company.com"
+                    autocomplete="email"
+                    inputmode="email"
+                    required
+                  />
+                </div>
+
+                <div
+                  class="form-error"
+                  aria-live="polite"
+                ></div>
+              </div>
+
+              <!-- Password -->
+
+              <div class="form-group">
+                <label
+                  class="form-label-required"
+                  for="signupPassword"
+                >
+                  Password
+                </label>
+
+                <div class="form-input-wrapper">
+                  <svg
+                    class="form-input-icon"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.9"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    aria-hidden="true"
+                  >
+                    <rect
+                      x="4"
+                      y="10"
+                      width="16"
+                      height="11"
+                      rx="2"
+                    ></rect>
+
+                    <path d="M8 10V7a4 4 0 0 1 8 0v3"></path>
+                  </svg>
+
+                  <input
+                    class="form-control"
+                    type="password"
+                    id="signupPassword"
+                    name="password"
+                    placeholder="Create a secure password"
+                    autocomplete="new-password"
+                    minlength="8"
+                    data-password
+                    required
+                  />
+
+                  <button
+                    type="button"
+                    class="form-input-action"
+                    data-password-toggle="#signupPassword"
+                    aria-label="Show password"
+                    aria-pressed="false"
+                  >
+                    <svg
+                      data-icon-show
+                      width="18"
+                      height="18"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="1.9"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      aria-hidden="true"
+                    >
+                      <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z"></path>
+                      <circle
+                        cx="12"
+                        cy="12"
+                        r="3"
+                      ></circle>
+                    </svg>
+
+                    <svg
+                      data-icon-hide
+                      width="18"
+                      height="18"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="1.9"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      aria-hidden="true"
+                      hidden
+                    >
+                      <path d="m3 3 18 18"></path>
+                      <path d="M10.6 10.6a2 2 0 0 0 2.8 2.8"></path>
+                      <path d="M9.8 4.2A10.8 10.8 0 0 1 12 4c6.5 0 10 8 10 8a18.5 18.5 0 0 1-2.1 3.2"></path>
+                      <path d="M6.6 6.6C3.5 8.5 2 12 2 12s3.5 8 10 8a9.8 9.8 0 0 0 4.4-1"></path>
+                    </svg>
+                  </button>
+                </div>
+
+                <div class="password-requirement">
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    aria-hidden="true"
+                  >
+                    <circle
+                      cx="12"
+                      cy="12"
+                      r="9"
+                    ></circle>
+
+                    <path d="M12 8v4"></path>
+                    <path d="M12 16h.01"></path>
+                  </svg>
+
+                  Use at least 8 characters.
+                </div>
+
+                <div
+                  class="form-error"
+                  aria-live="polite"
+                ></div>
+              </div>
+
+              <!-- Confirm password -->
+
+              <div class="form-group">
+                <label
+                  class="form-label-required"
+                  for="confirmPassword"
+                >
+                  Confirm password
+                </label>
+
+                <div class="form-input-wrapper">
+                  <svg
+                    class="form-input-icon"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.9"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    aria-hidden="true"
+                  >
+                    <path d="m9 12 2 2 4-4"></path>
+                    <circle
+                      cx="12"
+                      cy="12"
+                      r="9"
+                    ></circle>
+                  </svg>
+
+                  <input
+                    class="form-control"
+                    type="password"
+                    id="confirmPassword"
+                    name="confirm_password"
+                    placeholder="Re-enter your password"
+                    autocomplete="new-password"
+                    minlength="8"
+                    data-password
+                    required
+                  />
+
+                  <button
+                    type="button"
+                    class="form-input-action"
+                    data-password-toggle="#confirmPassword"
+                    aria-label="Show password"
+                    aria-pressed="false"
+                  >
+                    <svg
+                      data-icon-show
+                      width="18"
+                      height="18"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="1.9"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      aria-hidden="true"
+                    >
+                      <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z"></path>
+                      <circle
+                        cx="12"
+                        cy="12"
+                        r="3"
+                      ></circle>
+                    </svg>
+
+                    <svg
+                      data-icon-hide
+                      width="18"
+                      height="18"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="1.9"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      aria-hidden="true"
+                      hidden
+                    >
+                      <path d="m3 3 18 18"></path>
+                      <path d="M10.6 10.6a2 2 0 0 0 2.8 2.8"></path>
+                      <path d="M9.8 4.2A10.8 10.8 0 0 1 12 4c6.5 0 10 8 10 8a18.5 18.5 0 0 1-2.1 3.2"></path>
+                      <path d="M6.6 6.6C3.5 8.5 2 12 2 12s3.5 8 10 8a9.8 9.8 0 0 0 4.4-1"></path>
+                    </svg>
+                  </button>
+                </div>
+
+                <div
+                  class="form-error"
+                  aria-live="polite"
+                ></div>
+              </div>
+
+              <!-- Terms -->
+
+              <div class="form-group">
+                <label class="auth-terms">
+                  <input
+                    type="checkbox"
+                    id="signupTerms"
+                    name="terms"
+                    required
+                  />
+
+                  <span>
+                    I agree to the
+                    <a href="#">Terms of Service</a>
+                    and
+                    <a href="#">Privacy Policy</a>.
+                  </span>
+                </label>
+
+                <div
+                  class="form-error"
+                  aria-live="polite"
+                ></div>
+              </div>
+
+              <!-- Submit -->
+
+              <button
+                type="submit"
+                class="btn btn-primary btn-lg btn-block btn-ripple btn-shine"
+              >
+                <span>Create Employee Account</span>
+
+                <svg
+                  width="18"
+                  height="18"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  aria-hidden="true"
+                >
+                  <path d="M5 12h14"></path>
+                  <path d="m13 6 6 6-6 6"></path>
+                </svg>
+              </button>
+            </form>
+          </div>
+
+          <!-- Security note -->
+
+          <div class="auth-security-note">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z"></path>
+              <path d="m9 12 2 2 4-4"></path>
+            </svg>
+
+            Secure authentication with role-based access
+          </div>
+        </div>
+
+        <p class="auth-footer">
+          ©
+          <span id="authCurrentYear"></span>
+          AssetFlow. All rights reserved.
+        </p>
+      </div>
+    </section>
+  </main>
+
+  <!-- Toast notifications are inserted here automatically -->
+
+  <div
+    class="toast-container"
+    aria-live="polite"
+    aria-label="Notifications"
+  ></div>
+
+  <!-- ====================================================
+       JAVASCRIPT
+       ==================================================== -->
+
+  <script src="js/api.js"></script>
+  <script src="js/utils.js"></script>
+  <script src="js/auth.js"></script>
+
+  <script>
+    "use strict";
+
+    /* Current footer year */
+
+    const authYear =
+      document.getElementById(
+        "authCurrentYear"
+      );
+
+    if (authYear) {
+      authYear.textContent =
+        new Date().getFullYear();
+    }
+
+    /* Forgot-password hackathon placeholder */
+
+    const forgotPasswordLink =
+      document.getElementById(
+        "forgotPasswordLink"
+      );
+
+    forgotPasswordLink?.addEventListener(
+      "click",
+      (event) => {
+        event.preventDefault();
+
+        window.AssetFlowUtils.showToast(
+          "Password recovery will be available in the production release.",
+          "info",
+          {
+            title: "Coming soon"
+          }
+        );
+      }
+    );
+
+    /* Terms and privacy placeholders */
+
+    document
+      .querySelectorAll(
+        '.auth-terms a'
+      )
+      .forEach((link) => {
+        link.addEventListener(
+          "click",
+          (event) => {
+            event.preventDefault();
+
+            window.AssetFlowUtils.showToast(
+              "This document will be available in the production release.",
+              "info"
+            );
+          }
+        );
+      });
+  </script>
+</body>
+</html>

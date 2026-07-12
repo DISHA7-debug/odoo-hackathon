@@ -1,0 +1,3747 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  />
+
+  <meta
+    name="description"
+    content="Manage your AssetFlow profile, security, notifications, organization preferences and integrations."
+  />
+
+  <meta
+    name="theme-color"
+    content="#ff4f78"
+  />
+
+  <title>Settings | AssetFlow</title>
+
+  <!-- Global styles -->
+
+  <link
+    rel="stylesheet"
+    href="../css/variables.css"
+  />
+
+  <link
+    rel="stylesheet"
+    href="../css/global.css"
+  />
+
+  <link
+    rel="stylesheet"
+    href="../css/layout.css"
+  />
+
+  <link
+    rel="stylesheet"
+    href="../css/components.css"
+  />
+
+  <link
+    rel="stylesheet"
+    href="../css/animations.css"
+  />
+
+  <link
+    rel="stylesheet"
+    href="../css/responsive.css"
+  />
+
+  <!-- Page styles -->
+
+  <link
+    rel="stylesheet"
+    href="settings.css"
+  />
+</head>
+
+<body
+  data-auth="required"
+  class="page-transition"
+>
+  <a
+    class="skip-link"
+    href="#settingsMain"
+  >
+    Skip to settings
+  </a>
+
+  <!-- ====================================================
+       APPLICATION SHELL
+       ==================================================== -->
+
+  <div
+    class="app-shell"
+    id="appShell"
+  >
+    <div
+      id="sidebar-container"
+      data-component="sidebar"
+      data-required="true"
+    ></div>
+
+    <div class="app-content">
+      <div
+        id="navbar-container"
+        data-component="navbar"
+        data-required="true"
+      ></div>
+
+      <!-- ==================================================
+           PAGE CONTENT
+           ================================================== -->
+
+      <main
+        class="main-content"
+        id="settingsMain"
+      >
+        <div class="page-container">
+          <!-- Page header -->
+
+          <header class="page-header">
+            <div class="page-header-content">
+              <div class="breadcrumbs">
+                <span class="breadcrumb-item">
+                  <a
+                    class="breadcrumb-link"
+                    href="../dashboard/index.html"
+                  >
+                    AssetFlow
+                  </a>
+
+                  <svg
+                    class="breadcrumb-separator"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    aria-hidden="true"
+                  >
+                    <path d="m9 18 6-6-6-6"></path>
+                  </svg>
+                </span>
+
+                <span
+                  class="breadcrumb-current"
+                  aria-current="page"
+                >
+                  Settings
+                </span>
+              </div>
+
+              <h1 class="page-title">
+                Settings
+              </h1>
+
+              <p class="page-description">
+                Manage your profile, account security, notifications
+                and AssetFlow system preferences.
+              </p>
+            </div>
+
+            <div class="page-actions">
+              <button
+                type="button"
+                class="btn btn-outline"
+                data-reset-current-settings
+              >
+                Reset Changes
+              </button>
+
+              <button
+                type="button"
+                class="btn btn-primary"
+                data-save-current-settings
+              >
+                <svg
+                  width="18"
+                  height="18"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  aria-hidden="true"
+                >
+                  <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2Z"></path>
+                  <path d="M17 21v-8H7v8"></path>
+                  <path d="M7 3v5h8"></path>
+                </svg>
+
+                Save Changes
+              </button>
+            </div>
+          </header>
+
+          <!-- Page error -->
+
+          <div
+            class="alert alert-danger settings-page-alert"
+            id="settingsPageErrorAlert"
+            role="alert"
+            hidden
+          >
+            <div class="alert-icon">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                aria-hidden="true"
+              >
+                <circle
+                  cx="12"
+                  cy="12"
+                  r="10"
+                ></circle>
+
+                <path d="M12 8v4"></path>
+                <path d="M12 16h.01"></path>
+              </svg>
+            </div>
+
+            <div class="alert-content">
+              <h2 class="alert-title">
+                Unable to load settings
+              </h2>
+
+              <p
+                class="alert-message"
+                id="settingsPageErrorMessage"
+              >
+                Please refresh the page and try again.
+              </p>
+            </div>
+
+            <div class="alert-actions">
+              <button
+                type="button"
+                class="btn btn-danger btn-sm"
+                data-retry-settings
+              >
+                Retry
+              </button>
+            </div>
+          </div>
+
+          <!-- Unsaved changes alert -->
+
+          <div
+            class="alert alert-warning settings-unsaved-alert"
+            data-unsaved-settings-alert
+            role="status"
+            hidden
+          >
+            <div class="alert-icon">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                aria-hidden="true"
+              >
+                <path d="M12 3 2 21h20L12 3Z"></path>
+                <path d="M12 9v4"></path>
+                <path d="M12 17h.01"></path>
+              </svg>
+            </div>
+
+            <div class="alert-content">
+              <h2 class="alert-title">
+                Unsaved changes
+              </h2>
+
+              <p class="alert-message">
+                Save or reset your changes before leaving this page.
+              </p>
+            </div>
+          </div>
+
+          <!-- ==================================================
+               SETTINGS WORKSPACE
+               ================================================== -->
+
+          <section
+            class="settings-workspace"
+            aria-labelledby="settingsWorkspaceTitle"
+          >
+            <h2
+              id="settingsWorkspaceTitle"
+              class="sr-only"
+            >
+              AssetFlow settings
+            </h2>
+
+            <!-- Settings navigation -->
+
+            <aside
+              class="card settings-navigation"
+              aria-label="Settings sections"
+            >
+              <div class="settings-navigation-profile">
+                <div
+                  class="settings-profile-avatar"
+                  data-settings-profile-avatar
+                  aria-hidden="true"
+                >
+                  AF
+                </div>
+
+                <div>
+                  <strong data-settings-profile-name>
+                    AssetFlow User
+                  </strong>
+
+                  <span data-settings-profile-role>
+                    Employee
+                  </span>
+                </div>
+              </div>
+
+              <nav
+                class="settings-navigation-list"
+                role="tablist"
+                aria-orientation="vertical"
+              >
+                <button
+                  type="button"
+                  class="settings-navigation-item active"
+                  id="profileSettingsTab"
+                  data-settings-tab="profile"
+                  role="tab"
+                  aria-selected="true"
+                  aria-controls="profileSettingsPanel"
+                >
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.9"
+                    aria-hidden="true"
+                  >
+                    <circle
+                      cx="12"
+                      cy="8"
+                      r="4"
+                    ></circle>
+
+                    <path d="M4 21a8 8 0 0 1 16 0"></path>
+                  </svg>
+
+                  <span>
+                    <strong>
+                      Profile
+                    </strong>
+
+                    <small>
+                      Personal information
+                    </small>
+                  </span>
+                </button>
+
+                <button
+                  type="button"
+                  class="settings-navigation-item"
+                  id="securitySettingsTab"
+                  data-settings-tab="security"
+                  role="tab"
+                  aria-selected="false"
+                  aria-controls="securitySettingsPanel"
+                  tabindex="-1"
+                >
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.9"
+                    aria-hidden="true"
+                  >
+                    <path d="M12 3 4 6v6c0 5 3.5 8 8 9 4.5-1 8-4 8-9V6l-8-3Z"></path>
+                    <path d="m9 12 2 2 4-5"></path>
+                  </svg>
+
+                  <span>
+                    <strong>
+                      Security
+                    </strong>
+
+                    <small>
+                      Password and sessions
+                    </small>
+                  </span>
+                </button>
+
+                <button
+                  type="button"
+                  class="settings-navigation-item"
+                  id="notificationSettingsTab"
+                  data-settings-tab="notifications"
+                  role="tab"
+                  aria-selected="false"
+                  aria-controls="notificationSettingsPanel"
+                  tabindex="-1"
+                >
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.9"
+                    aria-hidden="true"
+                  >
+                    <path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"></path>
+                    <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+                  </svg>
+
+                  <span>
+                    <strong>
+                      Notifications
+                    </strong>
+
+                    <small>
+                      Alerts and communication
+                    </small>
+                  </span>
+                </button>
+
+                <button
+                  type="button"
+                  class="settings-navigation-item"
+                  id="organizationSettingsTab"
+                  data-settings-tab="organization"
+                  data-admin-only
+                  role="tab"
+                  aria-selected="false"
+                  aria-controls="organizationSettingsPanel"
+                  tabindex="-1"
+                >
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.9"
+                    aria-hidden="true"
+                  >
+                    <path d="M3 21h18"></path>
+                    <path d="M6 21V8l6-4 6 4v13"></path>
+                    <path d="M9 12h6"></path>
+                    <path d="M9 16h6"></path>
+                  </svg>
+
+                  <span>
+                    <strong>
+                      Organization
+                    </strong>
+
+                    <small>
+                      Company information
+                    </small>
+                  </span>
+                </button>
+
+                <button
+                  type="button"
+                  class="settings-navigation-item"
+                  id="systemSettingsTab"
+                  data-settings-tab="system"
+                  data-admin-only
+                  role="tab"
+                  aria-selected="false"
+                  aria-controls="systemSettingsPanel"
+                  tabindex="-1"
+                >
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.9"
+                    aria-hidden="true"
+                  >
+                    <circle
+                      cx="12"
+                      cy="12"
+                      r="3"
+                    ></circle>
+
+                    <path d="M19.4 15a1.7 1.7 0 0 0 .34 1.88l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06A1.7 1.7 0 0 0 15 19.4a1.7 1.7 0 0 0-1 .6 1.7 1.7 0 0 0-.4 1.1V21a2 2 0 1 1-4 0v-.09A1.7 1.7 0 0 0 8.6 19.4a1.7 1.7 0 0 0-1.88.34l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.7 1.7 0 0 0 4.6 15a1.7 1.7 0 0 0-.6-1 1.7 1.7 0 0 0-1.1-.4H3a2 2 0 1 1 0-4h.09A1.7 1.7 0 0 0 4.6 8.6a1.7 1.7 0 0 0-.34-1.88l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.7 1.7 0 0 0 9 4.6a1.7 1.7 0 0 0 1-.6 1.7 1.7 0 0 0 .4-1.1V3a2 2 0 1 1 4 0v.09A1.7 1.7 0 0 0 15.4 4.6a1.7 1.7 0 0 0 1.88-.34l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.7 1.7 0 0 0 19.4 9c.1.37.32.7.6 1 .29.27.68.42 1.09.4H21a2 2 0 1 1 0 4h-.09a1.7 1.7 0 0 0-1.51.6Z"></path>
+                  </svg>
+
+                  <span>
+                    <strong>
+                      System
+                    </strong>
+
+                    <small>
+                      Workflow defaults
+                    </small>
+                  </span>
+                </button>
+
+                <button
+                  type="button"
+                  class="settings-navigation-item"
+                  id="integrationSettingsTab"
+                  data-settings-tab="integrations"
+                  data-admin-only
+                  role="tab"
+                  aria-selected="false"
+                  aria-controls="integrationSettingsPanel"
+                  tabindex="-1"
+                >
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.9"
+                    aria-hidden="true"
+                  >
+                    <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
+                    <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
+                  </svg>
+
+                  <span>
+                    <strong>
+                      Integrations
+                    </strong>
+
+                    <small>
+                      API and webhooks
+                    </small>
+                  </span>
+                </button>
+              </nav>
+            </aside>
+
+            <!-- Settings content -->
+
+            <div class="settings-content">
+              <!-- ============================================
+                   PROFILE SETTINGS
+                   ============================================ -->
+
+              <section
+                class="settings-panel active"
+                id="profileSettingsPanel"
+                data-settings-panel="profile"
+                role="tabpanel"
+                aria-labelledby="profileSettingsTab"
+              >
+                <form
+                  id="profileSettingsForm"
+                  data-settings-form="profile"
+                  novalidate
+                >
+                  <article class="card settings-card">
+                    <header class="settings-card-header">
+                      <div>
+                        <h2>
+                          Profile Information
+                        </h2>
+
+                        <p>
+                          Update your personal information and account
+                          profile.
+                        </p>
+                      </div>
+                    </header>
+
+                    <div class="settings-card-body">
+                      <div
+                        class="alert alert-danger"
+                        data-profile-settings-error
+                        role="alert"
+                        hidden
+                      ></div>
+
+                      <div class="profile-photo-section">
+                        <div
+                          class="profile-photo-preview"
+                          data-profile-photo-preview
+                        >
+                          AF
+                        </div>
+
+                        <div class="profile-photo-content">
+                          <h3>
+                            Profile Photo
+                          </h3>
+
+                          <p>
+                            Upload a square JPG, PNG or WebP image up to
+                            5 MB.
+                          </p>
+
+                          <div class="profile-photo-actions">
+                            <label
+                              class="btn btn-outline btn-sm"
+                              for="profilePhotoInput"
+                            >
+                              Upload Photo
+                            </label>
+
+                            <input
+                              type="file"
+                              id="profilePhotoInput"
+                              name="avatar"
+                              accept="image/png,image/jpeg,image/webp"
+                              hidden
+                            />
+
+                            <button
+                              type="button"
+                              class="btn btn-ghost btn-sm"
+                              data-remove-profile-photo
+                            >
+                              Remove
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="form-grid form-grid-2">
+                        <div class="form-group">
+                          <label
+                            class="form-label-required"
+                            for="settingsFullName"
+                          >
+                            Full Name
+                          </label>
+
+                          <input
+                            class="form-control"
+                            type="text"
+                            id="settingsFullName"
+                            name="name"
+                            maxlength="120"
+                            autocomplete="name"
+                            required
+                          />
+
+                          <div class="form-error"></div>
+                        </div>
+
+                        <div class="form-group">
+                          <label
+                            class="form-label-required"
+                            for="settingsEmail"
+                          >
+                            Email Address
+                          </label>
+
+                          <input
+                            class="form-control"
+                            type="email"
+                            id="settingsEmail"
+                            name="email"
+                            maxlength="180"
+                            autocomplete="email"
+                            required
+                          />
+
+                          <div class="form-error"></div>
+                        </div>
+                      </div>
+
+                      <div class="form-grid form-grid-2">
+                        <div class="form-group">
+                          <label for="settingsPhone">
+                            Phone Number
+                          </label>
+
+                          <input
+                            class="form-control"
+                            type="tel"
+                            id="settingsPhone"
+                            name="phone"
+                            maxlength="24"
+                            autocomplete="tel"
+                          />
+
+                          <div class="form-error"></div>
+                        </div>
+
+                        <div class="form-group">
+                          <label for="settingsJobTitle">
+                            Job Title
+                          </label>
+
+                          <input
+                            class="form-control"
+                            type="text"
+                            id="settingsJobTitle"
+                            name="job_title"
+                            maxlength="120"
+                          />
+
+                          <div class="form-error"></div>
+                        </div>
+                      </div>
+
+                      <div class="form-grid form-grid-2">
+                        <div class="form-group">
+                          <label for="settingsDepartment">
+                            Department
+                          </label>
+
+                          <input
+                            class="form-control"
+                            type="text"
+                            id="settingsDepartment"
+                            disabled
+                          />
+
+                          <p class="form-help">
+                            Contact an administrator to change your
+                            department.
+                          </p>
+                        </div>
+
+                        <div class="form-group">
+                          <label for="settingsEmployeeCode">
+                            Employee ID
+                          </label>
+
+                          <input
+                            class="form-control"
+                            type="text"
+                            id="settingsEmployeeCode"
+                            disabled
+                          />
+                        </div>
+                      </div>
+
+                      <div class="form-group">
+                        <label for="settingsBio">
+                          Bio
+                        </label>
+
+                        <textarea
+                          id="settingsBio"
+                          name="bio"
+                          rows="4"
+                          maxlength="500"
+                          placeholder="Add a short professional description..."
+                        ></textarea>
+
+                        <div class="form-character-count">
+                          <span data-profile-bio-count>
+                            0
+                          </span>
+                          / 500
+                        </div>
+                      </div>
+                    </div>
+
+                    <footer class="settings-card-footer">
+                      <button
+                        type="button"
+                        class="btn btn-outline"
+                        data-reset-settings-form="profile"
+                      >
+                        Reset
+                      </button>
+
+                      <button
+                        type="submit"
+                        class="btn btn-primary"
+                        data-profile-settings-submit
+                      >
+                        Save Profile
+                      </button>
+                    </footer>
+                  </article>
+
+                  <article class="card settings-card">
+                    <header class="settings-card-header">
+                      <div>
+                        <h2>
+                          Regional Preferences
+                        </h2>
+
+                        <p>
+                          Configure how dates, times and language are
+                          displayed.
+                        </p>
+                      </div>
+                    </header>
+
+                    <div class="settings-card-body">
+                      <div class="form-grid form-grid-2">
+                        <div class="form-group">
+                          <label for="settingsLanguage">
+                            Language
+                          </label>
+
+                          <select
+                            id="settingsLanguage"
+                            name="language"
+                          >
+                            <option value="en">
+                              English
+                            </option>
+
+                            <option value="hi">
+                              Hindi
+                            </option>
+                          </select>
+                        </div>
+
+                        <div class="form-group">
+                          <label for="settingsTimezone">
+                            Time Zone
+                          </label>
+
+                          <select
+                            id="settingsTimezone"
+                            name="timezone"
+                          >
+                            <option value="Asia/Kolkata">
+                              India Standard Time (UTC+05:30)
+                            </option>
+
+                            <option value="UTC">
+                              Coordinated Universal Time
+                            </option>
+
+                            <option value="Asia/Dubai">
+                              Gulf Standard Time (UTC+04:00)
+                            </option>
+
+                            <option value="Europe/London">
+                              London
+                            </option>
+
+                            <option value="America/New_York">
+                              New York
+                            </option>
+
+                            <option value="America/Los_Angeles">
+                              Los Angeles
+                            </option>
+                          </select>
+                        </div>
+                      </div>
+
+                      <div class="form-grid form-grid-2">
+                        <div class="form-group">
+                          <label for="settingsDateFormat">
+                            Date Format
+                          </label>
+
+                          <select
+                            id="settingsDateFormat"
+                            name="date_format"
+                          >
+                            <option value="DD/MM/YYYY">
+                              DD/MM/YYYY
+                            </option>
+
+                            <option value="MM/DD/YYYY">
+                              MM/DD/YYYY
+                            </option>
+
+                            <option value="YYYY-MM-DD">
+                              YYYY-MM-DD
+                            </option>
+
+                            <option value="DD MMM YYYY">
+                              DD MMM YYYY
+                            </option>
+                          </select>
+                        </div>
+
+                        <div class="form-group">
+                          <label for="settingsTimeFormat">
+                            Time Format
+                          </label>
+
+                          <select
+                            id="settingsTimeFormat"
+                            name="time_format"
+                          >
+                            <option value="12">
+                              12-hour
+                            </option>
+
+                            <option value="24">
+                              24-hour
+                            </option>
+                          </select>
+                        </div>
+                      </div>
+                    </div>
+                  </article>
+                </form>
+              </section>
+
+              <!-- ============================================
+                   SECURITY SETTINGS
+                   ============================================ -->
+
+              <section
+                class="settings-panel"
+                id="securitySettingsPanel"
+                data-settings-panel="security"
+                role="tabpanel"
+                aria-labelledby="securitySettingsTab"
+                hidden
+              >
+                <form
+                  id="passwordSettingsForm"
+                  data-settings-form="security"
+                  novalidate
+                >
+                  <article class="card settings-card">
+                    <header class="settings-card-header">
+                      <div>
+                        <h2>
+                          Change Password
+                        </h2>
+
+                        <p>
+                          Use a unique password that you do not use on
+                          other services.
+                        </p>
+                      </div>
+                    </header>
+
+                    <div class="settings-card-body">
+                      <div
+                        class="alert alert-danger"
+                        data-password-settings-error
+                        role="alert"
+                        hidden
+                      ></div>
+
+                      <div class="form-group">
+                        <label
+                          class="form-label-required"
+                          for="currentPassword"
+                        >
+                          Current Password
+                        </label>
+
+                        <div class="password-input-wrapper">
+                          <input
+                            class="form-control"
+                            type="password"
+                            id="currentPassword"
+                            name="current_password"
+                            autocomplete="current-password"
+                            required
+                          />
+
+                          <button
+                            type="button"
+                            class="password-toggle"
+                            data-password-toggle="#currentPassword"
+                            aria-label="Show current password"
+                          >
+                            <svg
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              stroke="currentColor"
+                              stroke-width="1.9"
+                              aria-hidden="true"
+                            >
+                              <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z"></path>
+                              <circle
+                                cx="12"
+                                cy="12"
+                                r="3"
+                              ></circle>
+                            </svg>
+                          </button>
+                        </div>
+
+                        <div class="form-error"></div>
+                      </div>
+
+                      <div class="form-grid form-grid-2">
+                        <div class="form-group">
+                          <label
+                            class="form-label-required"
+                            for="newPassword"
+                          >
+                            New Password
+                          </label>
+
+                          <div class="password-input-wrapper">
+                            <input
+                              class="form-control"
+                              type="password"
+                              id="newPassword"
+                              name="new_password"
+                              minlength="8"
+                              maxlength="128"
+                              autocomplete="new-password"
+                              required
+                            />
+
+                            <button
+                              type="button"
+                              class="password-toggle"
+                              data-password-toggle="#newPassword"
+                              aria-label="Show new password"
+                            >
+                              <svg
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="1.9"
+                                aria-hidden="true"
+                              >
+                                <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z"></path>
+                                <circle
+                                  cx="12"
+                                  cy="12"
+                                  r="3"
+                                ></circle>
+                              </svg>
+                            </button>
+                          </div>
+
+                          <div class="form-error"></div>
+                        </div>
+
+                        <div class="form-group">
+                          <label
+                            class="form-label-required"
+                            for="confirmNewPassword"
+                          >
+                            Confirm New Password
+                          </label>
+
+                          <div class="password-input-wrapper">
+                            <input
+                              class="form-control"
+                              type="password"
+                              id="confirmNewPassword"
+                              name="confirm_password"
+                              minlength="8"
+                              maxlength="128"
+                              autocomplete="new-password"
+                              required
+                            />
+
+                            <button
+                              type="button"
+                              class="password-toggle"
+                              data-password-toggle="#confirmNewPassword"
+                              aria-label="Show password confirmation"
+                            >
+                              <svg
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="1.9"
+                                aria-hidden="true"
+                              >
+                                <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z"></path>
+                                <circle
+                                  cx="12"
+                                  cy="12"
+                                  r="3"
+                                ></circle>
+                              </svg>
+                            </button>
+                          </div>
+
+                          <div class="form-error"></div>
+                        </div>
+                      </div>
+
+                      <div
+                        class="password-strength"
+                        data-security-password-strength
+                        hidden
+                      >
+                        <div class="password-strength-track">
+                          <div
+                            class="password-strength-bar"
+                            data-security-password-strength-bar
+                          ></div>
+                        </div>
+
+                        <span data-security-password-strength-label>
+                          Password strength
+                        </span>
+                      </div>
+
+                      <div class="password-requirements">
+                        <h3>
+                          Password requirements
+                        </h3>
+
+                        <ul>
+                          <li data-password-requirement="length">
+                            At least 8 characters
+                          </li>
+
+                          <li data-password-requirement="uppercase">
+                            One uppercase letter
+                          </li>
+
+                          <li data-password-requirement="lowercase">
+                            One lowercase letter
+                          </li>
+
+                          <li data-password-requirement="number">
+                            One number
+                          </li>
+
+                          <li data-password-requirement="symbol">
+                            One special character
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
+
+                    <footer class="settings-card-footer">
+                      <button
+                        type="reset"
+                        class="btn btn-outline"
+                      >
+                        Clear
+                      </button>
+
+                      <button
+                        type="submit"
+                        class="btn btn-primary"
+                        data-password-settings-submit
+                      >
+                        Update Password
+                      </button>
+                    </footer>
+                  </article>
+                </form>
+
+                <article class="card settings-card">
+                  <header class="settings-card-header">
+                    <div>
+                      <h2>
+                        Two-Factor Authentication
+                      </h2>
+
+                      <p>
+                        Add an additional verification step to your
+                        AssetFlow account.
+                      </p>
+                    </div>
+
+                    <span
+                      class="badge badge-neutral badge-dot"
+                      data-mfa-status
+                    >
+                      Disabled
+                    </span>
+                  </header>
+
+                  <div class="settings-card-body">
+                    <div class="security-feature">
+                      <div class="security-feature-icon">
+                        <svg
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="1.9"
+                          aria-hidden="true"
+                        >
+                          <rect
+                            x="7"
+                            y="2"
+                            width="10"
+                            height="20"
+                            rx="2"
+                          ></rect>
+
+                          <path d="M11 18h2"></path>
+                          <path d="m9 10 2 2 4-4"></path>
+                        </svg>
+                      </div>
+
+                      <div class="security-feature-content">
+                        <h3>
+                          Authenticator application
+                        </h3>
+
+                        <p>
+                          Use an authenticator app to generate a
+                          verification code when signing in.
+                        </p>
+                      </div>
+
+                      <button
+                        type="button"
+                        class="btn btn-primary"
+                        data-enable-mfa
+                      >
+                        Enable 2FA
+                      </button>
+
+                      <button
+                        type="button"
+                        class="btn btn-danger"
+                        data-modal-open="#disableMfaModal"
+                        data-disable-mfa
+                        hidden
+                      >
+                        Disable 2FA
+                      </button>
+                    </div>
+                  </div>
+                </article>
+
+                <article class="card settings-card">
+                  <header class="settings-card-header">
+                    <div>
+                      <h2>
+                        Active Sessions
+                      </h2>
+
+                      <p>
+                        Review devices currently signed in to your
+                        account.
+                      </p>
+                    </div>
+
+                    <button
+                      type="button"
+                      class="btn btn-danger btn-sm"
+                      data-sign-out-other-sessions
+                    >
+                      Sign Out Other Sessions
+                    </button>
+                  </header>
+
+                  <div class="settings-card-body">
+                    <div
+                      class="active-session-list"
+                      id="activeSessionList"
+                      data-active-session-list
+                    >
+                      <div class="active-session-skeleton">
+                        <div class="skeleton skeleton-avatar"></div>
+
+                        <div>
+                          <div class="skeleton skeleton-text"></div>
+                          <div class="skeleton skeleton-text-sm"></div>
+                        </div>
+                      </div>
+
+                      <div class="active-session-skeleton">
+                        <div class="skeleton skeleton-avatar"></div>
+
+                        <div>
+                          <div class="skeleton skeleton-text"></div>
+                          <div class="skeleton skeleton-text-sm"></div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </article>
+
+                <article class="card settings-card danger-zone-card">
+                  <header class="settings-card-header">
+                    <div>
+                      <h2>
+                        Danger Zone
+                      </h2>
+
+                      <p>
+                        Actions in this section may permanently affect
+                        your account.
+                      </p>
+                    </div>
+                  </header>
+
+                  <div class="settings-card-body">
+                    <div class="danger-zone-action">
+                      <div>
+                        <h3>
+                          Deactivate Account
+                        </h3>
+
+                        <p>
+                          Disable your account and prevent future
+                          sign-ins until an administrator reactivates it.
+                        </p>
+                      </div>
+
+                      <button
+                        type="button"
+                        class="btn btn-danger"
+                        data-request-account-deactivation
+                      >
+                        Deactivate Account
+                      </button>
+                    </div>
+                  </div>
+                </article>
+              </section>
+
+              <!-- ============================================
+                   NOTIFICATION SETTINGS
+                   ============================================ -->
+
+              <section
+                class="settings-panel"
+                id="notificationSettingsPanel"
+                data-settings-panel="notifications"
+                role="tabpanel"
+                aria-labelledby="notificationSettingsTab"
+                hidden
+              >
+                <form
+                  id="notificationSettingsForm"
+                  data-settings-form="notifications"
+                  novalidate
+                >
+                  <article class="card settings-card">
+                    <header class="settings-card-header">
+                      <div>
+                        <h2>
+                          Notification Channels
+                        </h2>
+
+                        <p>
+                          Select how AssetFlow may communicate with you.
+                        </p>
+                      </div>
+                    </header>
+
+                    <div class="settings-card-body">
+                      <div
+                        class="alert alert-danger"
+                        data-notification-settings-error
+                        role="alert"
+                        hidden
+                      ></div>
+
+                      <div class="settings-toggle-list">
+                        <label class="settings-toggle-row">
+                          <span class="settings-toggle-icon">
+                            <svg
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              stroke="currentColor"
+                              stroke-width="1.9"
+                              aria-hidden="true"
+                            >
+                              <rect
+                                x="3"
+                                y="5"
+                                width="18"
+                                height="14"
+                                rx="2"
+                              ></rect>
+                              <path d="m3 7 9 6 9-6"></path>
+                            </svg>
+                          </span>
+
+                          <span class="settings-toggle-content">
+                            <strong>
+                              Email Notifications
+                            </strong>
+
+                            <small>
+                              Receive account and operational alerts by
+                              email.
+                            </small>
+                          </span>
+
+                          <span class="switch">
+                            <input
+                              type="checkbox"
+                              id="notificationEmailEnabled"
+                              name="email_enabled"
+                              checked
+                            />
+
+                            <span class="switch-slider"></span>
+                          </span>
+                        </label>
+
+                        <label class="settings-toggle-row">
+                          <span class="settings-toggle-icon">
+                            <svg
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              stroke="currentColor"
+                              stroke-width="1.9"
+                              aria-hidden="true"
+                            >
+                              <path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"></path>
+                              <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+                            </svg>
+                          </span>
+
+                          <span class="settings-toggle-content">
+                            <strong>
+                              In-App Notifications
+                            </strong>
+
+                            <small>
+                              Show alerts inside the AssetFlow
+                              application.
+                            </small>
+                          </span>
+
+                          <span class="switch">
+                            <input
+                              type="checkbox"
+                              id="notificationInAppEnabled"
+                              name="in_app_enabled"
+                              checked
+                            />
+
+                            <span class="switch-slider"></span>
+                          </span>
+                        </label>
+
+                        <label class="settings-toggle-row">
+                          <span class="settings-toggle-icon">
+                            <svg
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              stroke="currentColor"
+                              stroke-width="1.9"
+                              aria-hidden="true"
+                            >
+                              <rect
+                                x="7"
+                                y="2"
+                                width="10"
+                                height="20"
+                                rx="2"
+                              ></rect>
+                              <path d="M11 18h2"></path>
+                            </svg>
+                          </span>
+
+                          <span class="settings-toggle-content">
+                            <strong>
+                              SMS Notifications
+                            </strong>
+
+                            <small>
+                              Receive urgent account and asset alerts
+                              through SMS.
+                            </small>
+                          </span>
+
+                          <span class="switch">
+                            <input
+                              type="checkbox"
+                              id="notificationSmsEnabled"
+                              name="sms_enabled"
+                            />
+
+                            <span class="switch-slider"></span>
+                          </span>
+                        </label>
+                      </div>
+                    </div>
+                  </article>
+
+                  <article class="card settings-card">
+                    <header class="settings-card-header">
+                      <div>
+                        <h2>
+                          Notification Preferences
+                        </h2>
+
+                        <p>
+                          Choose the events for which you want to
+                          receive alerts.
+                        </p>
+                      </div>
+                    </header>
+
+                    <div class="settings-card-body">
+                      <div class="notification-preference-table">
+                        <div class="notification-preference-header">
+                          <span>
+                            Notification
+                          </span>
+
+                          <span>
+                            Email
+                          </span>
+
+                          <span>
+                            In-App
+                          </span>
+
+                          <span>
+                            SMS
+                          </span>
+                        </div>
+
+                        <div class="notification-preference-row">
+                          <div>
+                            <strong>
+                              Asset Allocation
+                            </strong>
+
+                            <small>
+                              When an asset is allocated, transferred
+                              or returned.
+                            </small>
+                          </div>
+
+                          <label class="table-checkbox">
+                            <input
+                              type="checkbox"
+                              name="allocation_email"
+                              checked
+                            />
+
+                            <span></span>
+                          </label>
+
+                          <label class="table-checkbox">
+                            <input
+                              type="checkbox"
+                              name="allocation_in_app"
+                              checked
+                            />
+
+                            <span></span>
+                          </label>
+
+                          <label class="table-checkbox">
+                            <input
+                              type="checkbox"
+                              name="allocation_sms"
+                            />
+
+                            <span></span>
+                          </label>
+                        </div>
+
+                        <div class="notification-preference-row">
+                          <div>
+                            <strong>
+                              Resource Booking
+                            </strong>
+
+                            <small>
+                              Booking approvals, rejections, conflicts
+                              and reminders.
+                            </small>
+                          </div>
+
+                          <label class="table-checkbox">
+                            <input
+                              type="checkbox"
+                              name="booking_email"
+                              checked
+                            />
+
+                            <span></span>
+                          </label>
+
+                          <label class="table-checkbox">
+                            <input
+                              type="checkbox"
+                              name="booking_in_app"
+                              checked
+                            />
+
+                            <span></span>
+                          </label>
+
+                          <label class="table-checkbox">
+                            <input
+                              type="checkbox"
+                              name="booking_sms"
+                            />
+
+                            <span></span>
+                          </label>
+                        </div>
+
+                        <div class="notification-preference-row">
+                          <div>
+                            <strong>
+                              Maintenance Requests
+                            </strong>
+
+                            <small>
+                              Status changes and updates to maintenance
+                              requests.
+                            </small>
+                          </div>
+
+                          <label class="table-checkbox">
+                            <input
+                              type="checkbox"
+                              name="maintenance_email"
+                              checked
+                            />
+
+                            <span></span>
+                          </label>
+
+                          <label class="table-checkbox">
+                            <input
+                              type="checkbox"
+                              name="maintenance_in_app"
+                              checked
+                            />
+
+                            <span></span>
+                          </label>
+
+                          <label class="table-checkbox">
+                            <input
+                              type="checkbox"
+                              name="maintenance_sms"
+                            />
+
+                            <span></span>
+                          </label>
+                        </div>
+
+                        <div class="notification-preference-row">
+                          <div>
+                            <strong>
+                              Approval Requests
+                            </strong>
+
+                            <small>
+                              New actions waiting for your approval.
+                            </small>
+                          </div>
+
+                          <label class="table-checkbox">
+                            <input
+                              type="checkbox"
+                              name="approval_email"
+                              checked
+                            />
+
+                            <span></span>
+                          </label>
+
+                          <label class="table-checkbox">
+                            <input
+                              type="checkbox"
+                              name="approval_in_app"
+                              checked
+                            />
+
+                            <span></span>
+                          </label>
+
+                          <label class="table-checkbox">
+                            <input
+                              type="checkbox"
+                              name="approval_sms"
+                            />
+
+                            <span></span>
+                          </label>
+                        </div>
+
+                        <div class="notification-preference-row">
+                          <div>
+                            <strong>
+                              Security Alerts
+                            </strong>
+
+                            <small>
+                              Sign-in, password, role and account
+                              security events.
+                            </small>
+                          </div>
+
+                          <label class="table-checkbox">
+                            <input
+                              type="checkbox"
+                              name="security_email"
+                              checked
+                            />
+
+                            <span></span>
+                          </label>
+
+                          <label class="table-checkbox">
+                            <input
+                              type="checkbox"
+                              name="security_in_app"
+                              checked
+                            />
+
+                            <span></span>
+                          </label>
+
+                          <label class="table-checkbox">
+                            <input
+                              type="checkbox"
+                              name="security_sms"
+                              checked
+                            />
+
+                            <span></span>
+                          </label>
+                        </div>
+
+                        <div class="notification-preference-row">
+                          <div>
+                            <strong>
+                              Reports and Summaries
+                            </strong>
+
+                            <small>
+                              Scheduled reports and periodic summary
+                              emails.
+                            </small>
+                          </div>
+
+                          <label class="table-checkbox">
+                            <input
+                              type="checkbox"
+                              name="report_email"
+                              checked
+                            />
+
+                            <span></span>
+                          </label>
+
+                          <label class="table-checkbox">
+                            <input
+                              type="checkbox"
+                              name="report_in_app"
+                            />
+
+                            <span></span>
+                          </label>
+
+                          <label class="table-checkbox">
+                            <input
+                              type="checkbox"
+                              name="report_sms"
+                            />
+
+                            <span></span>
+                          </label>
+                        </div>
+                      </div>
+                    </div>
+                  </article>
+
+                  <article class="card settings-card">
+                    <header class="settings-card-header">
+                      <div>
+                        <h2>
+                          Notification Schedule
+                        </h2>
+
+                        <p>
+                          Control digest delivery and quiet hours.
+                        </p>
+                      </div>
+                    </header>
+
+                    <div class="settings-card-body">
+                      <div class="form-grid form-grid-2">
+                        <div class="form-group">
+                          <label for="notificationDigestFrequency">
+                            Email Digest
+                          </label>
+
+                          <select
+                            id="notificationDigestFrequency"
+                            name="digest_frequency"
+                          >
+                            <option value="none">
+                              Do not send a digest
+                            </option>
+
+                            <option value="daily">
+                              Daily
+                            </option>
+
+                            <option value="weekly">
+                              Weekly
+                            </option>
+                          </select>
+                        </div>
+
+                        <div class="form-group">
+                          <label for="notificationDigestTime">
+                            Digest Time
+                          </label>
+
+                          <input
+                            class="form-control"
+                            type="time"
+                            id="notificationDigestTime"
+                            name="digest_time"
+                            value="09:00"
+                          />
+                        </div>
+                      </div>
+
+                      <label class="settings-toggle-row bordered">
+                        <span class="settings-toggle-icon">
+                          <svg
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="1.9"
+                            aria-hidden="true"
+                          >
+                            <path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"></path>
+                          </svg>
+                        </span>
+
+                        <span class="settings-toggle-content">
+                          <strong>
+                            Quiet Hours
+                          </strong>
+
+                          <small>
+                            Pause non-critical notifications during the
+                            configured time window.
+                          </small>
+                        </span>
+
+                        <span class="switch">
+                          <input
+                            type="checkbox"
+                            id="quietHoursEnabled"
+                            name="quiet_hours_enabled"
+                          />
+
+                          <span class="switch-slider"></span>
+                        </span>
+                      </label>
+
+                      <div
+                        class="form-grid form-grid-2 quiet-hours-fields"
+                        data-quiet-hours-fields
+                        hidden
+                      >
+                        <div class="form-group">
+                          <label for="quietHoursStart">
+                            Quiet Hours Start
+                          </label>
+
+                          <input
+                            class="form-control"
+                            type="time"
+                            id="quietHoursStart"
+                            name="quiet_hours_start"
+                            value="22:00"
+                          />
+                        </div>
+
+                        <div class="form-group">
+                          <label for="quietHoursEnd">
+                            Quiet Hours End
+                          </label>
+
+                          <input
+                            class="form-control"
+                            type="time"
+                            id="quietHoursEnd"
+                            name="quiet_hours_end"
+                            value="07:00"
+                          />
+                        </div>
+                      </div>
+                    </div>
+
+                    <footer class="settings-card-footer">
+                      <button
+                        type="button"
+                        class="btn btn-outline"
+                        data-reset-settings-form="notifications"
+                      >
+                        Reset
+                      </button>
+
+                      <button
+                        type="submit"
+                        class="btn btn-primary"
+                        data-notification-settings-submit
+                      >
+                        Save Notifications
+                      </button>
+                    </footer>
+                  </article>
+                </form>
+              </section>
+
+              <!-- ============================================
+                   ORGANIZATION SETTINGS
+                   ============================================ -->
+
+              <section
+                class="settings-panel"
+                id="organizationSettingsPanel"
+                data-settings-panel="organization"
+                data-admin-only
+                role="tabpanel"
+                aria-labelledby="organizationSettingsTab"
+                hidden
+              >
+                <form
+                  id="organizationSettingsForm"
+                  data-settings-form="organization"
+                  novalidate
+                >
+                  <article class="card settings-card">
+                    <header class="settings-card-header">
+                      <div>
+                        <h2>
+                          Organization Profile
+                        </h2>
+
+                        <p>
+                          Information displayed throughout AssetFlow
+                          reports and communications.
+                        </p>
+                      </div>
+                    </header>
+
+                    <div class="settings-card-body">
+                      <div
+                        class="alert alert-danger"
+                        data-organization-settings-error
+                        role="alert"
+                        hidden
+                      ></div>
+
+                      <div class="organization-logo-section">
+                        <div
+                          class="organization-logo-preview"
+                          data-organization-logo-preview
+                        >
+                          AF
+                        </div>
+
+                        <div>
+                          <h3>
+                            Organization Logo
+                          </h3>
+
+                          <p>
+                            Upload a PNG, JPG or WebP image up to 5 MB.
+                          </p>
+
+                          <div class="profile-photo-actions">
+                            <label
+                              class="btn btn-outline btn-sm"
+                              for="organizationLogoInput"
+                            >
+                              Upload Logo
+                            </label>
+
+                            <input
+                              type="file"
+                              id="organizationLogoInput"
+                              name="logo"
+                              accept="image/png,image/jpeg,image/webp"
+                              hidden
+                            />
+
+                            <button
+                              type="button"
+                              class="btn btn-ghost btn-sm"
+                              data-remove-organization-logo
+                            >
+                              Remove
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="form-grid form-grid-2">
+                        <div class="form-group">
+                          <label
+                            class="form-label-required"
+                            for="organizationName"
+                          >
+                            Organization Name
+                          </label>
+
+                          <input
+                            class="form-control"
+                            type="text"
+                            id="organizationName"
+                            name="name"
+                            maxlength="180"
+                            required
+                          />
+
+                          <div class="form-error"></div>
+                        </div>
+
+                        <div class="form-group">
+                          <label for="organizationCode">
+                            Organization Code
+                          </label>
+
+                          <input
+                            class="form-control"
+                            type="text"
+                            id="organizationCode"
+                            name="code"
+                            maxlength="40"
+                            placeholder="e.g. AF-MUJ"
+                          />
+
+                          <div class="form-error"></div>
+                        </div>
+                      </div>
+
+                      <div class="form-grid form-grid-2">
+                        <div class="form-group">
+                          <label for="organizationIndustry">
+                            Industry
+                          </label>
+
+                          <select
+                            id="organizationIndustry"
+                            name="industry"
+                          >
+                            <option value="">
+                              Select industry
+                            </option>
+
+                            <option value="Education">
+                              Education
+                            </option>
+
+                            <option value="Technology">
+                              Technology
+                            </option>
+
+                            <option value="Manufacturing">
+                              Manufacturing
+                            </option>
+
+                            <option value="Healthcare">
+                              Healthcare
+                            </option>
+
+                            <option value="Government">
+                              Government
+                            </option>
+
+                            <option value="Financial Services">
+                              Financial Services
+                            </option>
+
+                            <option value="Other">
+                              Other
+                            </option>
+                          </select>
+                        </div>
+
+                        <div class="form-group">
+                          <label for="organizationRegistrationNumber">
+                            Registration Number
+                          </label>
+
+                          <input
+                            class="form-control"
+                            type="text"
+                            id="organizationRegistrationNumber"
+                            name="registration_number"
+                            maxlength="100"
+                          />
+                        </div>
+                      </div>
+
+                      <div class="form-grid form-grid-2">
+                        <div class="form-group">
+                          <label for="organizationEmail">
+                            Contact Email
+                          </label>
+
+                          <input
+                            class="form-control"
+                            type="email"
+                            id="organizationEmail"
+                            name="contact_email"
+                            maxlength="180"
+                          />
+                        </div>
+
+                        <div class="form-group">
+                          <label for="organizationPhone">
+                            Contact Phone
+                          </label>
+
+                          <input
+                            class="form-control"
+                            type="tel"
+                            id="organizationPhone"
+                            name="contact_phone"
+                            maxlength="24"
+                          />
+                        </div>
+                      </div>
+
+                      <div class="form-group">
+                        <label for="organizationAddress">
+                          Registered Address
+                        </label>
+
+                        <textarea
+                          id="organizationAddress"
+                          name="address"
+                          rows="4"
+                          maxlength="600"
+                        ></textarea>
+                      </div>
+
+                      <div class="form-grid form-grid-2">
+                        <div class="form-group">
+                          <label for="organizationCurrency">
+                            Default Currency
+                          </label>
+
+                          <select
+                            id="organizationCurrency"
+                            name="currency"
+                          >
+                            <option value="INR">
+                              Indian Rupee (INR)
+                            </option>
+
+                            <option value="USD">
+                              US Dollar (USD)
+                            </option>
+
+                            <option value="EUR">
+                              Euro (EUR)
+                            </option>
+
+                            <option value="GBP">
+                              British Pound (GBP)
+                            </option>
+                          </select>
+                        </div>
+
+                        <div class="form-group">
+                          <label for="organizationFiscalYearStart">
+                            Fiscal Year Start
+                          </label>
+
+                          <select
+                            id="organizationFiscalYearStart"
+                            name="fiscal_year_start_month"
+                          >
+                            <option value="1">
+                              January
+                            </option>
+
+                            <option value="4">
+                              April
+                            </option>
+
+                            <option value="7">
+                              July
+                            </option>
+
+                            <option value="10">
+                              October
+                            </option>
+                          </select>
+                        </div>
+                      </div>
+                    </div>
+
+                    <footer class="settings-card-footer">
+                      <a
+                        class="btn btn-outline"
+                        href="../organization-setup/index.html"
+                      >
+                        Manage Structure
+                      </a>
+
+                      <button
+                        type="submit"
+                        class="btn btn-primary"
+                        data-organization-settings-submit
+                      >
+                        Save Organization
+                      </button>
+                    </footer>
+                  </article>
+                </form>
+              </section>
+
+              <!-- ============================================
+                   SYSTEM SETTINGS
+                   ============================================ -->
+
+              <section
+                class="settings-panel"
+                id="systemSettingsPanel"
+                data-settings-panel="system"
+                data-admin-only
+                role="tabpanel"
+                aria-labelledby="systemSettingsTab"
+                hidden
+              >
+                <form
+                  id="systemSettingsForm"
+                  data-settings-form="system"
+                  novalidate
+                >
+                  <article class="card settings-card">
+                    <header class="settings-card-header">
+                      <div>
+                        <h2>
+                          Asset Defaults
+                        </h2>
+
+                        <p>
+                          Configure default asset registration and
+                          lifecycle behavior.
+                        </p>
+                      </div>
+                    </header>
+
+                    <div class="settings-card-body">
+                      <div
+                        class="alert alert-danger"
+                        data-system-settings-error
+                        role="alert"
+                        hidden
+                      ></div>
+
+                      <div class="form-grid form-grid-2">
+                        <div class="form-group">
+                          <label for="defaultAssetStatus">
+                            Default Asset Status
+                          </label>
+
+                          <select
+                            id="defaultAssetStatus"
+                            name="default_asset_status"
+                          >
+                            <option value="Available">
+                              Available
+                            </option>
+
+                            <option value="PendingInspection">
+                              Pending Inspection
+                            </option>
+
+                            <option value="InStorage">
+                              In Storage
+                            </option>
+                          </select>
+                        </div>
+
+                        <div class="form-group">
+                          <label for="assetTagPrefix">
+                            Asset Tag Prefix
+                          </label>
+
+                          <input
+                            class="form-control"
+                            type="text"
+                            id="assetTagPrefix"
+                            name="asset_tag_prefix"
+                            maxlength="12"
+                            placeholder="AST"
+                          />
+                        </div>
+                      </div>
+
+                      <div class="form-grid form-grid-2">
+                        <div class="form-group">
+                          <label for="defaultUsefulLife">
+                            Default Useful Life
+                          </label>
+
+                          <div class="input-suffix">
+                            <input
+                              class="form-control"
+                              type="number"
+                              id="defaultUsefulLife"
+                              name="default_useful_life_years"
+                              min="1"
+                              max="50"
+                              value="5"
+                            />
+
+                            <span>
+                              years
+                            </span>
+                          </div>
+                        </div>
+
+                        <div class="form-group">
+                          <label for="defaultDepreciationMethod">
+                            Depreciation Method
+                          </label>
+
+                          <select
+                            id="defaultDepreciationMethod"
+                            name="depreciation_method"
+                          >
+                            <option value="StraightLine">
+                              Straight Line
+                            </option>
+
+                            <option value="DecliningBalance">
+                              Declining Balance
+                            </option>
+
+                            <option value="None">
+                              Do Not Calculate
+                            </option>
+                          </select>
+                        </div>
+                      </div>
+
+                      <label class="settings-toggle-row bordered">
+                        <span class="settings-toggle-icon">
+                          <svg
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="1.9"
+                            aria-hidden="true"
+                          >
+                            <path d="M9 11l3 3L22 4"></path>
+                            <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path>
+                          </svg>
+                        </span>
+
+                        <span class="settings-toggle-content">
+                          <strong>
+                            Require Registration Approval
+                          </strong>
+
+                          <small>
+                            New assets must be approved before becoming
+                            available.
+                          </small>
+                        </span>
+
+                        <span class="switch">
+                          <input
+                            type="checkbox"
+                            id="requireAssetApproval"
+                            name="require_asset_approval"
+                          />
+
+                          <span class="switch-slider"></span>
+                        </span>
+                      </label>
+                    </div>
+                  </article>
+
+                  <article class="card settings-card">
+                    <header class="settings-card-header">
+                      <div>
+                        <h2>
+                          Allocation and Booking Workflows
+                        </h2>
+
+                        <p>
+                          Configure approvals, reminders and usage
+                          restrictions.
+                        </p>
+                      </div>
+                    </header>
+
+                    <div class="settings-card-body">
+                      <div class="settings-toggle-list">
+                        <label class="settings-toggle-row">
+                          <span class="settings-toggle-content">
+                            <strong>
+                              Require Allocation Approval
+                            </strong>
+
+                            <small>
+                              Asset allocation requests must be reviewed
+                              before assignment.
+                            </small>
+                          </span>
+
+                          <span class="switch">
+                            <input
+                              type="checkbox"
+                              id="requireAllocationApproval"
+                              name="require_allocation_approval"
+                              checked
+                            />
+
+                            <span class="switch-slider"></span>
+                          </span>
+                        </label>
+
+                        <label class="settings-toggle-row">
+                          <span class="settings-toggle-content">
+                            <strong>
+                              Require Booking Approval
+                            </strong>
+
+                            <small>
+                              Resource booking requests require manager
+                              approval.
+                            </small>
+                          </span>
+
+                          <span class="switch">
+                            <input
+                              type="checkbox"
+                              id="requireBookingApproval"
+                              name="require_booking_approval"
+                              checked
+                            />
+
+                            <span class="switch-slider"></span>
+                          </span>
+                        </label>
+
+                        <label class="settings-toggle-row">
+                          <span class="settings-toggle-content">
+                            <strong>
+                              Prevent Booking Conflicts
+                            </strong>
+
+                            <small>
+                              Block overlapping bookings for the same
+                              resource.
+                            </small>
+                          </span>
+
+                          <span class="switch">
+                            <input
+                              type="checkbox"
+                              id="preventBookingConflicts"
+                              name="prevent_booking_conflicts"
+                              checked
+                            />
+
+                            <span class="switch-slider"></span>
+                          </span>
+                        </label>
+
+                        <label class="settings-toggle-row">
+                          <span class="settings-toggle-content">
+                            <strong>
+                              Automatic Return Reminders
+                            </strong>
+
+                            <small>
+                              Notify assignees before an asset return is
+                              due.
+                            </small>
+                          </span>
+
+                          <span class="switch">
+                            <input
+                              type="checkbox"
+                              id="automaticReturnReminders"
+                              name="automatic_return_reminders"
+                              checked
+                            />
+
+                            <span class="switch-slider"></span>
+                          </span>
+                        </label>
+                      </div>
+
+                      <div class="form-grid form-grid-2 settings-spacing-top">
+                        <div class="form-group">
+                          <label for="maximumBookingDays">
+                            Maximum Booking Duration
+                          </label>
+
+                          <div class="input-suffix">
+                            <input
+                              class="form-control"
+                              type="number"
+                              id="maximumBookingDays"
+                              name="maximum_booking_days"
+                              min="1"
+                              max="365"
+                              value="30"
+                            />
+
+                            <span>
+                              days
+                            </span>
+                          </div>
+                        </div>
+
+                        <div class="form-group">
+                          <label for="returnReminderDays">
+                            Return Reminder
+                          </label>
+
+                          <div class="input-suffix">
+                            <input
+                              class="form-control"
+                              type="number"
+                              id="returnReminderDays"
+                              name="return_reminder_days"
+                              min="1"
+                              max="30"
+                              value="3"
+                            />
+
+                            <span>
+                              days before
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </article>
+
+                  <article class="card settings-card">
+                    <header class="settings-card-header">
+                      <div>
+                        <h2>
+                          Maintenance and Audit
+                        </h2>
+
+                        <p>
+                          Configure escalation behavior and record
+                          retention.
+                        </p>
+                      </div>
+                    </header>
+
+                    <div class="settings-card-body">
+                      <div class="form-grid form-grid-2">
+                        <div class="form-group">
+                          <label for="maintenanceEscalationHours">
+                            Maintenance Escalation Time
+                          </label>
+
+                          <div class="input-suffix">
+                            <input
+                              class="form-control"
+                              type="number"
+                              id="maintenanceEscalationHours"
+                              name="maintenance_escalation_hours"
+                              min="1"
+                              max="720"
+                              value="48"
+                            />
+
+                            <span>
+                              hours
+                            </span>
+                          </div>
+                        </div>
+
+                        <div class="form-group">
+                          <label for="auditRetentionDays">
+                            Audit Log Retention
+                          </label>
+
+                          <div class="input-suffix">
+                            <input
+                              class="form-control"
+                              type="number"
+                              id="auditRetentionDays"
+                              name="audit_retention_days"
+                              min="30"
+                              max="3650"
+                              value="365"
+                            />
+
+                            <span>
+                              days
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+
+                      <label class="settings-toggle-row bordered">
+                        <span class="settings-toggle-content">
+                          <strong>
+                            Automatic Maintenance Escalation
+                          </strong>
+
+                          <small>
+                            Escalate unresolved high-priority requests
+                            after the configured period.
+                          </small>
+                        </span>
+
+                        <span class="switch">
+                          <input
+                            type="checkbox"
+                            id="automaticMaintenanceEscalation"
+                            name="automatic_maintenance_escalation"
+                            checked
+                          />
+
+                          <span class="switch-slider"></span>
+                        </span>
+                      </label>
+
+                      <label class="settings-toggle-row bordered">
+                        <span class="settings-toggle-content">
+                          <strong>
+                            Record Detailed Audit History
+                          </strong>
+
+                          <small>
+                            Preserve before-and-after values for
+                            sensitive record changes.
+                          </small>
+                        </span>
+
+                        <span class="switch">
+                          <input
+                            type="checkbox"
+                            id="detailedAuditHistory"
+                            name="detailed_audit_history"
+                            checked
+                          />
+
+                          <span class="switch-slider"></span>
+                        </span>
+                      </label>
+                    </div>
+
+                    <footer class="settings-card-footer">
+                      <button
+                        type="button"
+                        class="btn btn-outline"
+                        data-reset-settings-form="system"
+                      >
+                        Reset
+                      </button>
+
+                      <button
+                        type="submit"
+                        class="btn btn-primary"
+                        data-system-settings-submit
+                      >
+                        Save System Settings
+                      </button>
+                    </footer>
+                  </article>
+                </form>
+              </section>
+
+              <!-- ============================================
+                   INTEGRATIONS
+                   ============================================ -->
+
+              <section
+                class="settings-panel"
+                id="integrationSettingsPanel"
+                data-settings-panel="integrations"
+                data-admin-only
+                role="tabpanel"
+                aria-labelledby="integrationSettingsTab"
+                hidden
+              >
+                <article class="card settings-card">
+                  <header class="settings-card-header">
+                    <div>
+                      <h2>
+                        Connected Services
+                      </h2>
+
+                      <p>
+                        Connect AssetFlow to email, identity and
+                        collaboration services.
+                      </p>
+                    </div>
+                  </header>
+
+                  <div class="settings-card-body">
+                    <div class="integration-card-grid">
+                      <article class="integration-card">
+                        <div class="integration-card-icon">
+                          <svg
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="1.9"
+                            aria-hidden="true"
+                          >
+                            <rect
+                              x="3"
+                              y="5"
+                              width="18"
+                              height="14"
+                              rx="2"
+                            ></rect>
+                            <path d="m3 7 9 6 9-6"></path>
+                          </svg>
+                        </div>
+
+                        <div class="integration-card-content">
+                          <div class="integration-card-heading">
+                            <h3>
+                              SMTP Email
+                            </h3>
+
+                            <span
+                              class="badge badge-neutral badge-dot"
+                              data-integration-status="smtp"
+                            >
+                              Not Configured
+                            </span>
+                          </div>
+
+                          <p>
+                            Send invitations, reminders and report
+                            emails through your organization mail
+                            server.
+                          </p>
+                        </div>
+
+                        <button
+                          type="button"
+                          class="btn btn-outline btn-sm"
+                          data-configure-integration="smtp"
+                        >
+                          Configure
+                        </button>
+                      </article>
+
+                      <article class="integration-card">
+                        <div class="integration-card-icon">
+                          <svg
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="1.9"
+                            aria-hidden="true"
+                          >
+                            <path d="M12 3 4 6v6c0 5 3.5 8 8 9 4.5-1 8-4 8-9V6l-8-3Z"></path>
+                            <circle
+                              cx="12"
+                              cy="10"
+                              r="2"
+                            ></circle>
+                            <path d="M8 17a4 4 0 0 1 8 0"></path>
+                          </svg>
+                        </div>
+
+                        <div class="integration-card-content">
+                          <div class="integration-card-heading">
+                            <h3>
+                              Single Sign-On
+                            </h3>
+
+                            <span
+                              class="badge badge-neutral badge-dot"
+                              data-integration-status="sso"
+                            >
+                              Not Configured
+                            </span>
+                          </div>
+
+                          <p>
+                            Allow users to sign in through an external
+                            identity provider.
+                          </p>
+                        </div>
+
+                        <button
+                          type="button"
+                          class="btn btn-outline btn-sm"
+                          data-configure-integration="sso"
+                        >
+                          Configure
+                        </button>
+                      </article>
+
+                      <article class="integration-card">
+                        <div class="integration-card-icon">
+                          <svg
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="1.9"
+                            aria-hidden="true"
+                          >
+                            <path d="M8 9h8"></path>
+                            <path d="M8 13h6"></path>
+                            <rect
+                              x="3"
+                              y="4"
+                              width="18"
+                              height="16"
+                              rx="2"
+                            ></rect>
+                          </svg>
+                        </div>
+
+                        <div class="integration-card-content">
+                          <div class="integration-card-heading">
+                            <h3>
+                              Microsoft Teams
+                            </h3>
+
+                            <span
+                              class="badge badge-neutral badge-dot"
+                              data-integration-status="teams"
+                            >
+                              Not Connected
+                            </span>
+                          </div>
+
+                          <p>
+                            Deliver approval and maintenance alerts to
+                            Microsoft Teams channels.
+                          </p>
+                        </div>
+
+                        <button
+                          type="button"
+                          class="btn btn-outline btn-sm"
+                          data-configure-integration="teams"
+                        >
+                          Connect
+                        </button>
+                      </article>
+
+                      <article class="integration-card">
+                        <div class="integration-card-icon">
+                          <svg
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="1.9"
+                            aria-hidden="true"
+                          >
+                            <path d="M7 7h10v10H7z"></path>
+                            <path d="M3 12h4"></path>
+                            <path d="M17 12h4"></path>
+                            <path d="M12 3v4"></path>
+                            <path d="M12 17v4"></path>
+                          </svg>
+                        </div>
+
+                        <div class="integration-card-content">
+                          <div class="integration-card-heading">
+                            <h3>
+                              Slack
+                            </h3>
+
+                            <span
+                              class="badge badge-neutral badge-dot"
+                              data-integration-status="slack"
+                            >
+                              Not Connected
+                            </span>
+                          </div>
+
+                          <p>
+                            Publish AssetFlow workflow updates to Slack
+                            channels.
+                          </p>
+                        </div>
+
+                        <button
+                          type="button"
+                          class="btn btn-outline btn-sm"
+                          data-configure-integration="slack"
+                        >
+                          Connect
+                        </button>
+                      </article>
+                    </div>
+                  </div>
+                </article>
+
+                <article class="card settings-card">
+                  <header class="settings-card-header">
+                    <div>
+                      <h2>
+                        API Keys
+                      </h2>
+
+                      <p>
+                        Create credentials for approved applications
+                        and services.
+                      </p>
+                    </div>
+
+                    <button
+                      type="button"
+                      class="btn btn-primary btn-sm"
+                      data-modal-open="#createApiKeyModal"
+                      data-create-api-key
+                    >
+                      Create API Key
+                    </button>
+                  </header>
+
+                  <div class="settings-card-body">
+                    <div
+                      class="api-key-list"
+                      data-api-key-list
+                    >
+                      <div class="api-key-skeleton">
+                        <div class="skeleton skeleton-avatar"></div>
+
+                        <div>
+                          <div class="skeleton skeleton-text"></div>
+                          <div class="skeleton skeleton-text-sm"></div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </article>
+
+                <article class="card settings-card">
+                  <header class="settings-card-header">
+                    <div>
+                      <h2>
+                        Webhooks
+                      </h2>
+
+                      <p>
+                        Send AssetFlow event data to external HTTP
+                        endpoints.
+                      </p>
+                    </div>
+
+                    <button
+                      type="button"
+                      class="btn btn-primary btn-sm"
+                      data-modal-open="#webhookModal"
+                      data-create-webhook
+                    >
+                      Add Webhook
+                    </button>
+                  </header>
+
+                  <div class="settings-card-body">
+                    <div
+                      class="webhook-list"
+                      data-webhook-list
+                    >
+                      <div class="webhook-skeleton">
+                        <div class="skeleton skeleton-avatar"></div>
+
+                        <div>
+                          <div class="skeleton skeleton-text"></div>
+                          <div class="skeleton skeleton-text-sm"></div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </article>
+              </section>
+            </div>
+          </section>
+        </div>
+      </main>
+
+      <div
+        id="footer-container"
+        data-component="footer"
+      ></div>
+    </div>
+  </div>
+
+  <!-- ====================================================
+       DISABLE MFA MODAL
+       ==================================================== -->
+
+  <div
+    class="modal-overlay"
+    id="disableMfaModal"
+    aria-hidden="true"
+    data-close-on-overlay="false"
+  >
+    <section
+      class="modal confirmation-modal"
+      role="alertdialog"
+      aria-modal="true"
+      aria-labelledby="disableMfaModalTitle"
+      aria-describedby="disableMfaModalDescription"
+    >
+      <header class="modal-header">
+        <div class="modal-header-content">
+          <h2
+            class="modal-title"
+            id="disableMfaModalTitle"
+          >
+            Disable Two-Factor Authentication
+          </h2>
+
+          <p
+            class="modal-subtitle"
+            id="disableMfaModalDescription"
+          >
+            This will reduce the security of your account.
+          </p>
+        </div>
+
+        <button
+          type="button"
+          class="modal-close"
+          data-modal-close
+          aria-label="Close confirmation"
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            aria-hidden="true"
+          >
+            <path d="M18 6 6 18"></path>
+            <path d="m6 6 12 12"></path>
+          </svg>
+        </button>
+      </header>
+
+      <form
+        id="disableMfaForm"
+        data-disable-mfa-form
+        novalidate
+      >
+        <div class="modal-body">
+          <div
+            class="alert alert-danger"
+            data-disable-mfa-error
+            role="alert"
+            hidden
+          ></div>
+
+          <div class="confirmation-icon danger">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.9"
+              aria-hidden="true"
+            >
+              <path d="M12 3 4 6v6c0 5 3.5 8 8 9 4.5-1 8-4 8-9V6l-8-3Z"></path>
+              <path d="M8 8l8 8"></path>
+              <path d="m16 8-8 8"></path>
+            </svg>
+          </div>
+
+          <h3 class="confirmation-title">
+            Disable 2FA?
+          </h3>
+
+          <p class="confirmation-description">
+            Enter your password to confirm that you want to remove
+            two-factor authentication.
+          </p>
+
+          <div class="form-group text-left">
+            <label
+              class="form-label-required"
+              for="disableMfaPassword"
+            >
+              Current Password
+            </label>
+
+            <input
+              class="form-control"
+              type="password"
+              id="disableMfaPassword"
+              name="password"
+              autocomplete="current-password"
+              required
+            />
+
+            <div class="form-error"></div>
+          </div>
+        </div>
+
+        <footer class="modal-footer">
+          <button
+            type="button"
+            class="btn btn-outline"
+            data-modal-close
+          >
+            Cancel
+          </button>
+
+          <button
+            type="submit"
+            class="btn btn-danger"
+            id="disableMfaSubmitButton"
+          >
+            Disable 2FA
+          </button>
+        </footer>
+      </form>
+    </section>
+  </div>
+
+  <!-- ====================================================
+       REVOKE SESSION MODAL
+       ==================================================== -->
+
+  <div
+    class="modal-overlay"
+    id="revokeSessionModal"
+    aria-hidden="true"
+    data-close-on-overlay="false"
+  >
+    <section
+      class="modal confirmation-modal"
+      role="alertdialog"
+      aria-modal="true"
+      aria-labelledby="revokeSessionModalTitle"
+    >
+      <header class="modal-header">
+        <div class="modal-header-content">
+          <h2
+            class="modal-title"
+            id="revokeSessionModalTitle"
+          >
+            Sign Out Device
+          </h2>
+
+          <p class="modal-subtitle">
+            End the selected AssetFlow session.
+          </p>
+        </div>
+
+        <button
+          type="button"
+          class="modal-close"
+          data-modal-close
+          aria-label="Close session confirmation"
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            aria-hidden="true"
+          >
+            <path d="M18 6 6 18"></path>
+            <path d="m6 6 12 12"></path>
+          </svg>
+        </button>
+      </header>
+
+      <form
+        id="revokeSessionForm"
+        data-revoke-session-form
+      >
+        <input
+          type="hidden"
+          id="revokeSessionId"
+          name="session_id"
+        />
+
+        <div class="modal-body">
+          <div
+            class="alert alert-danger"
+            data-revoke-session-error
+            role="alert"
+            hidden
+          ></div>
+
+          <div class="confirmation-icon danger">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.9"
+              aria-hidden="true"
+            >
+              <rect
+                x="3"
+                y="4"
+                width="18"
+                height="14"
+                rx="2"
+              ></rect>
+              <path d="M8 22h8"></path>
+              <path d="M12 18v4"></path>
+              <path d="M8 8l8 6"></path>
+              <path d="m16 8-8 6"></path>
+            </svg>
+          </div>
+
+          <h3 class="confirmation-title">
+            Sign out this device?
+          </h3>
+
+          <p
+            class="confirmation-description"
+            data-revoke-session-description
+          >
+            This device will need to authenticate again.
+          </p>
+        </div>
+
+        <footer class="modal-footer">
+          <button
+            type="button"
+            class="btn btn-outline"
+            data-modal-close
+          >
+            Cancel
+          </button>
+
+          <button
+            type="submit"
+            class="btn btn-danger"
+            id="revokeSessionSubmitButton"
+          >
+            Sign Out Device
+          </button>
+        </footer>
+      </form>
+    </section>
+  </div>
+
+  <!-- ====================================================
+       CREATE API KEY MODAL
+       ==================================================== -->
+
+  <div
+    class="modal-overlay"
+    id="createApiKeyModal"
+    aria-hidden="true"
+    data-close-on-overlay="false"
+  >
+    <section
+      class="modal api-key-modal"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="createApiKeyModalTitle"
+    >
+      <header class="modal-header">
+        <div class="modal-header-content">
+          <h2
+            class="modal-title"
+            id="createApiKeyModalTitle"
+          >
+            Create API Key
+          </h2>
+
+          <p class="modal-subtitle">
+            Generate credentials for an approved application.
+          </p>
+        </div>
+
+        <button
+          type="button"
+          class="modal-close"
+          data-modal-close
+          aria-label="Close API key form"
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            aria-hidden="true"
+          >
+            <path d="M18 6 6 18"></path>
+            <path d="m6 6 12 12"></path>
+          </svg>
+        </button>
+      </header>
+
+      <form
+        id="createApiKeyForm"
+        data-create-api-key-form
+        novalidate
+      >
+        <div class="modal-body">
+          <div
+            class="alert alert-danger"
+            data-api-key-error
+            role="alert"
+            hidden
+          ></div>
+
+          <div
+            class="api-key-result"
+            data-api-key-result
+            hidden
+          >
+            <div class="api-key-result-warning">
+              <strong>
+                Copy this API key now
+              </strong>
+
+              <p>
+                It will not be shown again after this dialog is closed.
+              </p>
+            </div>
+
+            <div class="api-key-value">
+              <code data-generated-api-key>
+                af_live_••••••••••••
+              </code>
+
+              <button
+                type="button"
+                class="btn btn-outline btn-sm"
+                data-copy-api-key
+              >
+                Copy
+              </button>
+            </div>
+          </div>
+
+          <div data-api-key-form-fields>
+            <div class="form-group">
+              <label
+                class="form-label-required"
+                for="apiKeyName"
+              >
+                Key Name
+              </label>
+
+              <input
+                class="form-control"
+                type="text"
+                id="apiKeyName"
+                name="name"
+                maxlength="120"
+                placeholder="e.g. Analytics Integration"
+                required
+              />
+
+              <div class="form-error"></div>
+            </div>
+
+            <fieldset class="api-permission-group">
+              <legend>
+                Permissions
+              </legend>
+
+              <label class="report-option-checkbox">
+                <input
+                  type="checkbox"
+                  name="permissions"
+                  value="assets:read"
+                  checked
+                />
+
+                <span>
+                  <strong>
+                    Read Assets
+                  </strong>
+
+                  <small>
+                    View asset inventory and metadata.
+                  </small>
+                </span>
+              </label>
+
+              <label class="report-option-checkbox">
+                <input
+                  type="checkbox"
+                  name="permissions"
+                  value="assets:write"
+                />
+
+                <span>
+                  <strong>
+                    Manage Assets
+                  </strong>
+
+                  <small>
+                    Create and update asset records.
+                  </small>
+                </span>
+              </label>
+
+              <label class="report-option-checkbox">
+                <input
+                  type="checkbox"
+                  name="permissions"
+                  value="reports:read"
+                />
+
+                <span>
+                  <strong>
+                    Read Reports
+                  </strong>
+
+                  <small>
+                    Access reporting and analytics data.
+                  </small>
+                </span>
+              </label>
+
+              <label class="report-option-checkbox">
+                <input
+                  type="checkbox"
+                  name="permissions"
+                  value="users:read"
+                />
+
+                <span>
+                  <strong>
+                    Read Users
+                  </strong>
+
+                  <small>
+                    View limited user and department information.
+                  </small>
+                </span>
+              </label>
+            </fieldset>
+
+            <div class="form-group">
+              <label for="apiKeyExpiry">
+                Expiration
+              </label>
+
+              <select
+                id="apiKeyExpiry"
+                name="expiry_days"
+              >
+                <option value="30">
+                  30 days
+                </option>
+
+                <option value="90">
+                  90 days
+                </option>
+
+                <option value="180">
+                  180 days
+                </option>
+
+                <option value="365">
+                  1 year
+                </option>
+
+                <option value="">
+                  Never
+                </option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <footer class="modal-footer">
+          <button
+            type="button"
+            class="btn btn-outline"
+            data-modal-close
+          >
+            Close
+          </button>
+
+          <button
+            type="submit"
+            class="btn btn-primary"
+            id="createApiKeySubmitButton"
+          >
+            Create Key
+          </button>
+        </footer>
+      </form>
+    </section>
+  </div>
+
+  <!-- ====================================================
+       WEBHOOK MODAL
+       ==================================================== -->
+
+  <div
+    class="modal-overlay"
+    id="webhookModal"
+    aria-hidden="true"
+    data-close-on-overlay="false"
+  >
+    <section
+      class="modal webhook-modal"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="webhookModalTitle"
+    >
+      <header class="modal-header">
+        <div class="modal-header-content">
+          <h2
+            class="modal-title"
+            id="webhookModalTitle"
+            data-webhook-modal-title
+          >
+            Add Webhook
+          </h2>
+
+          <p class="modal-subtitle">
+            Send selected AssetFlow events to an HTTP endpoint.
+          </p>
+        </div>
+
+        <button
+          type="button"
+          class="modal-close"
+          data-modal-close
+          aria-label="Close webhook form"
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            aria-hidden="true"
+          >
+            <path d="M18 6 6 18"></path>
+            <path d="m6 6 12 12"></path>
+          </svg>
+        </button>
+      </header>
+
+      <form
+        id="webhookForm"
+        data-webhook-form
+        novalidate
+      >
+        <input
+          type="hidden"
+          id="webhookId"
+          name="webhook_id"
+        />
+
+        <div class="modal-body">
+          <div
+            class="alert alert-danger"
+            data-webhook-error
+            role="alert"
+            hidden
+          ></div>
+
+          <div class="form-group">
+            <label
+              class="form-label-required"
+              for="webhookName"
+            >
+              Webhook Name
+            </label>
+
+            <input
+              class="form-control"
+              type="text"
+              id="webhookName"
+              name="name"
+              maxlength="120"
+              placeholder="e.g. Asset Update Listener"
+              required
+            />
+
+            <div class="form-error"></div>
+          </div>
+
+          <div class="form-group">
+            <label
+              class="form-label-required"
+              for="webhookUrl"
+            >
+              Endpoint URL
+            </label>
+
+            <input
+              class="form-control"
+              type="url"
+              id="webhookUrl"
+              name="url"
+              maxlength="500"
+              placeholder="https://example.com/webhooks/assetflow"
+              required
+            />
+
+            <div class="form-error"></div>
+          </div>
+
+          <fieldset class="webhook-event-group">
+            <legend>
+              Events
+            </legend>
+
+            <label class="report-option-checkbox">
+              <input
+                type="checkbox"
+                name="events"
+                value="asset.created"
+              />
+
+              <span>
+                <strong>
+                  Asset Created
+                </strong>
+
+                <small>
+                  A new asset is registered.
+                </small>
+              </span>
+            </label>
+
+            <label class="report-option-checkbox">
+              <input
+                type="checkbox"
+                name="events"
+                value="asset.updated"
+              />
+
+              <span>
+                <strong>
+                  Asset Updated
+                </strong>
+
+                <small>
+                  Asset information or status changes.
+                </small>
+              </span>
+            </label>
+
+            <label class="report-option-checkbox">
+              <input
+                type="checkbox"
+                name="events"
+                value="allocation.changed"
+              />
+
+              <span>
+                <strong>
+                  Allocation Changed
+                </strong>
+
+                <small>
+                  An asset is allocated, transferred or returned.
+                </small>
+              </span>
+            </label>
+
+            <label class="report-option-checkbox">
+              <input
+                type="checkbox"
+                name="events"
+                value="maintenance.updated"
+              />
+
+              <span>
+                <strong>
+                  Maintenance Updated
+                </strong>
+
+                <small>
+                  A maintenance request changes status.
+                </small>
+              </span>
+            </label>
+
+            <label class="report-option-checkbox">
+              <input
+                type="checkbox"
+                name="events"
+                value="booking.updated"
+              />
+
+              <span>
+                <strong>
+                  Booking Updated
+                </strong>
+
+                <small>
+                  A resource booking is created or changed.
+                </small>
+              </span>
+            </label>
+          </fieldset>
+
+          <label class="settings-toggle-row bordered">
+            <span class="settings-toggle-content">
+              <strong>
+                Active Webhook
+              </strong>
+
+              <small>
+                Start delivering events immediately.
+              </small>
+            </span>
+
+            <span class="switch">
+              <input
+                type="checkbox"
+                id="webhookActive"
+                name="is_active"
+                checked
+              />
+
+              <span class="switch-slider"></span>
+            </span>
+          </label>
+        </div>
+
+        <footer class="modal-footer">
+          <button
+            type="button"
+            class="btn btn-outline"
+            data-modal-close
+          >
+            Cancel
+          </button>
+
+          <button
+            type="submit"
+            class="btn btn-primary"
+            id="webhookSubmitButton"
+          >
+            Add Webhook
+          </button>
+        </footer>
+      </form>
+    </section>
+  </div>
+
+  <!-- Shared components -->
+
+  <div
+    id="loader-container"
+    data-component="loader"
+  ></div>
+
+  <div
+    id="modal-container"
+    data-component="modal"
+  ></div>
+
+  <div
+    class="sidebar-overlay"
+    id="sidebarOverlay"
+    aria-hidden="true"
+  ></div>
+
+  <div
+    class="toast-container"
+    aria-live="polite"
+    aria-label="Notifications"
+  ></div>
+
+  <!-- JavaScript -->
+
+  <script src="../js/api.js"></script>
+  <script src="../js/utils.js"></script>
+  <script src="../js/auth.js"></script>
+  <script src="../js/loader.js"></script>
+  <script src="../js/sidebar.js"></script>
+
+  <script src="settings.js"></script>
+</body>
+</html>

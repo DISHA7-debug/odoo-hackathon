@@ -1,0 +1,2264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  />
+
+  <meta
+    name="description"
+    content="Reserve shared assets and organizational resources through AssetFlow."
+  />
+
+  <meta
+    name="theme-color"
+    content="#ff4f78"
+  />
+
+  <title>Resource Booking | AssetFlow</title>
+
+  <!-- ====================================================
+       GLOBAL STYLES
+       ==================================================== -->
+
+  <link
+    rel="stylesheet"
+    href="../css/variables.css"
+  />
+
+  <link
+    rel="stylesheet"
+    href="../css/global.css"
+  />
+
+  <link
+    rel="stylesheet"
+    href="../css/layout.css"
+  />
+
+  <link
+    rel="stylesheet"
+    href="../css/components.css"
+  />
+
+  <link
+    rel="stylesheet"
+    href="../css/animations.css"
+  />
+
+  <link
+    rel="stylesheet"
+    href="../css/responsive.css"
+  />
+
+  <!-- Page-specific styles -->
+
+  <link
+    rel="stylesheet"
+    href="resource-booking.css"
+  />
+</head>
+
+<body
+  data-auth="required"
+  class="page-transition"
+>
+  <a
+    class="skip-link"
+    href="#resourceBookingMain"
+  >
+    Skip to resource booking
+  </a>
+
+  <!-- ====================================================
+       APPLICATION SHELL
+       ==================================================== -->
+
+  <div
+    class="app-shell"
+    id="appShell"
+  >
+    <!-- Shared sidebar -->
+
+    <div
+      id="sidebar-container"
+      data-component="sidebar"
+      data-required="true"
+    ></div>
+
+    <!-- Main application content -->
+
+    <div class="app-content">
+      <!-- Shared navbar -->
+
+      <div
+        id="navbar-container"
+        data-component="navbar"
+        data-required="true"
+      ></div>
+
+      <!-- ==================================================
+           PAGE CONTENT
+           ================================================== -->
+
+      <main
+        class="main-content"
+        id="resourceBookingMain"
+      >
+        <div class="page-container">
+          <!-- Page header -->
+
+          <header class="page-header">
+            <div class="page-header-content">
+              <div class="breadcrumbs">
+                <span class="breadcrumb-item">
+                  <a
+                    class="breadcrumb-link"
+                    href="../dashboard/index.html"
+                  >
+                    AssetFlow
+                  </a>
+
+                  <svg
+                    class="breadcrumb-separator"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    aria-hidden="true"
+                  >
+                    <path d="m9 18 6-6-6-6"></path>
+                  </svg>
+                </span>
+
+                <span
+                  class="breadcrumb-current"
+                  aria-current="page"
+                >
+                  Resource Booking
+                </span>
+              </div>
+
+              <h1 class="page-title">
+                Resource Booking
+              </h1>
+
+              <p class="page-description">
+                Check availability and reserve meeting rooms,
+                vehicles, equipment and other shared resources.
+              </p>
+            </div>
+
+            <div class="page-actions">
+              <button
+                type="button"
+                class="btn btn-outline"
+                id="refreshBookingsButton"
+                data-refresh-bookings
+              >
+                <svg
+                  width="18"
+                  height="18"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  aria-hidden="true"
+                >
+                  <path d="M20 11a8.1 8.1 0 0 0-15.5-2M4 4v5h5"></path>
+                  <path d="M4 13a8.1 8.1 0 0 0 15.5 2M20 20v-5h-5"></path>
+                </svg>
+
+                Refresh
+              </button>
+
+              <button
+                type="button"
+                class="btn btn-primary"
+                data-modal-open="#bookingFormModal"
+                data-create-booking
+              >
+                <svg
+                  width="18"
+                  height="18"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  aria-hidden="true"
+                >
+                  <path d="M12 5v14"></path>
+                  <path d="M5 12h14"></path>
+                </svg>
+
+                New Booking
+              </button>
+            </div>
+          </header>
+
+          <!-- ==================================================
+               PAGE ERROR
+               ================================================== -->
+
+          <div
+            class="alert alert-danger booking-page-alert"
+            id="bookingPageErrorAlert"
+            role="alert"
+            hidden
+          >
+            <div class="alert-icon">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                aria-hidden="true"
+              >
+                <circle
+                  cx="12"
+                  cy="12"
+                  r="10"
+                ></circle>
+
+                <path d="M12 8v4"></path>
+                <path d="M12 16h.01"></path>
+              </svg>
+            </div>
+
+            <div class="alert-content">
+              <h2 class="alert-title">
+                Unable to load bookings
+              </h2>
+
+              <p
+                class="alert-message"
+                id="bookingPageErrorMessage"
+              >
+                Please refresh the page and try again.
+              </p>
+            </div>
+
+            <div class="alert-actions">
+              <button
+                type="button"
+                class="btn btn-danger btn-sm"
+                data-retry-bookings
+              >
+                Retry
+              </button>
+            </div>
+          </div>
+
+          <!-- ==================================================
+               BOOKING SUMMARY
+               ================================================== -->
+
+          <section
+            class="page-section"
+            aria-labelledby="bookingSummaryTitle"
+          >
+            <div class="section-header">
+              <div class="section-title-group">
+                <h2
+                  class="section-title"
+                  id="bookingSummaryTitle"
+                >
+                  Booking Summary
+                </h2>
+
+                <p class="section-description">
+                  Current reservations and shared-resource
+                  availability.
+                </p>
+              </div>
+
+              <span
+                class="booking-last-updated"
+                data-booking-last-updated
+              >
+                Updating...
+              </span>
+            </div>
+
+            <div
+              class="content-grid booking-summary-grid stagger-container"
+            >
+              <!-- Available resources -->
+
+              <article class="kpi-card success">
+                <div class="kpi-card-header">
+                  <p class="kpi-card-label">
+                    Available Resources
+                  </p>
+
+                  <div
+                    class="kpi-card-icon"
+                    aria-hidden="true"
+                  >
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="1.9"
+                    >
+                      <circle
+                        cx="12"
+                        cy="12"
+                        r="9"
+                      ></circle>
+
+                      <path d="m8 12 3 3 5-6"></path>
+                    </svg>
+                  </div>
+                </div>
+
+                <div
+                  class="kpi-card-value"
+                  data-booking-summary="available_resources"
+                >
+                  <span class="skeleton skeleton-title"></span>
+                </div>
+
+                <div class="kpi-card-footer">
+                  <span>
+                    Bookable and currently free
+                  </span>
+                </div>
+              </article>
+
+              <!-- Upcoming -->
+
+              <article class="kpi-card info">
+                <div class="kpi-card-header">
+                  <p class="kpi-card-label">
+                    Upcoming Bookings
+                  </p>
+
+                  <div
+                    class="kpi-card-icon"
+                    aria-hidden="true"
+                  >
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="1.9"
+                    >
+                      <rect
+                        x="3"
+                        y="5"
+                        width="18"
+                        height="16"
+                        rx="2"
+                      ></rect>
+
+                      <path d="M16 3v4"></path>
+                      <path d="M8 3v4"></path>
+                      <path d="M3 10h18"></path>
+                    </svg>
+                  </div>
+                </div>
+
+                <div
+                  class="kpi-card-value"
+                  data-booking-summary="upcoming"
+                >
+                  <span class="skeleton skeleton-title"></span>
+                </div>
+
+                <div class="kpi-card-footer">
+                  <span>
+                    Confirmed future reservations
+                  </span>
+                </div>
+              </article>
+
+              <!-- Ongoing -->
+
+              <article class="kpi-card">
+                <div class="kpi-card-header">
+                  <p class="kpi-card-label">
+                    Ongoing Now
+                  </p>
+
+                  <div
+                    class="kpi-card-icon"
+                    aria-hidden="true"
+                  >
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="1.9"
+                    >
+                      <circle
+                        cx="12"
+                        cy="12"
+                        r="9"
+                      ></circle>
+
+                      <path d="M10 8v8l6-4Z"></path>
+                    </svg>
+                  </div>
+                </div>
+
+                <div
+                  class="kpi-card-value"
+                  data-booking-summary="ongoing"
+                >
+                  <span class="skeleton skeleton-title"></span>
+                </div>
+
+                <div class="kpi-card-footer">
+                  <span>
+                    Resources currently in use
+                  </span>
+                </div>
+              </article>
+
+              <!-- Pending approval -->
+
+              <article class="kpi-card warning">
+                <div class="kpi-card-header">
+                  <p class="kpi-card-label">
+                    Awaiting Approval
+                  </p>
+
+                  <div
+                    class="kpi-card-icon"
+                    aria-hidden="true"
+                  >
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="1.9"
+                    >
+                      <circle
+                        cx="12"
+                        cy="12"
+                        r="9"
+                      ></circle>
+
+                      <path d="M12 7v5l3 2"></path>
+                    </svg>
+                  </div>
+                </div>
+
+                <div
+                  class="kpi-card-value"
+                  data-booking-summary="pending_approval"
+                >
+                  <span class="skeleton skeleton-title"></span>
+                </div>
+
+                <div class="kpi-card-footer">
+                  <span>
+                    Requests requiring review
+                  </span>
+                </div>
+              </article>
+
+              <!-- Completed this month -->
+
+              <article class="kpi-card">
+                <div class="kpi-card-header">
+                  <p class="kpi-card-label">
+                    Completed This Month
+                  </p>
+
+                  <div
+                    class="kpi-card-icon"
+                    aria-hidden="true"
+                  >
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="1.9"
+                    >
+                      <path d="M9 11l3 3L22 4"></path>
+                      <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path>
+                    </svg>
+                  </div>
+                </div>
+
+                <div
+                  class="kpi-card-value"
+                  data-booking-summary="completed_month"
+                >
+                  <span class="skeleton skeleton-title"></span>
+                </div>
+
+                <div class="kpi-card-footer">
+                  <span>
+                    Finished resource sessions
+                  </span>
+                </div>
+              </article>
+            </div>
+          </section>
+
+          <!-- ==================================================
+               BOOKING MANAGEMENT
+               ================================================== -->
+
+          <section
+            class="page-section"
+            aria-labelledby="bookingManagementTitle"
+          >
+            <article class="card booking-management-card">
+              <header class="card-header booking-card-header">
+                <div class="card-header-content">
+                  <h2
+                    class="card-title"
+                    id="bookingManagementTitle"
+                  >
+                    Resource Schedule
+                  </h2>
+
+                  <p class="card-subtitle">
+                    Review resource availability, manage your
+                    bookings and process approval requests.
+                  </p>
+                </div>
+              </header>
+
+              <!-- Tabs -->
+
+              <div
+                class="booking-tabs"
+                role="tablist"
+                aria-label="Resource booking sections"
+              >
+                <button
+                  type="button"
+                  class="booking-tab active"
+                  id="availabilityTab"
+                  data-booking-tab="availability"
+                  role="tab"
+                  aria-selected="true"
+                  aria-controls="availabilityPanel"
+                >
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.9"
+                    aria-hidden="true"
+                  >
+                    <rect
+                      x="3"
+                      y="5"
+                      width="18"
+                      height="16"
+                      rx="2"
+                    ></rect>
+
+                    <path d="M16 3v4"></path>
+                    <path d="M8 3v4"></path>
+                    <path d="M3 10h18"></path>
+                  </svg>
+
+                  Availability Calendar
+                </button>
+
+                <button
+                  type="button"
+                  class="booking-tab"
+                  id="myBookingsTab"
+                  data-booking-tab="bookings"
+                  role="tab"
+                  aria-selected="false"
+                  aria-controls="myBookingsPanel"
+                  tabindex="-1"
+                >
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.9"
+                    aria-hidden="true"
+                  >
+                    <circle
+                      cx="9"
+                      cy="7"
+                      r="4"
+                    ></circle>
+
+                    <path d="M3 21v-2a6 6 0 0 1 6-6"></path>
+                    <path d="M16 11h6"></path>
+                  </svg>
+
+                  My Bookings
+
+                  <span
+                    class="booking-tab-count"
+                    data-booking-tab-count="bookings"
+                  >
+                    0
+                  </span>
+                </button>
+
+                <button
+                  type="button"
+                  class="booking-tab"
+                  id="bookingApprovalsTab"
+                  data-booking-tab="approvals"
+                  role="tab"
+                  aria-selected="false"
+                  aria-controls="bookingApprovalsPanel"
+                  tabindex="-1"
+                  data-approval-tab
+                >
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.9"
+                    aria-hidden="true"
+                  >
+                    <path d="M9 11l3 3L22 4"></path>
+                    <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path>
+                  </svg>
+
+                  Approvals
+
+                  <span
+                    class="booking-tab-count"
+                    data-booking-tab-count="approvals"
+                  >
+                    0
+                  </span>
+                </button>
+              </div>
+
+              <!-- ==============================================
+                   AVAILABILITY PANEL
+                   ============================================== -->
+
+              <section
+                class="booking-panel active"
+                id="availabilityPanel"
+                data-booking-panel="availability"
+                role="tabpanel"
+                aria-labelledby="availabilityTab"
+              >
+                <!-- Calendar toolbar -->
+
+                <div class="booking-calendar-toolbar">
+                  <div class="booking-calendar-navigation">
+                    <button
+                      type="button"
+                      class="btn btn-icon btn-outline"
+                      data-calendar-previous
+                      aria-label="Previous month"
+                      title="Previous month"
+                    >
+                      <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        aria-hidden="true"
+                      >
+                        <path d="m15 18-6-6 6-6"></path>
+                      </svg>
+                    </button>
+
+                    <button
+                      type="button"
+                      class="btn btn-outline btn-sm"
+                      data-calendar-today
+                    >
+                      Today
+                    </button>
+
+                    <button
+                      type="button"
+                      class="btn btn-icon btn-outline"
+                      data-calendar-next
+                      aria-label="Next month"
+                      title="Next month"
+                    >
+                      <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        aria-hidden="true"
+                      >
+                        <path d="m9 18 6-6-6-6"></path>
+                      </svg>
+                    </button>
+
+                    <h3
+                      class="booking-calendar-title"
+                      id="bookingCalendarTitle"
+                      aria-live="polite"
+                    >
+                      Month Year
+                    </h3>
+                  </div>
+
+                  <div class="booking-calendar-filters">
+                    <select
+                      id="calendarResourceFilter"
+                      data-calendar-resource-filter
+                      aria-label="Filter calendar by resource"
+                    >
+                      <option value="">
+                        All resources
+                      </option>
+                    </select>
+
+                    <select
+                      id="calendarCategoryFilter"
+                      data-calendar-category-filter
+                      aria-label="Filter calendar by resource category"
+                    >
+                      <option value="">
+                        All categories
+                      </option>
+                    </select>
+
+                    <select
+                      id="calendarLocationFilter"
+                      data-calendar-location-filter
+                      aria-label="Filter calendar by location"
+                    >
+                      <option value="">
+                        All locations
+                      </option>
+                    </select>
+
+                    <button
+                      type="button"
+                      class="btn btn-primary"
+                      data-modal-open="#bookingFormModal"
+                      data-create-booking
+                    >
+                      Book Resource
+                    </button>
+                  </div>
+                </div>
+
+                <!-- Calendar and selected-day schedule -->
+
+                <div class="booking-calendar-layout">
+                  <div class="booking-calendar-container">
+                    <div
+                      class="booking-calendar-weekdays"
+                      aria-hidden="true"
+                    >
+                      <span>Sun</span>
+                      <span>Mon</span>
+                      <span>Tue</span>
+                      <span>Wed</span>
+                      <span>Thu</span>
+                      <span>Fri</span>
+                      <span>Sat</span>
+                    </div>
+
+                    <div
+                      class="booking-calendar-grid"
+                      id="bookingCalendarGrid"
+                      role="grid"
+                      aria-label="Monthly resource booking calendar"
+                    >
+                      <div class="booking-calendar-loading">
+                        <span class="skeleton skeleton-text"></span>
+                        <span class="skeleton skeleton-text"></span>
+                        <span class="skeleton skeleton-text"></span>
+                        <span class="skeleton skeleton-text"></span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <aside
+                    class="booking-day-schedule"
+                    aria-labelledby="selectedDayScheduleTitle"
+                  >
+                    <header class="booking-day-schedule-header">
+                      <div>
+                        <span
+                          class="booking-selected-day-label"
+                          data-selected-day-label
+                        >
+                          Selected date
+                        </span>
+
+                        <h3
+                          id="selectedDayScheduleTitle"
+                          data-selected-day-title
+                        >
+                          Today
+                        </h3>
+                      </div>
+
+                      <button
+                        type="button"
+                        class="btn btn-icon btn-primary"
+                        data-book-selected-day
+                        aria-label="Create a booking on the selected day"
+                        title="Book selected day"
+                      >
+                        <svg
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          aria-hidden="true"
+                        >
+                          <path d="M12 5v14"></path>
+                          <path d="M5 12h14"></path>
+                        </svg>
+                      </button>
+                    </header>
+
+                    <div
+                      class="booking-day-list"
+                      id="selectedDayBookingList"
+                    >
+                      <div class="booking-day-loading">
+                        <div class="skeleton skeleton-text"></div>
+                        <div class="skeleton skeleton-text-sm"></div>
+                      </div>
+
+                      <div class="booking-day-loading">
+                        <div class="skeleton skeleton-text"></div>
+                        <div class="skeleton skeleton-text-sm"></div>
+                      </div>
+                    </div>
+
+                    <div
+                      class="booking-day-empty"
+                      id="selectedDayEmptyState"
+                      hidden
+                    >
+                      <div
+                        class="booking-day-empty-icon"
+                        aria-hidden="true"
+                      >
+                        <svg
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="1.9"
+                        >
+                          <rect
+                            x="3"
+                            y="5"
+                            width="18"
+                            height="16"
+                            rx="2"
+                          ></rect>
+
+                          <path d="M16 3v4"></path>
+                          <path d="M8 3v4"></path>
+                          <path d="M3 10h18"></path>
+                        </svg>
+                      </div>
+
+                      <h4>
+                        No bookings
+                      </h4>
+
+                      <p>
+                        Resources appear available for this date.
+                      </p>
+
+                      <button
+                        type="button"
+                        class="btn btn-outline btn-sm"
+                        data-book-selected-day
+                      >
+                        Create Booking
+                      </button>
+                    </div>
+                  </aside>
+                </div>
+              </section>
+
+              <!-- ==============================================
+                   MY BOOKINGS PANEL
+                   ============================================== -->
+
+              <section
+                class="booking-panel"
+                id="myBookingsPanel"
+                data-booking-panel="bookings"
+                role="tabpanel"
+                aria-labelledby="myBookingsTab"
+                hidden
+              >
+                <!-- Filters -->
+
+                <div class="booking-filter-panel">
+                  <div class="booking-search-field">
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      aria-hidden="true"
+                    >
+                      <circle
+                        cx="11"
+                        cy="11"
+                        r="8"
+                      ></circle>
+
+                      <path d="m21 21-4.35-4.35"></path>
+                    </svg>
+
+                    <input
+                      type="search"
+                      id="bookingSearchInput"
+                      placeholder="Search resource, purpose or location..."
+                      autocomplete="off"
+                      aria-label="Search my bookings"
+                      data-booking-search
+                    />
+                  </div>
+
+                  <select
+                    id="bookingStatusFilter"
+                    data-booking-status-filter
+                    aria-label="Filter bookings by status"
+                  >
+                    <option value="">
+                      All statuses
+                    </option>
+
+                    <option value="Upcoming">
+                      Upcoming
+                    </option>
+
+                    <option value="Ongoing">
+                      Ongoing
+                    </option>
+
+                    <option value="Completed">
+                      Completed
+                    </option>
+
+                    <option value="Cancelled">
+                      Cancelled
+                    </option>
+                  </select>
+
+                  <select
+                    id="bookingResourceFilter"
+                    data-booking-resource-filter
+                    aria-label="Filter bookings by resource"
+                  >
+                    <option value="">
+                      All resources
+                    </option>
+                  </select>
+
+                  <input
+                    type="date"
+                    id="bookingDateFilter"
+                    data-booking-date-filter
+                    aria-label="Filter bookings by date"
+                  />
+
+                  <button
+                    type="button"
+                    class="btn btn-outline"
+                    data-reset-booking-filters
+                  >
+                    Reset
+                  </button>
+                </div>
+
+                <!-- Table -->
+
+                <div
+                  class="table-container booking-table-container"
+                >
+                  <table class="data-table booking-table">
+                    <thead>
+                      <tr>
+                        <th scope="col">
+                          Resource
+                        </th>
+
+                        <th scope="col">
+                          Date and Time
+                        </th>
+
+                        <th scope="col">
+                          Purpose
+                        </th>
+
+                        <th scope="col">
+                          Location
+                        </th>
+
+                        <th scope="col">
+                          Approval
+                        </th>
+
+                        <th scope="col">
+                          Status
+                        </th>
+
+                        <th
+                          scope="col"
+                          class="text-right"
+                        >
+                          Actions
+                        </th>
+                      </tr>
+                    </thead>
+
+                    <tbody id="myBookingsTableBody">
+                      <tr>
+                        <td colspan="7">
+                          <div class="skeleton skeleton-text"></div>
+                        </td>
+                      </tr>
+
+                      <tr>
+                        <td colspan="7">
+                          <div class="skeleton skeleton-text"></div>
+                        </td>
+                      </tr>
+
+                      <tr>
+                        <td colspan="7">
+                          <div class="skeleton skeleton-text"></div>
+                        </td>
+                      </tr>
+
+                      <tr>
+                        <td colspan="7">
+                          <div class="skeleton skeleton-text"></div>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+
+                <!-- Empty state -->
+
+                <div
+                  id="myBookingsEmptyState"
+                  hidden
+                >
+                  <div class="state-container">
+                    <div class="state-icon">
+                      <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="1.9"
+                        aria-hidden="true"
+                      >
+                        <rect
+                          x="3"
+                          y="5"
+                          width="18"
+                          height="16"
+                          rx="2"
+                        ></rect>
+
+                        <path d="M16 3v4"></path>
+                        <path d="M8 3v4"></path>
+                        <path d="M3 10h18"></path>
+                      </svg>
+                    </div>
+
+                    <h3 class="state-title">
+                      No bookings found
+                    </h3>
+
+                    <p class="state-description">
+                      No reservations match the current search and
+                      filter criteria.
+                    </p>
+
+                    <div class="state-action">
+                      <button
+                        type="button"
+                        class="btn btn-outline"
+                        data-reset-booking-filters
+                      >
+                        Clear Filters
+                      </button>
+
+                      <button
+                        type="button"
+                        class="btn btn-primary"
+                        data-modal-open="#bookingFormModal"
+                        data-create-booking
+                      >
+                        Create Booking
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Pagination -->
+
+                <footer class="booking-pagination">
+                  <p
+                    class="pagination-summary"
+                    data-booking-pagination-summary
+                  >
+                    Showing 0 bookings
+                  </p>
+
+                  <div
+                    class="pagination"
+                    data-booking-pagination
+                  ></div>
+                </footer>
+              </section>
+
+              <!-- ==============================================
+                   APPROVALS PANEL
+                   ============================================== -->
+
+              <section
+                class="booking-panel"
+                id="bookingApprovalsPanel"
+                data-booking-panel="approvals"
+                role="tabpanel"
+                aria-labelledby="bookingApprovalsTab"
+                hidden
+              >
+                <div class="booking-panel-toolbar">
+                  <div>
+                    <h3 class="booking-panel-title">
+                      Booking Approval Queue
+                    </h3>
+
+                    <p class="booking-panel-description">
+                      Review reservations for resources that require
+                      authorization.
+                    </p>
+                  </div>
+
+                  <div class="booking-approval-filters">
+                    <select
+                      id="approvalStatusFilter"
+                      data-approval-status-filter
+                      aria-label="Filter booking approval status"
+                    >
+                      <option value="">
+                        All approval statuses
+                      </option>
+
+                      <option value="Pending">
+                        Pending
+                      </option>
+
+                      <option value="Approved">
+                        Approved
+                      </option>
+
+                      <option value="Rejected">
+                        Rejected
+                      </option>
+                    </select>
+
+                    <select
+                      id="approvalDepartmentFilter"
+                      data-approval-department-filter
+                      aria-label="Filter approvals by department"
+                    >
+                      <option value="">
+                        All departments
+                      </option>
+                    </select>
+                  </div>
+                </div>
+
+                <div
+                  class="table-container booking-approval-table-container"
+                >
+                  <table class="data-table booking-approval-table">
+                    <thead>
+                      <tr>
+                        <th scope="col">
+                          Resource
+                        </th>
+
+                        <th scope="col">
+                          Requested By
+                        </th>
+
+                        <th scope="col">
+                          Department
+                        </th>
+
+                        <th scope="col">
+                          Schedule
+                        </th>
+
+                        <th scope="col">
+                          Purpose
+                        </th>
+
+                        <th scope="col">
+                          Approval Status
+                        </th>
+
+                        <th
+                          scope="col"
+                          class="text-right"
+                        >
+                          Actions
+                        </th>
+                      </tr>
+                    </thead>
+
+                    <tbody id="bookingApprovalsTableBody">
+                      <tr>
+                        <td colspan="7">
+                          <div class="skeleton skeleton-text"></div>
+                        </td>
+                      </tr>
+
+                      <tr>
+                        <td colspan="7">
+                          <div class="skeleton skeleton-text"></div>
+                        </td>
+                      </tr>
+
+                      <tr>
+                        <td colspan="7">
+                          <div class="skeleton skeleton-text"></div>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+
+                <div
+                  id="bookingApprovalsEmptyState"
+                  hidden
+                >
+                  <div class="state-container">
+                    <div class="state-icon">
+                      <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="1.9"
+                        aria-hidden="true"
+                      >
+                        <path d="M9 11l3 3L22 4"></path>
+                        <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path>
+                      </svg>
+                    </div>
+
+                    <h3 class="state-title">
+                      No approval requests
+                    </h3>
+
+                    <p class="state-description">
+                      Booking requests requiring review will appear
+                      here.
+                    </p>
+                  </div>
+                </div>
+              </section>
+            </article>
+          </section>
+        </div>
+      </main>
+
+      <!-- Shared footer -->
+
+      <div
+        id="footer-container"
+        data-component="footer"
+      ></div>
+    </div>
+  </div>
+
+  <!-- ====================================================
+       CREATE / EDIT BOOKING MODAL
+       ==================================================== -->
+
+  <div
+    class="modal-overlay"
+    id="bookingFormModal"
+    aria-hidden="true"
+    data-close-on-overlay="false"
+  >
+    <section
+      class="modal booking-form-modal"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="bookingFormModalTitle"
+      aria-describedby="bookingFormModalDescription"
+    >
+      <header class="modal-header">
+        <div class="modal-header-content">
+          <h2
+            class="modal-title"
+            id="bookingFormModalTitle"
+            data-booking-form-title
+          >
+            Create Resource Booking
+          </h2>
+
+          <p
+            class="modal-subtitle"
+            id="bookingFormModalDescription"
+          >
+            Select an available resource and reserve a time slot.
+          </p>
+        </div>
+
+        <button
+          type="button"
+          class="modal-close"
+          data-modal-close
+          aria-label="Close booking form"
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            aria-hidden="true"
+          >
+            <path d="M18 6 6 18"></path>
+            <path d="m6 6 12 12"></path>
+          </svg>
+        </button>
+      </header>
+
+      <form
+        id="bookingForm"
+        data-booking-form
+        novalidate
+      >
+        <input
+          type="hidden"
+          id="bookingId"
+          name="booking_id"
+        />
+
+        <div class="modal-body">
+          <div
+            class="alert alert-danger"
+            data-booking-form-error
+            role="alert"
+            hidden
+          ></div>
+
+          <!-- Conflict warning -->
+
+          <div
+            class="booking-conflict-alert"
+            id="bookingConflictAlert"
+            role="alert"
+            hidden
+          >
+            <div
+              class="booking-conflict-icon"
+              aria-hidden="true"
+            >
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <circle
+                  cx="12"
+                  cy="12"
+                  r="9"
+                ></circle>
+
+                <path d="M12 8v4"></path>
+                <path d="M12 16h.01"></path>
+              </svg>
+            </div>
+
+            <div>
+              <h3>
+                Booking conflict detected
+              </h3>
+
+              <p data-booking-conflict-message>
+                The selected resource is unavailable during this
+                time period.
+              </p>
+            </div>
+          </div>
+
+          <!-- Resource selection -->
+
+          <fieldset class="booking-form-section">
+            <legend class="booking-form-section-title">
+              Resource
+            </legend>
+
+            <div class="form-grid form-grid-2">
+              <div class="form-group">
+                <label
+                  class="form-label-required"
+                  for="bookingResourceId"
+                >
+                  Resource
+                </label>
+
+                <select
+                  id="bookingResourceId"
+                  name="resource_id"
+                  required
+                >
+                  <option value="">
+                    Select a resource
+                  </option>
+                </select>
+
+                <div class="form-error"></div>
+              </div>
+
+              <div class="form-group">
+                <label for="bookingAttendeeCount">
+                  Attendees
+                </label>
+
+                <input
+                  class="form-control"
+                  type="number"
+                  id="bookingAttendeeCount"
+                  name="attendee_count"
+                  min="1"
+                  max="500"
+                  value="1"
+                  inputmode="numeric"
+                />
+
+                <div class="form-error"></div>
+              </div>
+            </div>
+
+            <div
+              class="booking-resource-preview"
+              id="bookingResourcePreview"
+              hidden
+            >
+              <div
+                class="booking-resource-preview-icon"
+                aria-hidden="true"
+              >
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.9"
+                >
+                  <path d="M21 16V8"></path>
+                  <path d="m3.5 7 8.5 5 8.5-5"></path>
+                  <path d="M12 22V12"></path>
+                  <path d="M3 7l9-5 9 5v10l-9 5-9-5V7Z"></path>
+                </svg>
+              </div>
+
+              <div class="booking-resource-preview-content">
+                <h3 data-booking-preview-name>
+                  Resource Name
+                </h3>
+
+                <p>
+                  <span data-booking-preview-category>
+                    Category
+                  </span>
+
+                  <span aria-hidden="true">
+                    ·
+                  </span>
+
+                  <span data-booking-preview-location>
+                    Location
+                  </span>
+                </p>
+              </div>
+
+              <span
+                class="badge badge-success badge-dot"
+                data-booking-preview-status
+              >
+                Available
+              </span>
+            </div>
+          </fieldset>
+
+          <!-- Schedule -->
+
+          <fieldset class="booking-form-section">
+            <legend class="booking-form-section-title">
+              Booking Schedule
+            </legend>
+
+            <div class="form-grid form-grid-2">
+              <div class="form-group">
+                <label
+                  class="form-label-required"
+                  for="bookingStartDateTime"
+                >
+                  Start Date and Time
+                </label>
+
+                <input
+                  class="form-control"
+                  type="datetime-local"
+                  id="bookingStartDateTime"
+                  name="start_time"
+                  required
+                />
+
+                <div class="form-error"></div>
+              </div>
+
+              <div class="form-group">
+                <label
+                  class="form-label-required"
+                  for="bookingEndDateTime"
+                >
+                  End Date and Time
+                </label>
+
+                <input
+                  class="form-control"
+                  type="datetime-local"
+                  id="bookingEndDateTime"
+                  name="end_time"
+                  required
+                />
+
+                <div class="form-error"></div>
+              </div>
+            </div>
+
+            <div
+              class="booking-duration-summary"
+              id="bookingDurationSummary"
+              hidden
+            >
+              <div
+                class="booking-duration-icon"
+                aria-hidden="true"
+              >
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <circle
+                    cx="12"
+                    cy="12"
+                    r="9"
+                  ></circle>
+
+                  <path d="M12 7v5l3 2"></path>
+                </svg>
+              </div>
+
+              <div>
+                <span>
+                  Booking duration
+                </span>
+
+                <strong data-booking-duration>
+                  0 minutes
+                </strong>
+              </div>
+            </div>
+
+            <label class="switch-label">
+              <span>
+                <strong>Recurring Booking</strong>
+
+                <small>
+                  Repeat this reservation using the selected
+                  recurrence pattern.
+                </small>
+              </span>
+
+              <span class="switch">
+                <input
+                  type="checkbox"
+                  id="bookingRecurring"
+                  name="is_recurring"
+                />
+
+                <span class="switch-slider"></span>
+              </span>
+            </label>
+
+            <div
+              class="booking-recurrence-fields"
+              id="bookingRecurrenceFields"
+              hidden
+            >
+              <div class="form-grid form-grid-2">
+                <div class="form-group">
+                  <label for="bookingRecurrencePattern">
+                    Repeat
+                  </label>
+
+                  <select
+                    id="bookingRecurrencePattern"
+                    name="recurrence_pattern"
+                  >
+                    <option value="Daily">
+                      Daily
+                    </option>
+
+                    <option
+                      value="Weekly"
+                      selected
+                    >
+                      Weekly
+                    </option>
+
+                    <option value="Monthly">
+                      Monthly
+                    </option>
+                  </select>
+                </div>
+
+                <div class="form-group">
+                  <label for="bookingRecurrenceEndDate">
+                    Repeat Until
+                  </label>
+
+                  <input
+                    class="form-control"
+                    type="date"
+                    id="bookingRecurrenceEndDate"
+                    name="recurrence_end_date"
+                  />
+                </div>
+              </div>
+            </div>
+          </fieldset>
+
+          <!-- Purpose -->
+
+          <fieldset class="booking-form-section">
+            <legend class="booking-form-section-title">
+              Booking Information
+            </legend>
+
+            <div class="form-group">
+              <label
+                class="form-label-required"
+                for="bookingPurpose"
+              >
+                Purpose
+              </label>
+
+              <input
+                class="form-control"
+                type="text"
+                id="bookingPurpose"
+                name="purpose"
+                placeholder="e.g. Project review meeting"
+                maxlength="180"
+                required
+              />
+
+              <div class="form-error"></div>
+            </div>
+
+            <div class="form-group">
+              <label for="bookingDescription">
+                Additional Details
+              </label>
+
+              <textarea
+                id="bookingDescription"
+                name="description"
+                rows="4"
+                maxlength="700"
+                placeholder="Add agenda, setup instructions or other booking details..."
+              ></textarea>
+
+              <div class="form-character-count">
+                <span data-booking-description-count>
+                  0
+                </span>
+                / 700
+              </div>
+
+              <div class="form-error"></div>
+            </div>
+
+            <label class="booking-policy-confirmation">
+              <input
+                type="checkbox"
+                id="bookingPolicyAcknowledgement"
+                name="policy_acknowledged"
+                required
+              />
+
+              <span>
+                I confirm that this booking follows the
+                organization’s resource-usage policy and does not
+                intentionally overlap an existing reservation.
+              </span>
+            </label>
+
+            <div class="form-error"></div>
+          </fieldset>
+        </div>
+
+        <footer class="modal-footer">
+          <button
+            type="button"
+            class="btn btn-outline"
+            data-modal-close
+          >
+            Cancel
+          </button>
+
+          <button
+            type="submit"
+            class="btn btn-primary"
+            id="bookingFormSubmitButton"
+          >
+            Create Booking
+          </button>
+        </footer>
+      </form>
+    </section>
+  </div>
+
+  <!-- ====================================================
+       BOOKING DETAILS MODAL
+       ==================================================== -->
+
+  <div
+    class="modal-overlay"
+    id="bookingDetailsModal"
+    aria-hidden="true"
+    data-close-on-overlay="true"
+  >
+    <section
+      class="modal booking-details-modal"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="bookingDetailsTitle"
+    >
+      <header class="modal-header">
+        <div class="booking-details-heading">
+          <div
+            class="booking-details-icon"
+            aria-hidden="true"
+          >
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.9"
+            >
+              <rect
+                x="3"
+                y="5"
+                width="18"
+                height="16"
+                rx="2"
+              ></rect>
+
+              <path d="M16 3v4"></path>
+              <path d="M8 3v4"></path>
+              <path d="M3 10h18"></path>
+            </svg>
+          </div>
+
+          <div>
+            <h2
+              class="modal-title"
+              id="bookingDetailsTitle"
+              data-booking-detail-resource
+            >
+              Booking Details
+            </h2>
+
+            <p
+              class="modal-subtitle"
+              data-booking-detail-reference
+            >
+              Loading booking information...
+            </p>
+          </div>
+        </div>
+
+        <button
+          type="button"
+          class="modal-close"
+          data-modal-close
+          aria-label="Close booking details"
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            aria-hidden="true"
+          >
+            <path d="M18 6 6 18"></path>
+            <path d="m6 6 12 12"></path>
+          </svg>
+        </button>
+      </header>
+
+      <div class="modal-body">
+        <div class="booking-detail-status-row">
+          <span
+            class="badge badge-info badge-dot"
+            data-booking-detail-status
+          >
+            Upcoming
+          </span>
+
+          <span
+            class="badge badge-warning"
+            data-booking-detail-approval
+          >
+            Approval Pending
+          </span>
+        </div>
+
+        <div class="booking-detail-overview">
+          <div class="booking-detail-grid">
+            <div class="booking-detail-item">
+              <span class="booking-detail-label">
+                Booked By
+              </span>
+
+              <span
+                class="booking-detail-value"
+                data-booking-detail-user
+              >
+                —
+              </span>
+            </div>
+
+            <div class="booking-detail-item">
+              <span class="booking-detail-label">
+                Department
+              </span>
+
+              <span
+                class="booking-detail-value"
+                data-booking-detail-department
+              >
+                —
+              </span>
+            </div>
+
+            <div class="booking-detail-item">
+              <span class="booking-detail-label">
+                Start
+              </span>
+
+              <span
+                class="booking-detail-value"
+                data-booking-detail-start
+              >
+                —
+              </span>
+            </div>
+
+            <div class="booking-detail-item">
+              <span class="booking-detail-label">
+                End
+              </span>
+
+              <span
+                class="booking-detail-value"
+                data-booking-detail-end
+              >
+                —
+              </span>
+            </div>
+
+            <div class="booking-detail-item">
+              <span class="booking-detail-label">
+                Location
+              </span>
+
+              <span
+                class="booking-detail-value"
+                data-booking-detail-location
+              >
+                —
+              </span>
+            </div>
+
+            <div class="booking-detail-item">
+              <span class="booking-detail-label">
+                Attendees
+              </span>
+
+              <span
+                class="booking-detail-value"
+                data-booking-detail-attendees
+              >
+                —
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <div class="booking-details-section">
+          <h3>
+            Purpose
+          </h3>
+
+          <p data-booking-detail-purpose>
+            —
+          </p>
+        </div>
+
+        <div class="booking-details-section">
+          <h3>
+            Additional Details
+          </h3>
+
+          <p data-booking-detail-description>
+            No additional details were provided.
+          </p>
+        </div>
+
+        <div
+          class="booking-recurring-summary"
+          data-booking-recurring-summary
+          hidden
+        >
+          <div
+            class="booking-recurring-icon"
+            aria-hidden="true"
+          >
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path d="M17 2l4 4-4 4"></path>
+              <path d="M3 11V9a3 3 0 0 1 3-3h15"></path>
+              <path d="m7 22-4-4 4-4"></path>
+              <path d="M21 13v2a3 3 0 0 1-3 3H3"></path>
+            </svg>
+          </div>
+
+          <div>
+            <strong>
+              Recurring reservation
+            </strong>
+
+            <p data-booking-recurrence-text>
+              Weekly recurrence
+            </p>
+          </div>
+        </div>
+
+        <div class="booking-details-section">
+          <div class="booking-details-section-header">
+            <h3>
+              Booking Activity
+            </h3>
+
+            <span
+              class="text-muted"
+              data-booking-activity-count
+            >
+              0 events
+            </span>
+          </div>
+
+          <div
+            class="booking-activity-timeline"
+            data-booking-activity-timeline
+          >
+            <div class="timeline-item">
+              <div class="skeleton skeleton-avatar"></div>
+
+              <div class="timeline-content">
+                <div class="skeleton skeleton-text"></div>
+                <div class="skeleton skeleton-text-sm mt-2"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <footer class="modal-footer booking-details-footer">
+        <button
+          type="button"
+          class="btn btn-outline"
+          data-modal-close
+        >
+          Close
+        </button>
+
+        <button
+          type="button"
+          class="btn btn-outline"
+          data-edit-current-booking
+        >
+          Edit Booking
+        </button>
+
+        <button
+          type="button"
+          class="btn btn-danger-outline"
+          data-cancel-current-booking
+        >
+          Cancel Booking
+        </button>
+      </footer>
+    </section>
+  </div>
+
+  <!-- ====================================================
+       BOOKING APPROVAL MODAL
+       ==================================================== -->
+
+  <div
+    class="modal-overlay"
+    id="bookingApprovalModal"
+    aria-hidden="true"
+    data-close-on-overlay="false"
+  >
+    <section
+      class="modal booking-approval-modal"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="bookingApprovalModalTitle"
+    >
+      <header class="modal-header">
+        <div class="modal-header-content">
+          <h2
+            class="modal-title"
+            id="bookingApprovalModalTitle"
+          >
+            Review Booking Request
+          </h2>
+
+          <p class="modal-subtitle">
+            Review the schedule and booking purpose before making a
+            decision.
+          </p>
+        </div>
+
+        <button
+          type="button"
+          class="modal-close"
+          data-modal-close
+          aria-label="Close booking approval"
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            aria-hidden="true"
+          >
+            <path d="M18 6 6 18"></path>
+            <path d="m6 6 12 12"></path>
+          </svg>
+        </button>
+      </header>
+
+      <div class="modal-body">
+        <input
+          type="hidden"
+          id="approvalBookingId"
+        />
+
+        <div
+          class="alert alert-danger"
+          data-booking-approval-error
+          hidden
+        ></div>
+
+        <div class="booking-approval-card">
+          <div class="booking-approval-resource">
+            <div
+              class="booking-approval-resource-icon"
+              aria-hidden="true"
+            >
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.9"
+              >
+                <path d="M21 16V8"></path>
+                <path d="m3.5 7 8.5 5 8.5-5"></path>
+                <path d="M12 22V12"></path>
+                <path d="M3 7l9-5 9 5v10l-9 5-9-5V7Z"></path>
+              </svg>
+            </div>
+
+            <div>
+              <h3 data-approval-booking-resource>
+                Resource Name
+              </h3>
+
+              <p data-approval-booking-location>
+                Resource location
+              </p>
+            </div>
+          </div>
+
+          <div class="booking-approval-grid">
+            <div>
+              <span>
+                Requested By
+              </span>
+
+              <strong data-approval-booking-user>
+                —
+              </strong>
+            </div>
+
+            <div>
+              <span>
+                Department
+              </span>
+
+              <strong data-approval-booking-department>
+                —
+              </strong>
+            </div>
+
+            <div>
+              <span>
+                Start
+              </span>
+
+              <strong data-approval-booking-start>
+                —
+              </strong>
+            </div>
+
+            <div>
+              <span>
+                End
+              </span>
+
+              <strong data-approval-booking-end>
+                —
+              </strong>
+            </div>
+          </div>
+
+          <div class="booking-approval-purpose">
+            <span>
+              Booking Purpose
+            </span>
+
+            <p data-approval-booking-purpose>
+              —
+            </p>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="bookingApprovalComment">
+            Review Comment
+          </label>
+
+          <textarea
+            id="bookingApprovalComment"
+            rows="4"
+            maxlength="500"
+            placeholder="Add an approval or rejection comment..."
+          ></textarea>
+
+          <div class="form-character-count">
+            <span data-booking-approval-comment-count>
+              0
+            </span>
+            / 500
+          </div>
+        </div>
+      </div>
+
+      <footer class="modal-footer">
+        <button
+          type="button"
+          class="btn btn-danger-outline"
+          id="rejectBookingButton"
+          data-reject-booking
+        >
+          Reject
+        </button>
+
+        <button
+          type="button"
+          class="btn btn-primary"
+          id="approveBookingButton"
+          data-approve-booking
+        >
+          Approve Booking
+        </button>
+      </footer>
+    </section>
+  </div>
+
+  <!-- ====================================================
+       SHARED COMPONENTS
+       ==================================================== -->
+
+  <div
+    id="loader-container"
+    data-component="loader"
+  ></div>
+
+  <div
+    id="modal-container"
+    data-component="modal"
+  ></div>
+
+  <div
+    class="sidebar-overlay"
+    id="sidebarOverlay"
+    aria-hidden="true"
+  ></div>
+
+  <div
+    class="toast-container"
+    aria-live="polite"
+    aria-label="Notifications"
+  ></div>
+
+  <!-- ====================================================
+       JAVASCRIPT
+       ==================================================== -->
+
+  <script src="../js/api.js"></script>
+  <script src="../js/utils.js"></script>
+  <script src="../js/auth.js"></script>
+  <script src="../js/loader.js"></script>
+  <script src="../js/sidebar.js"></script>
+
+  <script src="resource-booking.js"></script>
+</body>
+</html>

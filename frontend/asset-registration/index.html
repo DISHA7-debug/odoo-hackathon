@@ -1,0 +1,1847 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  />
+
+  <meta
+    name="description"
+    content="Register, search and manage organizational assets in AssetFlow."
+  />
+
+  <meta
+    name="theme-color"
+    content="#ff4f78"
+  />
+
+  <title>Asset Directory | AssetFlow</title>
+
+  <!-- ====================================================
+       GLOBAL STYLES
+       ==================================================== -->
+
+  <link
+    rel="stylesheet"
+    href="../css/variables.css"
+  />
+
+  <link
+    rel="stylesheet"
+    href="../css/global.css"
+  />
+
+  <link
+    rel="stylesheet"
+    href="../css/layout.css"
+  />
+
+  <link
+    rel="stylesheet"
+    href="../css/components.css"
+  />
+
+  <link
+    rel="stylesheet"
+    href="../css/animations.css"
+  />
+
+  <link
+    rel="stylesheet"
+    href="../css/responsive.css"
+  />
+
+  <!-- Page-specific styles -->
+
+  <link
+    rel="stylesheet"
+    href="asset-registration.css"
+  />
+</head>
+
+<body
+  data-auth="required"
+  class="page-transition"
+>
+  <a
+    class="skip-link"
+    href="#assetDirectoryMain"
+  >
+    Skip to asset directory
+  </a>
+
+  <!-- ====================================================
+       APPLICATION SHELL
+       ==================================================== -->
+
+  <div
+    class="app-shell"
+    id="appShell"
+  >
+    <!-- Shared sidebar -->
+
+    <div
+      id="sidebar-container"
+      data-component="sidebar"
+      data-required="true"
+    ></div>
+
+    <!-- Main content -->
+
+    <div class="app-content">
+      <!-- Shared navbar -->
+
+      <div
+        id="navbar-container"
+        data-component="navbar"
+        data-required="true"
+      ></div>
+
+      <!-- ==================================================
+           PAGE CONTENT
+           ================================================== -->
+
+      <main
+        class="main-content"
+        id="assetDirectoryMain"
+      >
+        <div class="page-container">
+          <!-- Page header -->
+
+          <header class="page-header">
+            <div class="page-header-content">
+              <div class="breadcrumbs">
+                <span class="breadcrumb-item">
+                  <a
+                    class="breadcrumb-link"
+                    href="../dashboard/index.html"
+                  >
+                    AssetFlow
+                  </a>
+
+                  <svg
+                    class="breadcrumb-separator"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    aria-hidden="true"
+                  >
+                    <path d="m9 18 6-6-6-6"></path>
+                  </svg>
+                </span>
+
+                <span
+                  class="breadcrumb-current"
+                  aria-current="page"
+                >
+                  Asset Directory
+                </span>
+              </div>
+
+              <h1 class="page-title">
+                Asset Directory
+              </h1>
+
+              <p class="page-description">
+                Register, monitor and manage every organizational
+                asset throughout its operational lifecycle.
+              </p>
+            </div>
+
+            <div class="page-actions">
+              <button
+                type="button"
+                class="btn btn-outline"
+                id="exportAssetsButton"
+                data-export-assets
+              >
+                <svg
+                  width="18"
+                  height="18"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  aria-hidden="true"
+                >
+                  <path d="M12 3v12"></path>
+                  <path d="m7 10 5 5 5-5"></path>
+                  <path d="M5 21h14"></path>
+                </svg>
+
+                Export
+              </button>
+
+              <button
+                type="button"
+                class="btn btn-primary"
+                data-modal-open="#assetFormModal"
+                data-register-asset
+                data-roles="Admin,AssetManager"
+              >
+                <svg
+                  width="18"
+                  height="18"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  aria-hidden="true"
+                >
+                  <path d="M12 5v14"></path>
+                  <path d="M5 12h14"></path>
+                </svg>
+
+                Register Asset
+              </button>
+            </div>
+          </header>
+
+          <!-- ==================================================
+               PAGE ERROR
+               ================================================== -->
+
+          <div
+            class="alert alert-danger asset-page-alert"
+            id="assetPageErrorAlert"
+            role="alert"
+            hidden
+          >
+            <div class="alert-icon">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                aria-hidden="true"
+              >
+                <circle
+                  cx="12"
+                  cy="12"
+                  r="10"
+                ></circle>
+
+                <path d="M12 8v4"></path>
+                <path d="M12 16h.01"></path>
+              </svg>
+            </div>
+
+            <div class="alert-content">
+              <h2 class="alert-title">
+                Unable to load assets
+              </h2>
+
+              <p
+                class="alert-message"
+                id="assetPageErrorMessage"
+              >
+                Please refresh the page and try again.
+              </p>
+            </div>
+
+            <div class="alert-actions">
+              <button
+                type="button"
+                class="btn btn-danger btn-sm"
+                data-retry-assets
+              >
+                Retry
+              </button>
+            </div>
+          </div>
+
+          <!-- ==================================================
+               ASSET SUMMARY
+               ================================================== -->
+
+          <section
+            class="page-section"
+            aria-labelledby="assetSummaryTitle"
+          >
+            <div class="section-header">
+              <div class="section-title-group">
+                <h2
+                  class="section-title"
+                  id="assetSummaryTitle"
+                >
+                  Asset Summary
+                </h2>
+
+                <p class="section-description">
+                  Current inventory distribution by lifecycle status.
+                </p>
+              </div>
+
+              <span
+                class="asset-last-updated"
+                data-asset-last-updated
+              >
+                Updating...
+              </span>
+            </div>
+
+            <div
+              class="content-grid asset-summary-grid stagger-container"
+            >
+              <!-- Total -->
+
+              <article class="kpi-card">
+                <div class="kpi-card-header">
+                  <p class="kpi-card-label">
+                    Total Assets
+                  </p>
+
+                  <div
+                    class="kpi-card-icon"
+                    aria-hidden="true"
+                  >
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="1.9"
+                    >
+                      <path d="M21 16V8"></path>
+                      <path d="m3.5 7 8.5 5 8.5-5"></path>
+                      <path d="M12 22V12"></path>
+                      <path d="M3 7l9-5 9 5v10l-9 5-9-5V7Z"></path>
+                    </svg>
+                  </div>
+                </div>
+
+                <div
+                  class="kpi-card-value"
+                  data-asset-summary="total"
+                >
+                  <span class="skeleton skeleton-title"></span>
+                </div>
+
+                <div class="kpi-card-footer">
+                  <span>
+                    Registered inventory
+                  </span>
+                </div>
+              </article>
+
+              <!-- Available -->
+
+              <article class="kpi-card success">
+                <div class="kpi-card-header">
+                  <p class="kpi-card-label">
+                    Available
+                  </p>
+
+                  <div
+                    class="kpi-card-icon"
+                    aria-hidden="true"
+                  >
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="1.9"
+                    >
+                      <circle
+                        cx="12"
+                        cy="12"
+                        r="9"
+                      ></circle>
+
+                      <path d="m8 12 3 3 5-6"></path>
+                    </svg>
+                  </div>
+                </div>
+
+                <div
+                  class="kpi-card-value"
+                  data-asset-summary="available"
+                >
+                  <span class="skeleton skeleton-title"></span>
+                </div>
+
+                <div class="kpi-card-footer">
+                  <span>
+                    Ready for allocation
+                  </span>
+                </div>
+              </article>
+
+              <!-- Allocated -->
+
+              <article class="kpi-card info">
+                <div class="kpi-card-header">
+                  <p class="kpi-card-label">
+                    Allocated
+                  </p>
+
+                  <div
+                    class="kpi-card-icon"
+                    aria-hidden="true"
+                  >
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="1.9"
+                    >
+                      <circle
+                        cx="9"
+                        cy="7"
+                        r="4"
+                      ></circle>
+
+                      <path d="M3 21v-2a6 6 0 0 1 6-6"></path>
+                      <path d="M16 11h6"></path>
+                      <path d="m19 8 3 3-3 3"></path>
+                    </svg>
+                  </div>
+                </div>
+
+                <div
+                  class="kpi-card-value"
+                  data-asset-summary="allocated"
+                >
+                  <span class="skeleton skeleton-title"></span>
+                </div>
+
+                <div class="kpi-card-footer">
+                  <span>
+                    Currently assigned
+                  </span>
+                </div>
+              </article>
+
+              <!-- Maintenance -->
+
+              <article class="kpi-card warning">
+                <div class="kpi-card-header">
+                  <p class="kpi-card-label">
+                    Under Maintenance
+                  </p>
+
+                  <div
+                    class="kpi-card-icon"
+                    aria-hidden="true"
+                  >
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="1.9"
+                    >
+                      <path d="M14.7 6.3a4 4 0 0 0-5-5l2.1 2.1-2.4 2.4-2.1-2.1a4 4 0 0 0 5 5l7.3 7.3"></path>
+                      <path d="m5 19 4-4"></path>
+                    </svg>
+                  </div>
+                </div>
+
+                <div
+                  class="kpi-card-value"
+                  data-asset-summary="maintenance"
+                >
+                  <span class="skeleton skeleton-title"></span>
+                </div>
+
+                <div class="kpi-card-footer">
+                  <span>
+                    Temporarily unavailable
+                  </span>
+                </div>
+              </article>
+
+              <!-- Reserved -->
+
+              <article class="kpi-card">
+                <div class="kpi-card-header">
+                  <p class="kpi-card-label">
+                    Reserved
+                  </p>
+
+                  <div
+                    class="kpi-card-icon"
+                    aria-hidden="true"
+                  >
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="1.9"
+                    >
+                      <rect
+                        x="3"
+                        y="5"
+                        width="18"
+                        height="16"
+                        rx="2"
+                      ></rect>
+
+                      <path d="M16 3v4"></path>
+                      <path d="M8 3v4"></path>
+                      <path d="M3 10h18"></path>
+                    </svg>
+                  </div>
+                </div>
+
+                <div
+                  class="kpi-card-value"
+                  data-asset-summary="reserved"
+                >
+                  <span class="skeleton skeleton-title"></span>
+                </div>
+
+                <div class="kpi-card-footer">
+                  <span>
+                    Booked resources
+                  </span>
+                </div>
+              </article>
+
+              <!-- Retired/lost -->
+
+              <article class="kpi-card danger">
+                <div class="kpi-card-header">
+                  <p class="kpi-card-label">
+                    Retired or Lost
+                  </p>
+
+                  <div
+                    class="kpi-card-icon"
+                    aria-hidden="true"
+                  >
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="1.9"
+                    >
+                      <circle
+                        cx="12"
+                        cy="12"
+                        r="9"
+                      ></circle>
+
+                      <path d="M9 9l6 6"></path>
+                      <path d="m15 9-6 6"></path>
+                    </svg>
+                  </div>
+                </div>
+
+                <div
+                  class="kpi-card-value"
+                  data-asset-summary="inactive"
+                >
+                  <span class="skeleton skeleton-title"></span>
+                </div>
+
+                <div class="kpi-card-footer">
+                  <span>
+                    Removed from active use
+                  </span>
+                </div>
+              </article>
+            </div>
+          </section>
+
+          <!-- ==================================================
+               ASSET DIRECTORY CARD
+               ================================================== -->
+
+          <section
+            class="page-section"
+            aria-labelledby="assetDirectoryTitle"
+          >
+            <article class="card asset-directory-card">
+              <header class="card-header asset-directory-header">
+                <div class="card-header-content">
+                  <h2
+                    class="card-title"
+                    id="assetDirectoryTitle"
+                  >
+                    Registered Assets
+                  </h2>
+
+                  <p class="card-subtitle">
+                    Search and manage physical assets and shared
+                    resources.
+                  </p>
+                </div>
+
+                <div class="card-actions">
+                  <div
+                    class="asset-view-toggle"
+                    role="group"
+                    aria-label="Choose asset display"
+                  >
+                    <button
+                      type="button"
+                      class="asset-view-button active"
+                      data-asset-view="table"
+                      aria-label="Table view"
+                      aria-pressed="true"
+                    >
+                      <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        aria-hidden="true"
+                      >
+                        <path d="M4 6h16"></path>
+                        <path d="M4 12h16"></path>
+                        <path d="M4 18h16"></path>
+                      </svg>
+                    </button>
+
+                    <button
+                      type="button"
+                      class="asset-view-button"
+                      data-asset-view="grid"
+                      aria-label="Grid view"
+                      aria-pressed="false"
+                    >
+                      <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        aria-hidden="true"
+                      >
+                        <rect
+                          x="3"
+                          y="3"
+                          width="7"
+                          height="7"
+                          rx="1"
+                        ></rect>
+
+                        <rect
+                          x="14"
+                          y="3"
+                          width="7"
+                          height="7"
+                          rx="1"
+                        ></rect>
+
+                        <rect
+                          x="3"
+                          y="14"
+                          width="7"
+                          height="7"
+                          rx="1"
+                        ></rect>
+
+                        <rect
+                          x="14"
+                          y="14"
+                          width="7"
+                          height="7"
+                          rx="1"
+                        ></rect>
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+              </header>
+
+              <!-- Filters -->
+
+              <div class="asset-filter-panel">
+                <div class="asset-search-field">
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    aria-hidden="true"
+                  >
+                    <circle
+                      cx="11"
+                      cy="11"
+                      r="8"
+                    ></circle>
+
+                    <path d="m21 21-4.35-4.35"></path>
+                  </svg>
+
+                  <input
+                    type="search"
+                    id="assetSearchInput"
+                    placeholder="Search by name, tag, serial number or model..."
+                    autocomplete="off"
+                    aria-label="Search assets"
+                    data-asset-search
+                  />
+                </div>
+
+                <select
+                  id="assetStatusFilter"
+                  data-asset-status-filter
+                  aria-label="Filter by asset status"
+                >
+                  <option value="">
+                    All statuses
+                  </option>
+
+                  <option value="Available">
+                    Available
+                  </option>
+
+                  <option value="Allocated">
+                    Allocated
+                  </option>
+
+                  <option value="Reserved">
+                    Reserved
+                  </option>
+
+                  <option value="UnderMaintenance">
+                    Under Maintenance
+                  </option>
+
+                  <option value="Lost">
+                    Lost
+                  </option>
+
+                  <option value="Retired">
+                    Retired
+                  </option>
+
+                  <option value="Disposed">
+                    Disposed
+                  </option>
+                </select>
+
+                <select
+                  id="assetCategoryFilter"
+                  data-asset-category-filter
+                  aria-label="Filter by category"
+                >
+                  <option value="">
+                    All categories
+                  </option>
+                </select>
+
+                <select
+                  id="assetDepartmentFilter"
+                  data-asset-department-filter
+                  aria-label="Filter by department"
+                >
+                  <option value="">
+                    All departments
+                  </option>
+                </select>
+
+                <select
+                  id="assetLocationFilter"
+                  data-asset-location-filter
+                  aria-label="Filter by location"
+                >
+                  <option value="">
+                    All locations
+                  </option>
+                </select>
+
+                <button
+                  type="button"
+                  class="btn btn-outline"
+                  id="resetAssetFiltersButton"
+                  data-reset-asset-filters
+                >
+                  Reset
+                </button>
+              </div>
+
+              <!-- Active filter summary -->
+
+              <div
+                class="asset-active-filters"
+                id="assetActiveFilters"
+                hidden
+              >
+                <span class="asset-active-filters-label">
+                  Active filters:
+                </span>
+
+                <div
+                  class="asset-filter-chips"
+                  data-asset-filter-chips
+                ></div>
+              </div>
+
+              <!-- Table view -->
+
+              <section
+                id="assetTableView"
+                data-asset-view-panel="table"
+              >
+                <div
+                  class="table-container asset-table-container"
+                >
+                  <table class="data-table asset-table">
+                    <thead>
+                      <tr>
+                        <th scope="col">
+                          <button
+                            type="button"
+                            class="table-sort-button"
+                            data-asset-sort="name"
+                          >
+                            Asset
+
+                            <svg
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              stroke="currentColor"
+                              stroke-width="2"
+                              aria-hidden="true"
+                            >
+                              <path d="m8 9 4-4 4 4"></path>
+                              <path d="m16 15-4 4-4-4"></path>
+                            </svg>
+                          </button>
+                        </th>
+
+                        <th scope="col">
+                          Category
+                        </th>
+
+                        <th scope="col">
+                          Department / Location
+                        </th>
+
+                        <th scope="col">
+                          Current Holder
+                        </th>
+
+                        <th scope="col">
+                          <button
+                            type="button"
+                            class="table-sort-button"
+                            data-asset-sort="status"
+                          >
+                            Status
+
+                            <svg
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              stroke="currentColor"
+                              stroke-width="2"
+                              aria-hidden="true"
+                            >
+                              <path d="m8 9 4-4 4 4"></path>
+                              <path d="m16 15-4 4-4-4"></path>
+                            </svg>
+                          </button>
+                        </th>
+
+                        <th scope="col">
+                          Acquisition
+                        </th>
+
+                        <th
+                          scope="col"
+                          class="text-right"
+                        >
+                          Actions
+                        </th>
+                      </tr>
+                    </thead>
+
+                    <tbody id="assetTableBody">
+                      <tr>
+                        <td colspan="7">
+                          <div class="skeleton skeleton-text"></div>
+                        </td>
+                      </tr>
+
+                      <tr>
+                        <td colspan="7">
+                          <div class="skeleton skeleton-text"></div>
+                        </td>
+                      </tr>
+
+                      <tr>
+                        <td colspan="7">
+                          <div class="skeleton skeleton-text"></div>
+                        </td>
+                      </tr>
+
+                      <tr>
+                        <td colspan="7">
+                          <div class="skeleton skeleton-text"></div>
+                        </td>
+                      </tr>
+
+                      <tr>
+                        <td colspan="7">
+                          <div class="skeleton skeleton-text"></div>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </section>
+
+              <!-- Grid view -->
+
+              <section
+                id="assetGridView"
+                data-asset-view-panel="grid"
+                hidden
+              >
+                <div
+                  class="asset-grid"
+                  id="assetGrid"
+                >
+                  <article class="asset-card">
+                    <div class="skeleton skeleton-avatar"></div>
+
+                    <div class="asset-card-content">
+                      <div class="skeleton skeleton-text"></div>
+                      <div class="skeleton skeleton-text-sm"></div>
+                      <div class="skeleton skeleton-text-sm"></div>
+                    </div>
+                  </article>
+
+                  <article class="asset-card">
+                    <div class="skeleton skeleton-avatar"></div>
+
+                    <div class="asset-card-content">
+                      <div class="skeleton skeleton-text"></div>
+                      <div class="skeleton skeleton-text-sm"></div>
+                      <div class="skeleton skeleton-text-sm"></div>
+                    </div>
+                  </article>
+
+                  <article class="asset-card">
+                    <div class="skeleton skeleton-avatar"></div>
+
+                    <div class="asset-card-content">
+                      <div class="skeleton skeleton-text"></div>
+                      <div class="skeleton skeleton-text-sm"></div>
+                      <div class="skeleton skeleton-text-sm"></div>
+                    </div>
+                  </article>
+                </div>
+              </section>
+
+              <!-- Empty state -->
+
+              <div
+                id="assetEmptyState"
+                hidden
+              >
+                <div class="state-container">
+                  <div class="state-icon">
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="1.9"
+                      aria-hidden="true"
+                    >
+                      <path d="M21 16V8"></path>
+                      <path d="m3.5 7 8.5 5 8.5-5"></path>
+                      <path d="M12 22V12"></path>
+                      <path d="M3 7l9-5 9 5v10l-9 5-9-5V7Z"></path>
+                    </svg>
+                  </div>
+
+                  <h3 class="state-title">
+                    No assets found
+                  </h3>
+
+                  <p class="state-description">
+                    No registered assets match the current search
+                    and filter criteria.
+                  </p>
+
+                  <div class="state-action">
+                    <button
+                      type="button"
+                      class="btn btn-outline"
+                      data-reset-asset-filters
+                    >
+                      Clear Filters
+                    </button>
+
+                    <button
+                      type="button"
+                      class="btn btn-primary"
+                      data-modal-open="#assetFormModal"
+                      data-register-asset
+                      data-roles="Admin,AssetManager"
+                    >
+                      Register Asset
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Pagination -->
+
+              <footer class="asset-pagination">
+                <p
+                  class="pagination-summary"
+                  data-asset-pagination-summary
+                >
+                  Showing 0 assets
+                </p>
+
+                <div
+                  class="pagination"
+                  data-asset-pagination
+                ></div>
+              </footer>
+            </article>
+          </section>
+        </div>
+      </main>
+
+      <!-- Shared footer -->
+
+      <div
+        id="footer-container"
+        data-component="footer"
+      ></div>
+    </div>
+  </div>
+
+  <!-- ====================================================
+       ASSET REGISTRATION / EDIT MODAL
+       ==================================================== -->
+
+  <div
+    class="modal-overlay"
+    id="assetFormModal"
+    aria-hidden="true"
+    data-close-on-overlay="false"
+  >
+    <section
+      class="modal asset-form-modal"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="assetFormModalTitle"
+      aria-describedby="assetFormModalDescription"
+    >
+      <header class="modal-header">
+        <div class="modal-header-content">
+          <h2
+            class="modal-title"
+            id="assetFormModalTitle"
+            data-asset-form-title
+          >
+            Register Asset
+          </h2>
+
+          <p
+            class="modal-subtitle"
+            id="assetFormModalDescription"
+          >
+            Add identification, ownership and acquisition details.
+          </p>
+        </div>
+
+        <button
+          type="button"
+          class="modal-close"
+          data-modal-close
+          aria-label="Close asset form"
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            aria-hidden="true"
+          >
+            <path d="M18 6 6 18"></path>
+            <path d="m6 6 12 12"></path>
+          </svg>
+        </button>
+      </header>
+
+      <form
+        id="assetForm"
+        data-asset-form
+        novalidate
+      >
+        <input
+          type="hidden"
+          id="assetId"
+          name="asset_id"
+        />
+
+        <div class="modal-body">
+          <div
+            class="alert alert-danger"
+            data-asset-form-error
+            role="alert"
+            hidden
+          ></div>
+
+          <!-- Basic information -->
+
+          <fieldset class="asset-form-section">
+            <legend class="asset-form-section-title">
+              Basic Information
+            </legend>
+
+            <div class="form-grid form-grid-2">
+              <div class="form-group">
+                <label
+                  class="form-label-required"
+                  for="assetName"
+                >
+                  Asset Name
+                </label>
+
+                <input
+                  class="form-control"
+                  type="text"
+                  id="assetName"
+                  name="name"
+                  placeholder="e.g. Dell Latitude 7440"
+                  maxlength="160"
+                  autocomplete="off"
+                  required
+                />
+
+                <div class="form-error"></div>
+              </div>
+
+              <div class="form-group">
+                <label
+                  class="form-label-required"
+                  for="assetTag"
+                >
+                  Asset Tag
+                </label>
+
+                <div class="form-input-wrapper">
+                  <input
+                    class="form-control asset-tag-input"
+                    type="text"
+                    id="assetTag"
+                    name="asset_tag"
+                    placeholder="e.g. AF-LAP-0042"
+                    maxlength="60"
+                    autocomplete="off"
+                    required
+                  />
+
+                  <button
+                    type="button"
+                    class="form-input-action asset-tag-generate"
+                    data-generate-asset-tag
+                    title="Generate asset tag"
+                    aria-label="Generate asset tag"
+                  >
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      aria-hidden="true"
+                    >
+                      <path d="M20 11a8 8 0 0 0-15.5-2M4 4v5h5"></path>
+                      <path d="M4 13a8 8 0 0 0 15.5 2M20 20v-5h-5"></path>
+                    </svg>
+                  </button>
+                </div>
+
+                <p class="form-helper">
+                  Must be unique across the organization.
+                </p>
+
+                <div class="form-error"></div>
+              </div>
+            </div>
+
+            <div class="form-grid form-grid-2">
+              <div class="form-group">
+                <label
+                  class="form-label-required"
+                  for="assetCategory"
+                >
+                  Category
+                </label>
+
+                <select
+                  id="assetCategory"
+                  name="category_id"
+                  required
+                >
+                  <option value="">
+                    Select category
+                  </option>
+                </select>
+
+                <div class="form-error"></div>
+              </div>
+
+              <div class="form-group">
+                <label
+                  class="form-label-required"
+                  for="assetStatus"
+                >
+                  Initial Status
+                </label>
+
+                <select
+                  id="assetStatus"
+                  name="status"
+                  required
+                >
+                  <option
+                    value="Available"
+                    selected
+                  >
+                    Available
+                  </option>
+
+                  <option value="Reserved">
+                    Reserved
+                  </option>
+
+                  <option value="UnderMaintenance">
+                    Under Maintenance
+                  </option>
+
+                  <option value="Retired">
+                    Retired
+                  </option>
+                </select>
+
+                <div class="form-error"></div>
+              </div>
+            </div>
+
+            <div class="form-grid form-grid-2">
+              <div class="form-group">
+                <label for="assetSerialNumber">
+                  Serial Number
+                </label>
+
+                <input
+                  class="form-control"
+                  type="text"
+                  id="assetSerialNumber"
+                  name="serial_number"
+                  placeholder="Manufacturer serial number"
+                  maxlength="120"
+                  autocomplete="off"
+                />
+
+                <div class="form-error"></div>
+              </div>
+
+              <div class="form-group">
+                <label for="assetModel">
+                  Model
+                </label>
+
+                <input
+                  class="form-control"
+                  type="text"
+                  id="assetModel"
+                  name="model"
+                  placeholder="e.g. Latitude 7440"
+                  maxlength="120"
+                  autocomplete="off"
+                />
+
+                <div class="form-error"></div>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="assetManufacturer">
+                Manufacturer
+              </label>
+
+              <input
+                class="form-control"
+                type="text"
+                id="assetManufacturer"
+                name="manufacturer"
+                placeholder="e.g. Dell Technologies"
+                maxlength="120"
+                autocomplete="off"
+              />
+
+              <div class="form-error"></div>
+            </div>
+          </fieldset>
+
+          <!-- Ownership and location -->
+
+          <fieldset class="asset-form-section">
+            <legend class="asset-form-section-title">
+              Ownership and Location
+            </legend>
+
+            <div class="form-grid form-grid-2">
+              <div class="form-group">
+                <label for="assetDepartment">
+                  Owning Department
+                </label>
+
+                <select
+                  id="assetDepartment"
+                  name="department_id"
+                >
+                  <option value="">
+                    Select department
+                  </option>
+                </select>
+
+                <div class="form-error"></div>
+              </div>
+
+              <div class="form-group">
+                <label for="assetLocation">
+                  Current Location
+                </label>
+
+                <select
+                  id="assetLocation"
+                  name="location_id"
+                >
+                  <option value="">
+                    Select location
+                  </option>
+                </select>
+
+                <div class="form-error"></div>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="assetCustodian">
+                Responsible Custodian
+              </label>
+
+              <select
+                id="assetCustodian"
+                name="custodian_id"
+              >
+                <option value="">
+                  Select custodian
+                </option>
+              </select>
+
+              <p class="form-helper">
+                A custodian is responsible for asset oversight,
+                but is not necessarily the allocated holder.
+              </p>
+
+              <div class="form-error"></div>
+            </div>
+          </fieldset>
+
+          <!-- Acquisition -->
+
+          <fieldset class="asset-form-section">
+            <legend class="asset-form-section-title">
+              Acquisition Details
+            </legend>
+
+            <div class="form-grid form-grid-3">
+              <div class="form-group">
+                <label for="assetAcquisitionDate">
+                  Acquisition Date
+                </label>
+
+                <input
+                  class="form-control"
+                  type="date"
+                  id="assetAcquisitionDate"
+                  name="acquisition_date"
+                />
+
+                <div class="form-error"></div>
+              </div>
+
+              <div class="form-group">
+                <label for="assetAcquisitionCost">
+                  Acquisition Cost
+                </label>
+
+                <div class="form-input-wrapper">
+                  <span class="form-input-prefix">
+                    ₹
+                  </span>
+
+                  <input
+                    class="form-control has-prefix"
+                    type="number"
+                    id="assetAcquisitionCost"
+                    name="acquisition_cost"
+                    min="0"
+                    step="0.01"
+                    placeholder="0.00"
+                    inputmode="decimal"
+                  />
+                </div>
+
+                <div class="form-error"></div>
+              </div>
+
+              <div class="form-group">
+                <label for="assetWarrantyEndDate">
+                  Warranty End
+                </label>
+
+                <input
+                  class="form-control"
+                  type="date"
+                  id="assetWarrantyEndDate"
+                  name="warranty_end_date"
+                />
+
+                <div class="form-error"></div>
+              </div>
+            </div>
+
+            <div class="form-grid form-grid-2">
+              <div class="form-group">
+                <label for="assetVendor">
+                  Vendor
+                </label>
+
+                <input
+                  class="form-control"
+                  type="text"
+                  id="assetVendor"
+                  name="vendor"
+                  placeholder="Supplier or vendor name"
+                  maxlength="160"
+                />
+
+                <div class="form-error"></div>
+              </div>
+
+              <div class="form-group">
+                <label for="assetInvoiceNumber">
+                  Invoice Number
+                </label>
+
+                <input
+                  class="form-control"
+                  type="text"
+                  id="assetInvoiceNumber"
+                  name="invoice_number"
+                  placeholder="Purchase invoice reference"
+                  maxlength="100"
+                />
+
+                <div class="form-error"></div>
+              </div>
+            </div>
+          </fieldset>
+
+          <!-- Resource settings -->
+
+          <fieldset class="asset-form-section">
+            <legend class="asset-form-section-title">
+              Usage Settings
+            </legend>
+
+            <div class="asset-settings-grid">
+              <label class="switch-label">
+                <span>
+                  <strong>Bookable Resource</strong>
+
+                  <small>
+                    Allow employees to reserve this asset through
+                    resource booking.
+                  </small>
+                </span>
+
+                <span class="switch">
+                  <input
+                    type="checkbox"
+                    id="assetBookable"
+                    name="is_bookable"
+                  />
+
+                  <span class="switch-slider"></span>
+                </span>
+              </label>
+
+              <label class="switch-label">
+                <span>
+                  <strong>Requires Approval</strong>
+
+                  <small>
+                    Booking requests require manager approval.
+                  </small>
+                </span>
+
+                <span class="switch">
+                  <input
+                    type="checkbox"
+                    id="assetRequiresApproval"
+                    name="requires_booking_approval"
+                  />
+
+                  <span class="switch-slider"></span>
+                </span>
+              </label>
+            </div>
+
+            <div class="form-group">
+              <label for="assetNotes">
+                Notes
+              </label>
+
+              <textarea
+                id="assetNotes"
+                name="notes"
+                rows="4"
+                maxlength="800"
+                placeholder="Add configuration, condition or usage notes..."
+              ></textarea>
+
+              <div class="form-character-count">
+                <span data-asset-notes-count>
+                  0
+                </span>
+                / 800
+              </div>
+
+              <div class="form-error"></div>
+            </div>
+          </fieldset>
+        </div>
+
+        <footer class="modal-footer">
+          <button
+            type="button"
+            class="btn btn-outline"
+            data-modal-close
+          >
+            Cancel
+          </button>
+
+          <button
+            type="submit"
+            class="btn btn-primary"
+            id="assetFormSubmitButton"
+          >
+            Register Asset
+          </button>
+        </footer>
+      </form>
+    </section>
+  </div>
+
+  <!-- ====================================================
+       ASSET DETAILS MODAL
+       ==================================================== -->
+
+  <div
+    class="modal-overlay"
+    id="assetDetailsModal"
+    aria-hidden="true"
+    data-close-on-overlay="true"
+  >
+    <section
+      class="modal asset-details-modal"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="assetDetailsTitle"
+    >
+      <header class="modal-header">
+        <div class="asset-details-heading">
+          <div
+            class="asset-details-heading-icon"
+            aria-hidden="true"
+          >
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.9"
+            >
+              <path d="M21 16V8"></path>
+              <path d="m3.5 7 8.5 5 8.5-5"></path>
+              <path d="M12 22V12"></path>
+              <path d="M3 7l9-5 9 5v10l-9 5-9-5V7Z"></path>
+            </svg>
+          </div>
+
+          <div>
+            <h2
+              class="modal-title"
+              id="assetDetailsTitle"
+              data-asset-detail-name
+            >
+              Asset Details
+            </h2>
+
+            <p
+              class="modal-subtitle"
+              data-asset-detail-tag
+            >
+              Loading asset information...
+            </p>
+          </div>
+        </div>
+
+        <button
+          type="button"
+          class="modal-close"
+          data-modal-close
+          aria-label="Close asset details"
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            aria-hidden="true"
+          >
+            <path d="M18 6 6 18"></path>
+            <path d="m6 6 12 12"></path>
+          </svg>
+        </button>
+      </header>
+
+      <div class="modal-body">
+        <!-- Overview -->
+
+        <div class="asset-details-overview">
+          <div class="asset-details-status">
+            <span
+              class="badge badge-neutral badge-dot"
+              data-asset-detail-status
+            >
+              Unknown
+            </span>
+
+            <span
+              class="badge badge-info"
+              data-asset-detail-category
+            >
+              Category
+            </span>
+          </div>
+
+          <div class="asset-detail-grid">
+            <div class="asset-detail-item">
+              <span class="asset-detail-label">
+                Serial Number
+              </span>
+
+              <span
+                class="asset-detail-value"
+                data-asset-detail-serial
+              >
+                —
+              </span>
+            </div>
+
+            <div class="asset-detail-item">
+              <span class="asset-detail-label">
+                Manufacturer
+              </span>
+
+              <span
+                class="asset-detail-value"
+                data-asset-detail-manufacturer
+              >
+                —
+              </span>
+            </div>
+
+            <div class="asset-detail-item">
+              <span class="asset-detail-label">
+                Model
+              </span>
+
+              <span
+                class="asset-detail-value"
+                data-asset-detail-model
+              >
+                —
+              </span>
+            </div>
+
+            <div class="asset-detail-item">
+              <span class="asset-detail-label">
+                Department
+              </span>
+
+              <span
+                class="asset-detail-value"
+                data-asset-detail-department
+              >
+                —
+              </span>
+            </div>
+
+            <div class="asset-detail-item">
+              <span class="asset-detail-label">
+                Location
+              </span>
+
+              <span
+                class="asset-detail-value"
+                data-asset-detail-location
+              >
+                —
+              </span>
+            </div>
+
+            <div class="asset-detail-item">
+              <span class="asset-detail-label">
+                Current Holder
+              </span>
+
+              <span
+                class="asset-detail-value"
+                data-asset-detail-holder
+              >
+                Not allocated
+              </span>
+            </div>
+
+            <div class="asset-detail-item">
+              <span class="asset-detail-label">
+                Acquisition Date
+              </span>
+
+              <span
+                class="asset-detail-value"
+                data-asset-detail-acquisition-date
+              >
+                —
+              </span>
+            </div>
+
+            <div class="asset-detail-item">
+              <span class="asset-detail-label">
+                Acquisition Cost
+              </span>
+
+              <span
+                class="asset-detail-value"
+                data-asset-detail-cost
+              >
+                —
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Lifecycle timeline -->
+
+        <div class="asset-details-section">
+          <div class="asset-details-section-header">
+            <h3>
+              Recent Lifecycle Activity
+            </h3>
+
+            <span
+              class="text-muted"
+              data-asset-activity-count
+            >
+              0 events
+            </span>
+          </div>
+
+          <div
+            class="asset-lifecycle-timeline"
+            data-asset-lifecycle-timeline
+          >
+            <div class="timeline-item">
+              <div class="skeleton skeleton-avatar"></div>
+
+              <div class="timeline-content">
+                <div class="skeleton skeleton-text"></div>
+                <div class="skeleton skeleton-text-sm mt-2"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <footer class="modal-footer asset-details-footer">
+        <button
+          type="button"
+          class="btn btn-outline"
+          data-modal-close
+        >
+          Close
+        </button>
+
+        <button
+          type="button"
+          class="btn btn-outline"
+          data-edit-current-asset
+          data-roles="Admin,AssetManager"
+        >
+          Edit Asset
+        </button>
+
+        <a
+          class="btn btn-primary"
+          href="../asset-allocation/index.html"
+          data-allocate-current-asset
+          data-roles="Admin,AssetManager"
+        >
+          Allocate Asset
+        </a>
+      </footer>
+    </section>
+  </div>
+
+  <!-- ====================================================
+       SHARED COMPONENTS
+       ==================================================== -->
+
+  <div
+    id="loader-container"
+    data-component="loader"
+  ></div>
+
+  <div
+    id="modal-container"
+    data-component="modal"
+  ></div>
+
+  <div
+    class="sidebar-overlay"
+    id="sidebarOverlay"
+    aria-hidden="true"
+  ></div>
+
+  <div
+    class="toast-container"
+    aria-live="polite"
+    aria-label="Notifications"
+  ></div>
+
+  <!-- ====================================================
+       JAVASCRIPT
+       ==================================================== -->
+
+  <script src="../js/api.js"></script>
+  <script src="../js/utils.js"></script>
+  <script src="../js/auth.js"></script>
+  <script src="../js/loader.js"></script>
+  <script src="../js/sidebar.js"></script>
+
+  <script src="asset-registration.js"></script>
+</body>
+</html>

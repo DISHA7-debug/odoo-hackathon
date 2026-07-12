@@ -1,0 +1,570 @@
+<!-- ======================================================
+     AssetFlow — Shared Modal Components
+     File: frontend/components/modal.html
+     Loaded dynamically through js/loader.js
+     ====================================================== -->
+
+<!-- ======================================================
+     GENERIC APPLICATION MODAL
+     Use:
+     AssetFlowUtils.openModal("#appModal")
+     ====================================================== -->
+
+<div
+  class="modal-overlay"
+  id="appModal"
+  aria-hidden="true"
+  data-close-on-overlay="true"
+>
+  <section
+    class="modal"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="appModalTitle"
+    aria-describedby="appModalDescription"
+  >
+    <header class="modal-header">
+      <div class="modal-header-content">
+        <h2
+          class="modal-title"
+          id="appModalTitle"
+          data-modal-title
+        >
+          AssetFlow
+        </h2>
+
+        <p
+          class="modal-subtitle"
+          id="appModalDescription"
+          data-modal-description
+        >
+          Complete the information below.
+        </p>
+      </div>
+
+      <button
+        type="button"
+        class="modal-close"
+        data-modal-close
+        aria-label="Close modal"
+      >
+        <svg
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+        >
+          <path d="M18 6 6 18"></path>
+          <path d="m6 6 12 12"></path>
+        </svg>
+      </button>
+    </header>
+
+    <div
+      class="modal-body"
+      data-modal-body
+    >
+      <div class="state-container">
+        <div class="state-icon">
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.8"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
+            <path d="M12 3v18"></path>
+            <path d="M3 12h18"></path>
+          </svg>
+        </div>
+
+        <h3 class="state-title">
+          Modal content
+        </h3>
+
+        <p class="state-description">
+          This content will be replaced dynamically.
+        </p>
+      </div>
+    </div>
+
+    <footer
+      class="modal-footer"
+      data-modal-footer
+    >
+      <button
+        type="button"
+        class="btn btn-outline"
+        data-modal-close
+      >
+        Cancel
+      </button>
+
+      <button
+        type="button"
+        class="btn btn-primary"
+        data-modal-submit
+      >
+        Save Changes
+      </button>
+    </footer>
+  </section>
+</div>
+
+<!-- ======================================================
+     ASSET ALLOCATION CONFLICT MODAL
+     Displayed when backend returns HTTP 409.
+     ====================================================== -->
+
+<div
+  class="modal-overlay"
+  id="allocationConflictModal"
+  aria-hidden="true"
+  data-close-on-overlay="false"
+>
+  <section
+    class="modal modal-sm"
+    role="alertdialog"
+    aria-modal="true"
+    aria-labelledby="allocationConflictTitle"
+    aria-describedby="allocationConflictMessage"
+  >
+    <header class="modal-header">
+      <div>
+        <h2
+          class="modal-title"
+          id="allocationConflictTitle"
+        >
+          Asset unavailable
+        </h2>
+
+        <p class="modal-subtitle">
+          This asset already has an active allocation.
+        </p>
+      </div>
+
+      <button
+        type="button"
+        class="modal-close"
+        data-modal-close
+        aria-label="Close allocation conflict"
+      >
+        <svg
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+        >
+          <path d="M18 6 6 18"></path>
+          <path d="m6 6 12 12"></path>
+        </svg>
+      </button>
+    </header>
+
+    <div class="modal-body">
+      <div class="conflict-card">
+        <div class="conflict-card-header">
+          <div
+            class="conflict-card-icon"
+            aria-hidden="true"
+          >
+            <svg
+              width="22"
+              height="22"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <circle
+                cx="12"
+                cy="12"
+                r="10"
+              ></circle>
+
+              <path d="M12 8v4"></path>
+              <path d="M12 16h.01"></path>
+            </svg>
+          </div>
+
+          <div>
+            <h3 class="conflict-card-title">
+              Currently allocated
+            </h3>
+
+            <p
+              class="conflict-card-message"
+              id="allocationConflictMessage"
+              data-conflict-message
+            >
+              This asset is currently held by another employee.
+            </p>
+          </div>
+        </div>
+
+        <div class="conflict-card-holder">
+          <div
+            class="avatar"
+            data-conflict-holder-initials
+            aria-hidden="true"
+          >
+            AF
+          </div>
+
+          <div>
+            <div
+              class="table-primary"
+              data-conflict-holder-name
+            >
+              Current Holder
+            </div>
+
+            <div
+              class="table-secondary"
+              data-conflict-holder-detail
+            >
+              Active allocation
+            </div>
+          </div>
+        </div>
+
+        <div class="conflict-card-actions">
+          <button
+            type="button"
+            class="btn btn-outline"
+            data-modal-close
+          >
+            Cancel
+          </button>
+
+          <button
+            type="button"
+            class="btn btn-primary"
+            data-request-transfer
+          >
+            <svg
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
+              <path d="M17 3h4v4"></path>
+              <path d="m21 3-7 7"></path>
+              <path d="M7 21H3v-4"></path>
+              <path d="m3 21 7-7"></path>
+            </svg>
+
+            Request Transfer
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ======================================================
+     BOOKING CONFLICT MODAL
+     Displayed when a resource booking overlaps.
+     ====================================================== -->
+
+<div
+  class="modal-overlay"
+  id="bookingConflictModal"
+  aria-hidden="true"
+  data-close-on-overlay="true"
+>
+  <section
+    class="modal modal-sm"
+    role="alertdialog"
+    aria-modal="true"
+    aria-labelledby="bookingConflictTitle"
+    aria-describedby="bookingConflictDescription"
+  >
+    <header class="modal-header">
+      <div>
+        <h2
+          class="modal-title"
+          id="bookingConflictTitle"
+        >
+          Time slot unavailable
+        </h2>
+
+        <p
+          class="modal-subtitle"
+          id="bookingConflictDescription"
+        >
+          The selected time overlaps an existing booking.
+        </p>
+      </div>
+
+      <button
+        type="button"
+        class="modal-close"
+        data-modal-close
+        aria-label="Close booking conflict"
+      >
+        <svg
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+        >
+          <path d="M18 6 6 18"></path>
+          <path d="m6 6 12 12"></path>
+        </svg>
+      </button>
+    </header>
+
+    <div class="modal-body">
+      <div class="alert alert-warning">
+        <div class="alert-icon">
+          <svg
+            width="18"
+            height="18"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
+            <circle
+              cx="12"
+              cy="12"
+              r="9"
+            ></circle>
+
+            <path d="M12 7v5"></path>
+            <path d="M12 16h.01"></path>
+          </svg>
+        </div>
+
+        <div class="alert-content">
+          <h3 class="alert-title">
+            Existing booking
+          </h3>
+
+          <p
+            class="alert-message"
+            data-booking-conflict-message
+          >
+            This resource is unavailable during the selected period.
+          </p>
+        </div>
+      </div>
+
+      <div
+        class="card"
+        style="margin-top: var(--space-4);"
+      >
+        <div class="card-body">
+          <div
+            class="flex justify-between gap-4"
+            style="align-items: flex-start;"
+          >
+            <div>
+              <div class="table-secondary">
+                Resource
+              </div>
+
+              <div
+                class="table-primary"
+                data-conflict-resource-name
+              >
+                Meeting Room
+              </div>
+            </div>
+
+            <span
+              class="badge badge-warning badge-dot"
+            >
+              Reserved
+            </span>
+          </div>
+
+          <hr />
+
+          <div class="content-grid content-grid-2">
+            <div>
+              <div class="table-secondary">
+                Existing booking
+              </div>
+
+              <div
+                class="table-primary"
+                data-conflict-existing-time
+              >
+                09:00 AM – 10:00 AM
+              </div>
+            </div>
+
+            <div>
+              <div class="table-secondary">
+                Your selection
+              </div>
+
+              <div
+                class="table-primary"
+                data-conflict-requested-time
+              >
+                09:30 AM – 10:30 AM
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <footer class="modal-footer">
+      <button
+        type="button"
+        class="btn btn-outline"
+        data-modal-close
+      >
+        Cancel
+      </button>
+
+      <button
+        type="button"
+        class="btn btn-primary"
+        data-choose-another-slot
+        data-modal-close
+      >
+        Choose Another Slot
+      </button>
+    </footer>
+  </section>
+</div>
+
+<!-- ======================================================
+     DESTRUCTIVE ACTION CONFIRMATION MODAL
+     Used for audit close, rejection and deletion.
+     ====================================================== -->
+
+<div
+  class="modal-overlay"
+  id="destructiveActionModal"
+  aria-hidden="true"
+  data-close-on-overlay="false"
+>
+  <section
+    class="modal modal-sm"
+    role="alertdialog"
+    aria-modal="true"
+    aria-labelledby="destructiveModalTitle"
+    aria-describedby="destructiveModalMessage"
+  >
+    <header class="modal-header">
+      <div>
+        <h2
+          class="modal-title"
+          id="destructiveModalTitle"
+          data-destructive-title
+        >
+          Confirm action
+        </h2>
+
+        <p class="modal-subtitle">
+          This action may not be reversible.
+        </p>
+      </div>
+
+      <button
+        type="button"
+        class="modal-close"
+        data-modal-close
+        aria-label="Close confirmation"
+      >
+        <svg
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+        >
+          <path d="M18 6 6 18"></path>
+          <path d="m6 6 12 12"></path>
+        </svg>
+      </button>
+    </header>
+
+    <div class="modal-body">
+      <div class="destructive-confirmation">
+        <div
+          class="destructive-confirmation-icon"
+          aria-hidden="true"
+        >
+          <svg
+            width="28"
+            height="28"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M10.3 2.9 1.8 17a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 2.9a2 2 0 0 0-3.4 0Z"></path>
+            <path d="M12 9v4"></path>
+            <path d="M12 17h.01"></path>
+          </svg>
+        </div>
+
+        <p
+          class="destructive-confirmation-message"
+          id="destructiveModalMessage"
+          data-destructive-message
+        >
+          Are you sure you want to continue?
+        </p>
+      </div>
+    </div>
+
+    <footer class="modal-footer">
+      <button
+        type="button"
+        class="btn btn-outline"
+        data-modal-close
+      >
+        Cancel
+      </button>
+
+      <button
+        type="button"
+        class="btn btn-danger"
+        data-destructive-confirm
+      >
+        Confirm
+      </button>
+    </footer>
+  </section>
+</div>

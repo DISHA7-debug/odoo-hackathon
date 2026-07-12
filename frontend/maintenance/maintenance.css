@@ -1,0 +1,2020 @@
+/* =========================================================
+   AssetFlow — Maintenance Management Styles
+   File: frontend/maintenance/maintenance.css
+   ========================================================= */
+
+/* =========================================================
+   PAGE BASE
+   ========================================================= */
+
+#maintenanceMain {
+  position: relative;
+  min-height: calc(100vh - var(--topbar-height));
+}
+
+.maintenance-page-alert {
+  margin-bottom: var(--space-6);
+}
+
+.maintenance-last-updated {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+
+  color: var(--color-text-muted);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+}
+
+.maintenance-last-updated::before {
+  width: 7px;
+  height: 7px;
+
+  content: "";
+
+  background: var(--color-success);
+  border-radius: var(--radius-circle);
+  box-shadow:
+    0 0 0 4px
+    var(--color-success-soft);
+}
+
+/* =========================================================
+   SUMMARY CARDS
+   ========================================================= */
+
+.maintenance-summary-grid {
+  grid-template-columns:
+    repeat(6, minmax(0, 1fr));
+}
+
+.maintenance-summary-grid .kpi-card {
+  min-width: 0;
+  min-height: 178px;
+}
+
+.maintenance-summary-grid .kpi-card-value {
+  min-height: 46px;
+}
+
+.maintenance-summary-grid .skeleton-title {
+  width: 70px;
+  height: 36px;
+}
+
+/* =========================================================
+   MANAGEMENT CARD
+   ========================================================= */
+
+.maintenance-management-card {
+  overflow: visible;
+}
+
+.maintenance-card-header {
+  border-bottom: 0;
+}
+
+/* =========================================================
+   MAINTENANCE TABS
+   ========================================================= */
+
+.maintenance-tabs {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+
+  padding:
+    0
+    var(--space-6);
+
+  overflow-x: auto;
+  overflow-y: hidden;
+
+  background: var(--color-surface);
+  border-bottom: 1px solid var(--color-border-light);
+
+  scrollbar-width: none;
+}
+
+.maintenance-tabs::-webkit-scrollbar {
+  display: none;
+}
+
+.maintenance-tab {
+  position: relative;
+
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+
+  min-height: 56px;
+  padding:
+    0
+    var(--space-3);
+
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  white-space: nowrap;
+
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+
+  transition:
+    color var(--transition-fast),
+    background-color var(--transition-fast);
+}
+
+.maintenance-tab::after {
+  position: absolute;
+  right: var(--space-2);
+  bottom: 0;
+  left: var(--space-2);
+
+  height: 3px;
+
+  content: "";
+
+  background: var(--brand-gradient);
+  border-radius:
+    var(--radius-pill)
+    var(--radius-pill)
+    0
+    0;
+
+  opacity: 0;
+  transform: scaleX(0.45);
+
+  transition:
+    opacity var(--transition-fast),
+    transform var(--transition-fast);
+}
+
+.maintenance-tab:hover {
+  color: var(--color-primary);
+  background: var(--color-primary-soft);
+}
+
+.maintenance-tab.active {
+  color: var(--color-primary);
+}
+
+.maintenance-tab.active::after {
+  opacity: 1;
+  transform: scaleX(1);
+}
+
+.maintenance-tab svg {
+  width: 18px;
+  height: 18px;
+}
+
+.maintenance-tab-count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  min-width: 24px;
+  min-height: 22px;
+  padding:
+    0
+    var(--space-2);
+
+  color: var(--color-text-muted);
+  font-size: 0.68rem;
+  font-weight: var(--font-weight-bold);
+
+  background: var(--color-neutral-100);
+  border-radius: var(--radius-pill);
+}
+
+.maintenance-tab.active
+.maintenance-tab-count {
+  color: var(--color-primary);
+  background: var(--color-primary-soft);
+}
+
+/* =========================================================
+   PANELS
+   ========================================================= */
+
+.maintenance-panel {
+  display: none;
+}
+
+.maintenance-panel.active {
+  display: block;
+  animation:
+    maintenancePanelEnter
+    250ms ease both;
+}
+
+@keyframes maintenancePanelEnter {
+  from {
+    opacity: 0;
+    transform: translateY(7px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* =========================================================
+   ACTIVE REQUEST FILTERS
+   ========================================================= */
+
+.maintenance-filter-panel {
+  display: grid;
+  grid-template-columns:
+    minmax(300px, 2fr)
+    repeat(4, minmax(150px, 1fr))
+    auto;
+  gap: var(--space-3);
+
+  padding: var(--space-5);
+
+  background: var(--color-background-subtle);
+  border-bottom: 1px solid var(--color-border-light);
+}
+
+.maintenance-search-field {
+  position: relative;
+  min-width: 0;
+}
+
+.maintenance-search-field svg {
+  position: absolute;
+  top: 50%;
+  left: var(--space-3);
+
+  width: 18px;
+  height: 18px;
+
+  color: var(--color-text-muted);
+  pointer-events: none;
+
+  transform: translateY(-50%);
+}
+
+.maintenance-search-field input {
+  width: 100%;
+  min-height: 42px;
+  padding-left: 2.7rem;
+}
+
+.maintenance-filter-panel select {
+  width: 100%;
+  min-width: 0;
+  min-height: 42px;
+}
+
+/* =========================================================
+   REQUEST TABLE
+   ========================================================= */
+
+.maintenance-table-container,
+.maintenance-history-table-container {
+  min-height: 410px;
+
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+.maintenance-table {
+  min-width: 1180px;
+}
+
+.maintenance-history-table {
+  min-width: 1110px;
+}
+
+.maintenance-table th:first-child,
+.maintenance-table td:first-child,
+.maintenance-history-table th:first-child,
+.maintenance-history-table td:first-child {
+  padding-left: var(--space-5);
+}
+
+.maintenance-table th:last-child,
+.maintenance-table td:last-child,
+.maintenance-history-table th:last-child,
+.maintenance-history-table td:last-child {
+  padding-right: var(--space-5);
+}
+
+/* =========================================================
+   REQUEST / ASSET IDENTITY
+   ========================================================= */
+
+.maintenance-request-identity {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+
+  min-width: 250px;
+}
+
+.maintenance-request-icon {
+  display: grid;
+  flex-shrink: 0;
+  place-items: center;
+
+  width: 44px;
+  height: 44px;
+
+  color: var(--color-warning-dark);
+  background: var(--color-warning-soft);
+  border: 1px solid var(--color-warning-border);
+  border-radius: var(--radius-lg);
+}
+
+.maintenance-request-icon svg {
+  width: 20px;
+  height: 20px;
+}
+
+.maintenance-request-content {
+  min-width: 0;
+}
+
+.maintenance-request-asset {
+  max-width: 240px;
+  overflow: hidden;
+
+  color: var(--color-text-primary);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.maintenance-request-reference {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+
+  margin-top: 3px;
+
+  color: var(--color-text-muted);
+  font-family: var(--font-family-mono, monospace);
+  font-size: var(--font-size-xs);
+}
+
+.maintenance-request-reference::before {
+  width: 5px;
+  height: 5px;
+
+  content: "";
+
+  background: var(--color-warning);
+  border-radius: var(--radius-circle);
+}
+
+/* =========================================================
+   ISSUE CELL
+   ========================================================= */
+
+.maintenance-issue-cell {
+  min-width: 240px;
+}
+
+.maintenance-issue-title {
+  max-width: 260px;
+  overflow: hidden;
+
+  color: var(--color-text-primary);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.maintenance-issue-description {
+  display: -webkit-box;
+
+  max-width: 270px;
+  margin-top: 3px;
+  overflow: hidden;
+
+  color: var(--color-text-muted);
+  font-size: var(--font-size-xs);
+  line-height: 1.45;
+
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+}
+
+.maintenance-issue-type {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+
+  margin-top: var(--space-2);
+
+  color: var(--color-text-secondary);
+  font-size: 0.68rem;
+  font-weight: var(--font-weight-semibold);
+}
+
+.maintenance-issue-type svg {
+  width: 13px;
+  height: 13px;
+}
+
+/* =========================================================
+   PRIORITY BADGES
+   ========================================================= */
+
+.maintenance-priority {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+
+  padding:
+    0.32rem
+    0.65rem;
+
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-bold);
+
+  border: 1px solid transparent;
+  border-radius: var(--radius-pill);
+}
+
+.maintenance-priority::before {
+  width: 7px;
+  height: 7px;
+
+  content: "";
+
+  background: currentColor;
+  border-radius: var(--radius-circle);
+}
+
+.maintenance-priority.low {
+  color: var(--color-success);
+  background: var(--color-success-soft);
+  border-color: var(--color-success-border);
+}
+
+.maintenance-priority.medium {
+  color: var(--color-info);
+  background: var(--color-info-soft);
+  border-color: var(--color-info-border);
+}
+
+.maintenance-priority.high {
+  color: var(--color-warning-dark);
+  background: var(--color-warning-soft);
+  border-color: var(--color-warning-border);
+}
+
+.maintenance-priority.critical {
+  color: var(--color-danger);
+  background: var(--color-danger-soft);
+  border-color: var(--color-danger-border);
+
+  animation:
+    criticalPriorityPulse
+    1.8s ease-in-out infinite;
+}
+
+@keyframes criticalPriorityPulse {
+  0%,
+  100% {
+    box-shadow:
+      0 0 0 0
+      rgba(220, 38, 38, 0);
+  }
+
+  50% {
+    box-shadow:
+      0 0 0 4px
+      rgba(220, 38, 38, 0.08);
+  }
+}
+
+/* =========================================================
+   TECHNICIAN CELL
+   ========================================================= */
+
+.maintenance-technician {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+
+  min-width: 180px;
+}
+
+.maintenance-technician-avatar {
+  display: grid;
+  flex-shrink: 0;
+  place-items: center;
+
+  width: 36px;
+  height: 36px;
+
+  color: var(--color-white);
+  font-size: 0.68rem;
+  font-weight: var(--font-weight-bold);
+
+  background: var(--brand-gradient);
+  border-radius: var(--radius-circle);
+}
+
+.maintenance-technician-avatar.unassigned {
+  color: var(--color-text-muted);
+  background: var(--color-neutral-100);
+  border: 1px dashed var(--color-neutral-300);
+}
+
+.maintenance-technician-content {
+  min-width: 0;
+}
+
+.maintenance-technician-name {
+  max-width: 175px;
+  overflow: hidden;
+
+  color: var(--color-text-primary);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.maintenance-technician-role {
+  max-width: 175px;
+  margin-top: 2px;
+  overflow: hidden;
+
+  color: var(--color-text-muted);
+  font-size: var(--font-size-xs);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* =========================================================
+   DATE CELL
+   ========================================================= */
+
+.maintenance-date-cell {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+
+  min-width: 130px;
+}
+
+.maintenance-date-primary {
+  color: var(--color-text-primary);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+}
+
+.maintenance-date-secondary {
+  color: var(--color-text-muted);
+  font-size: var(--font-size-xs);
+}
+
+.maintenance-date-secondary.overdue {
+  color: var(--color-danger);
+  font-weight: var(--font-weight-semibold);
+}
+
+/* =========================================================
+   REQUEST ACTIONS
+   ========================================================= */
+
+.maintenance-table-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--space-2);
+}
+
+/* =========================================================
+   PAGINATION
+   ========================================================= */
+
+.maintenance-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+
+  padding:
+    var(--space-4)
+    var(--space-5);
+
+  border-top: 1px solid var(--color-border-light);
+}
+
+.maintenance-pagination .pagination {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+}
+
+.pagination-summary {
+  color: var(--color-text-muted);
+  font-size: var(--font-size-xs);
+}
+
+.pagination-button {
+  display: grid;
+  place-items: center;
+
+  min-width: 34px;
+  height: 34px;
+  padding:
+    0
+    var(--space-2);
+
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+
+  transition:
+    color var(--transition-fast),
+    background-color var(--transition-fast),
+    border-color var(--transition-fast);
+}
+
+.pagination-button:hover:not(:disabled) {
+  color: var(--color-primary);
+  background: var(--color-primary-soft);
+  border-color: var(--color-primary-border);
+}
+
+.pagination-button.active {
+  color: var(--color-white);
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+}
+
+.pagination-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+
+.pagination-ellipsis {
+  display: grid;
+  place-items: center;
+
+  min-width: 26px;
+
+  color: var(--color-text-muted);
+}
+
+/* =========================================================
+   PANEL TOOLBAR
+   ========================================================= */
+
+.maintenance-panel-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-5);
+
+  padding: var(--space-5);
+
+  background: var(--color-background-subtle);
+  border-bottom: 1px solid var(--color-border-light);
+}
+
+.maintenance-panel-title {
+  color: var(--color-text-primary);
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-bold);
+}
+
+.maintenance-panel-description {
+  margin-top: var(--space-1);
+
+  color: var(--color-text-muted);
+  font-size: var(--font-size-xs);
+  line-height: 1.5;
+}
+
+.maintenance-schedule-actions,
+.maintenance-history-filters {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+}
+
+.maintenance-schedule-actions select {
+  min-width: 190px;
+}
+
+.maintenance-history-filters input {
+  min-width: 160px;
+}
+
+/* =========================================================
+   PREVENTIVE SCHEDULE GRID
+   ========================================================= */
+
+.maintenance-schedule-grid {
+  display: grid;
+  grid-template-columns:
+    repeat(3, minmax(0, 1fr));
+  gap: var(--space-5);
+
+  min-height: 390px;
+  padding: var(--space-5);
+}
+
+.maintenance-schedule-card {
+  position: relative;
+
+  display: flex;
+  flex-direction: column;
+
+  min-width: 0;
+  min-height: 240px;
+  padding: var(--space-5);
+
+  overflow: hidden;
+
+  background: var(--color-surface);
+  border: 1px solid var(--color-border-light);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-sm);
+
+  transition:
+    transform var(--transition-fast),
+    border-color var(--transition-fast),
+    box-shadow var(--transition-fast);
+}
+
+.maintenance-schedule-card::before {
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+
+  height: 4px;
+
+  content: "";
+
+  background:
+    var(
+      --schedule-accent,
+      var(--brand-gradient)
+    );
+}
+
+.maintenance-schedule-card:hover {
+  border-color: var(--color-primary-border);
+  box-shadow: var(--shadow-md);
+  transform: translateY(-3px);
+}
+
+.maintenance-schedule-card.overdue {
+  --schedule-accent: var(--color-danger);
+}
+
+.maintenance-schedule-card.due-soon {
+  --schedule-accent: var(--color-warning);
+}
+
+.maintenance-schedule-card.active {
+  --schedule-accent: var(--color-success);
+}
+
+.maintenance-schedule-card.paused {
+  --schedule-accent: var(--color-neutral-400);
+}
+
+.maintenance-schedule-card-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+.maintenance-schedule-card-icon {
+  display: grid;
+  place-items: center;
+
+  width: 46px;
+  height: 46px;
+
+  color: var(--color-primary);
+  background: var(--color-primary-soft);
+  border: 1px solid var(--color-primary-border);
+  border-radius: var(--radius-lg);
+}
+
+.maintenance-schedule-card-icon svg {
+  width: 21px;
+  height: 21px;
+}
+
+.maintenance-schedule-card-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.maintenance-schedule-card-content {
+  flex: 1;
+  min-width: 0;
+  margin-top: var(--space-4);
+}
+
+.maintenance-schedule-name {
+  overflow: hidden;
+
+  color: var(--color-text-primary);
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-bold);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.maintenance-schedule-asset {
+  margin-top: var(--space-1);
+
+  overflow: hidden;
+
+  color: var(--color-text-muted);
+  font-size: var(--font-size-xs);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.maintenance-schedule-meta {
+  display: grid;
+  grid-template-columns:
+    repeat(2, minmax(0, 1fr));
+  gap: var(--space-3);
+
+  margin-top: var(--space-4);
+}
+
+.maintenance-schedule-meta-item {
+  min-width: 0;
+  padding: var(--space-3);
+
+  background: var(--color-background-subtle);
+  border: 1px solid var(--color-border-light);
+  border-radius: var(--radius-md);
+}
+
+.maintenance-schedule-meta-label {
+  display: block;
+
+  color: var(--color-text-muted);
+  font-size: 0.65rem;
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+.maintenance-schedule-meta-value {
+  display: block;
+  margin-top: 3px;
+
+  overflow: hidden;
+
+  color: var(--color-text-primary);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.maintenance-schedule-progress {
+  margin-top: var(--space-4);
+}
+
+.maintenance-schedule-progress-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+
+  color: var(--color-text-muted);
+  font-size: 0.68rem;
+}
+
+.maintenance-schedule-progress-track {
+  height: 7px;
+  margin-top: var(--space-2);
+  overflow: hidden;
+
+  background: var(--color-neutral-100);
+  border-radius: var(--radius-pill);
+}
+
+.maintenance-schedule-progress-bar {
+  width:
+    var(
+      --schedule-progress,
+      0%
+    );
+  height: 100%;
+
+  background: var(--brand-gradient);
+  border-radius: inherit;
+
+  transition:
+    width
+    var(--transition-normal);
+}
+
+/* =========================================================
+   HISTORY TABLE
+   ========================================================= */
+
+.maintenance-history-resolution {
+  display: -webkit-box;
+
+  max-width: 280px;
+  overflow: hidden;
+
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-xs);
+  line-height: 1.5;
+
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+}
+
+.maintenance-cost {
+  color: var(--color-text-primary);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
+}
+
+.maintenance-cost.unavailable {
+  color: var(--color-text-muted);
+  font-weight: var(--font-weight-medium);
+}
+
+/* =========================================================
+   EMPTY STATES
+   ========================================================= */
+
+.maintenance-panel .state-container {
+  min-height: 350px;
+}
+
+.maintenance-panel .state-action {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+}
+
+/* =========================================================
+   REQUEST FORM MODAL
+   ========================================================= */
+
+.maintenance-request-modal {
+  width: min(840px, calc(100vw - 2rem));
+  max-height: calc(100vh - 2rem);
+}
+
+.maintenance-request-modal .modal-body {
+  padding:
+    var(--space-5)
+    var(--space-6);
+}
+
+.maintenance-form-section {
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+
+  border: 0;
+}
+
+.maintenance-form-section
++ .maintenance-form-section {
+  margin-top: var(--space-6);
+  padding-top: var(--space-5);
+
+  border-top: 1px solid var(--color-border-light);
+}
+
+.maintenance-form-section-title {
+  width: 100%;
+  margin-bottom: var(--space-5);
+
+  color: var(--color-text-primary);
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-bold);
+}
+
+.maintenance-form-section-title::after {
+  display: block;
+
+  width: 38px;
+  height: 3px;
+  margin-top: var(--space-2);
+
+  content: "";
+
+  background: var(--brand-gradient);
+  border-radius: var(--radius-pill);
+}
+
+/* =========================================================
+   ASSET PREVIEW
+   ========================================================= */
+
+.maintenance-asset-preview {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+
+  margin-top: var(--space-3);
+  padding: var(--space-4);
+
+  background:
+    linear-gradient(
+      135deg,
+      var(--color-primary-soft),
+      rgba(139, 77, 232, 0.08)
+    );
+
+  border: 1px solid var(--color-primary-border);
+  border-radius: var(--radius-lg);
+}
+
+.maintenance-asset-preview[hidden] {
+  display: none;
+}
+
+.maintenance-asset-preview-icon {
+  display: grid;
+  flex-shrink: 0;
+  place-items: center;
+
+  width: 46px;
+  height: 46px;
+
+  color: var(--color-primary);
+  background: var(--color-surface);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+}
+
+.maintenance-asset-preview-icon svg {
+  width: 21px;
+  height: 21px;
+}
+
+.maintenance-asset-preview-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.maintenance-asset-preview-content h3 {
+  overflow: hidden;
+
+  color: var(--color-text-primary);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.maintenance-asset-preview-content p {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+
+  margin-top: var(--space-1);
+
+  color: var(--color-text-muted);
+  font-size: var(--font-size-xs);
+}
+
+/* =========================================================
+   SWITCHES
+   ========================================================= */
+
+.switch-label {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-5);
+
+  padding: var(--space-4);
+
+  background: var(--color-background-subtle);
+  border: 1px solid var(--color-border-light);
+  border-radius: var(--radius-lg);
+}
+
+.switch-label
++ .switch-label {
+  margin-top: var(--space-3);
+}
+
+.switch-label > span:first-child {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.switch-label strong {
+  color: var(--color-text-primary);
+  font-size: var(--font-size-sm);
+}
+
+.switch-label small {
+  color: var(--color-text-muted);
+  font-size: var(--font-size-xs);
+  line-height: 1.5;
+}
+
+.switch {
+  position: relative;
+
+  display: inline-flex;
+  flex-shrink: 0;
+
+  width: 46px;
+  height: 26px;
+}
+
+.switch input {
+  width: 0;
+  height: 0;
+
+  opacity: 0;
+}
+
+.switch-slider {
+  position: absolute;
+  inset: 0;
+
+  background: var(--color-neutral-300);
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+
+  transition:
+    background-color var(--transition-fast);
+}
+
+.switch-slider::before {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+
+  width: 20px;
+  height: 20px;
+
+  content: "";
+
+  background: var(--color-white);
+  border-radius: var(--radius-circle);
+  box-shadow: var(--shadow-sm);
+
+  transition:
+    transform var(--transition-fast);
+}
+
+.switch input:checked
++ .switch-slider {
+  background: var(--color-primary);
+}
+
+.switch input:checked
++ .switch-slider::before {
+  transform: translateX(20px);
+}
+
+.switch input:focus-visible
++ .switch-slider {
+  outline:
+    3px solid
+    var(--color-primary-soft);
+  outline-offset: 2px;
+}
+
+/* =========================================================
+   FORM INPUT PREFIX
+   ========================================================= */
+
+.form-input-wrapper {
+  position: relative;
+}
+
+.form-input-prefix {
+  position: absolute;
+  top: 50%;
+  left: var(--space-3);
+  z-index: 1;
+
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  pointer-events: none;
+
+  transform: translateY(-50%);
+}
+
+.form-control.has-prefix {
+  padding-left: 2.25rem;
+}
+
+/* =========================================================
+   CHARACTER COUNTERS
+   ========================================================= */
+
+.form-character-count {
+  margin-top: var(--space-1);
+
+  color: var(--color-text-muted);
+  font-size: var(--font-size-xs);
+  text-align: right;
+}
+
+/* =========================================================
+   UPDATE MODAL
+   ========================================================= */
+
+.maintenance-update-modal {
+  width: min(720px, calc(100vw - 2rem));
+}
+
+.maintenance-update-preview {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+
+  margin-bottom: var(--space-5);
+  padding: var(--space-4);
+
+  background:
+    linear-gradient(
+      135deg,
+      var(--color-info-soft),
+      var(--color-background-subtle)
+    );
+
+  border: 1px solid var(--color-info-border);
+  border-radius: var(--radius-lg);
+}
+
+.maintenance-update-preview-icon {
+  display: grid;
+  flex-shrink: 0;
+  place-items: center;
+
+  width: 46px;
+  height: 46px;
+
+  color: var(--color-info);
+  background: var(--color-surface);
+  border-radius: var(--radius-circle);
+  box-shadow: var(--shadow-sm);
+}
+
+.maintenance-update-preview-icon svg {
+  width: 21px;
+  height: 21px;
+}
+
+.maintenance-update-preview h3 {
+  color: var(--color-text-primary);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
+}
+
+.maintenance-update-preview p {
+  margin-top: var(--space-1);
+
+  color: var(--color-text-muted);
+  font-size: var(--font-size-xs);
+}
+
+/* =========================================================
+   COMPLETION MODAL
+   ========================================================= */
+
+.maintenance-completion-preview {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+
+  margin-bottom: var(--space-5);
+  padding: var(--space-4);
+
+  background:
+    linear-gradient(
+      135deg,
+      var(--color-success-soft),
+      var(--color-background-subtle)
+    );
+
+  border: 1px solid var(--color-success-border);
+  border-radius: var(--radius-lg);
+}
+
+.maintenance-completion-icon {
+  display: grid;
+  flex-shrink: 0;
+  place-items: center;
+
+  width: 46px;
+  height: 46px;
+
+  color: var(--color-success);
+  background: var(--color-surface);
+  border-radius: var(--radius-circle);
+  box-shadow: var(--shadow-sm);
+}
+
+.maintenance-completion-icon svg {
+  width: 21px;
+  height: 21px;
+}
+
+.maintenance-completion-preview h3 {
+  color: var(--color-text-primary);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
+}
+
+.maintenance-completion-preview p {
+  margin-top: var(--space-1);
+
+  color: var(--color-text-muted);
+  font-size: var(--font-size-xs);
+}
+
+/* =========================================================
+   PREVENTIVE FORM
+   ========================================================= */
+
+#preventiveCustomIntervalGroup {
+  padding: var(--space-4);
+
+  background: var(--color-background-subtle);
+  border: 1px solid var(--color-border-light);
+  border-radius: var(--radius-lg);
+}
+
+#preventiveCustomIntervalGroup[hidden] {
+  display: none;
+}
+
+/* =========================================================
+   DETAILS MODAL
+   ========================================================= */
+
+.maintenance-details-modal {
+  width: min(780px, calc(100vw - 2rem));
+}
+
+.maintenance-details-heading {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.maintenance-details-icon {
+  display: grid;
+  flex-shrink: 0;
+  place-items: center;
+
+  width: 46px;
+  height: 46px;
+
+  color: var(--color-warning-dark);
+  background: var(--color-warning-soft);
+  border: 1px solid var(--color-warning-border);
+  border-radius: var(--radius-xl);
+}
+
+.maintenance-details-icon svg {
+  width: 21px;
+  height: 21px;
+}
+
+.maintenance-detail-status-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+
+  margin-bottom: var(--space-5);
+}
+
+.maintenance-detail-overview {
+  padding: var(--space-5);
+
+  background:
+    linear-gradient(
+      135deg,
+      var(--color-background-subtle),
+      var(--color-warning-soft)
+    );
+
+  border: 1px solid var(--color-warning-border);
+  border-radius: var(--radius-xl);
+}
+
+.maintenance-detail-grid {
+  display: grid;
+  grid-template-columns:
+    repeat(3, minmax(0, 1fr));
+  gap: var(--space-4);
+}
+
+.maintenance-detail-item {
+  min-width: 0;
+}
+
+.maintenance-detail-label {
+  display: block;
+
+  color: var(--color-text-muted);
+  font-size: 0.68rem;
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+.maintenance-detail-value {
+  display: block;
+  margin-top: var(--space-1);
+
+  overflow: hidden;
+
+  color: var(--color-text-primary);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.maintenance-details-section {
+  margin-top: var(--space-5);
+  padding: var(--space-4);
+
+  background: var(--color-background-subtle);
+  border: 1px solid var(--color-border-light);
+  border-radius: var(--radius-lg);
+}
+
+.maintenance-details-section > h3,
+.maintenance-details-section-header h3 {
+  color: var(--color-text-primary);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
+}
+
+.maintenance-details-section > strong {
+  display: block;
+  margin-top: var(--space-2);
+
+  color: var(--color-text-primary);
+  font-size: var(--font-size-sm);
+}
+
+.maintenance-details-section > p {
+  margin-top: var(--space-2);
+
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-xs);
+  line-height: 1.65;
+}
+
+.maintenance-details-section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+
+  margin-bottom: var(--space-4);
+}
+
+/* =========================================================
+   RISK BANNER
+   ========================================================= */
+
+.maintenance-risk-banner {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+
+  margin-top: var(--space-5);
+  padding: var(--space-4);
+
+  background: var(--color-danger-soft);
+  border: 1px solid var(--color-danger-border);
+  border-radius: var(--radius-lg);
+}
+
+.maintenance-risk-banner[hidden] {
+  display: none;
+}
+
+.maintenance-risk-icon {
+  display: grid;
+  flex-shrink: 0;
+  place-items: center;
+
+  width: 40px;
+  height: 40px;
+
+  color: var(--color-danger);
+  background: var(--color-surface);
+  border-radius: var(--radius-circle);
+}
+
+.maintenance-risk-icon svg {
+  width: 19px;
+  height: 19px;
+}
+
+.maintenance-risk-banner strong {
+  color: var(--color-danger);
+  font-size: var(--font-size-sm);
+}
+
+.maintenance-risk-banner p {
+  margin-top: var(--space-1);
+
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-xs);
+  line-height: 1.55;
+}
+
+/* =========================================================
+   ACTIVITY TIMELINE
+   ========================================================= */
+
+.maintenance-activity-timeline {
+  display: flex;
+  flex-direction: column;
+}
+
+.maintenance-activity-timeline
+.timeline-item {
+  position: relative;
+
+  display: flex;
+  gap: var(--space-4);
+
+  padding:
+    var(--space-3)
+    0;
+}
+
+.maintenance-activity-timeline
+.timeline-item:not(:last-child)::after {
+  position: absolute;
+  top: 51px;
+  bottom: -4px;
+  left: 18px;
+
+  width: 2px;
+
+  content: "";
+
+  background: var(--color-border-light);
+}
+
+.maintenance-activity-marker {
+  position: relative;
+  z-index: 1;
+
+  display: grid;
+  flex: 0 0 38px;
+  place-items: center;
+
+  width: 38px;
+  height: 38px;
+
+  color:
+    var(
+      --activity-color,
+      var(--color-warning)
+    );
+
+  background:
+    color-mix(
+      in srgb,
+      var(
+        --activity-color,
+        var(--color-warning)
+      ) 12%,
+      var(--color-surface)
+    );
+
+  border:
+    1px solid
+    color-mix(
+      in srgb,
+      var(
+        --activity-color,
+        var(--color-warning)
+      ) 22%,
+      var(--color-border)
+    );
+
+  border-radius: var(--radius-circle);
+}
+
+.maintenance-activity-marker svg {
+  width: 16px;
+  height: 16px;
+}
+
+.maintenance-activity-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.maintenance-activity-title {
+  color: var(--color-text-primary);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+}
+
+.maintenance-activity-description {
+  margin-top: 3px;
+
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-xs);
+  line-height: 1.5;
+}
+
+.maintenance-activity-meta {
+  margin-top: var(--space-1);
+
+  color: var(--color-text-muted);
+  font-size: 0.7rem;
+}
+
+.maintenance-details-footer {
+  justify-content: flex-end;
+}
+
+/* =========================================================
+   DATA ANIMATIONS
+   ========================================================= */
+
+.maintenance-data-enter {
+  animation:
+    maintenanceDataEnter
+    300ms ease both;
+}
+
+@keyframes maintenanceDataEnter {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.maintenance-refreshing
+[data-refresh-maintenance] svg {
+  animation:
+    maintenanceRefreshSpin
+    700ms linear infinite;
+}
+
+.maintenance-page-loading
+.maintenance-management-card,
+.maintenance-page-loading
+.maintenance-summary-grid {
+  pointer-events: none;
+}
+
+@keyframes maintenanceRefreshSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* =========================================================
+   LARGE SCREENS
+   ========================================================= */
+
+@media (min-width: 1600px) {
+  .maintenance-summary-grid {
+    grid-template-columns:
+      repeat(6, minmax(190px, 1fr));
+  }
+
+  .maintenance-filter-panel {
+    grid-template-columns:
+      minmax(360px, 2fr)
+      repeat(4, minmax(170px, 1fr))
+      auto;
+  }
+
+  .maintenance-schedule-grid {
+    grid-template-columns:
+      repeat(4, minmax(0, 1fr));
+  }
+}
+
+/* =========================================================
+   DESKTOP
+   ========================================================= */
+
+@media (max-width: 1499px) {
+  .maintenance-summary-grid {
+    grid-template-columns:
+      repeat(3, minmax(0, 1fr));
+  }
+
+  .maintenance-filter-panel {
+    grid-template-columns:
+      minmax(280px, 2fr)
+      repeat(3, minmax(150px, 1fr));
+  }
+
+  .maintenance-filter-panel
+  [data-maintenance-department-filter],
+  .maintenance-filter-panel
+  [data-reset-maintenance-filters] {
+    grid-row: 2;
+  }
+}
+
+@media (max-width: 1199px) {
+  .maintenance-schedule-grid {
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+  }
+
+  .maintenance-detail-grid {
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+  }
+}
+
+/* =========================================================
+   TABLET
+   ========================================================= */
+
+@media (max-width: 991px) {
+  .maintenance-summary-grid {
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+  }
+
+  .maintenance-filter-panel {
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+  }
+
+  .maintenance-search-field {
+    grid-column: 1 / -1;
+  }
+
+  .maintenance-filter-panel
+  [data-maintenance-department-filter],
+  .maintenance-filter-panel
+  [data-reset-maintenance-filters] {
+    grid-row: auto;
+  }
+
+  .maintenance-panel-toolbar {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .maintenance-schedule-actions,
+  .maintenance-history-filters {
+    width: 100%;
+  }
+
+  .maintenance-schedule-actions select,
+  .maintenance-history-filters input {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .maintenance-request-modal {
+    width: calc(100vw - 1.5rem);
+  }
+}
+
+/* =========================================================
+   SMALL TABLET
+   ========================================================= */
+
+@media (max-width: 767px) {
+  .maintenance-tabs {
+    padding:
+      0
+      var(--space-4);
+  }
+
+  .maintenance-filter-panel {
+    grid-template-columns: 1fr;
+    padding: var(--space-4);
+  }
+
+  .maintenance-search-field {
+    grid-column: auto;
+  }
+
+  .maintenance-panel-toolbar {
+    padding: var(--space-4);
+  }
+
+  .maintenance-schedule-grid {
+    grid-template-columns: 1fr;
+    padding: var(--space-4);
+  }
+
+  .maintenance-pagination {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .maintenance-request-modal .modal-body {
+    padding: var(--space-4);
+  }
+
+  .maintenance-detail-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .maintenance-details-modal {
+    width: calc(100vw - 1.5rem);
+  }
+}
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 575px) {
+  .maintenance-summary-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .maintenance-summary-grid .kpi-card {
+    min-height: 150px;
+  }
+
+  .maintenance-tab {
+    min-height: 50px;
+    padding:
+      0
+      var(--space-2);
+  }
+
+  .maintenance-tab svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  .maintenance-tab-count {
+    min-width: 21px;
+    min-height: 20px;
+    padding:
+      0
+      0.35rem;
+  }
+
+  .maintenance-schedule-actions,
+  .maintenance-history-filters {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .maintenance-schedule-actions select,
+  .maintenance-schedule-actions .btn,
+  .maintenance-history-filters input,
+  .maintenance-history-filters .btn {
+    width: 100%;
+  }
+
+  .maintenance-schedule-meta {
+    grid-template-columns: 1fr;
+  }
+
+  .maintenance-panel .state-action {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .maintenance-panel .state-action .btn {
+    width: 100%;
+  }
+
+  .maintenance-asset-preview {
+    align-items: flex-start;
+  }
+
+  .maintenance-asset-preview .badge {
+    display: none;
+  }
+
+  .switch-label {
+    align-items: flex-start;
+  }
+
+  .maintenance-details-heading {
+    align-items: flex-start;
+  }
+
+  .maintenance-details-icon {
+    width: 40px;
+    height: 40px;
+  }
+
+  .maintenance-details-footer {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .maintenance-details-footer .btn {
+    width: 100%;
+  }
+}
+
+/* =========================================================
+   VERY SMALL SCREENS
+   ========================================================= */
+
+@media (max-width: 379px) {
+  .maintenance-filter-panel,
+  .maintenance-panel-toolbar,
+  .maintenance-schedule-grid {
+    padding: var(--space-3);
+  }
+
+  .maintenance-request-modal,
+  .maintenance-update-modal,
+  .maintenance-details-modal {
+    width: calc(100vw - 0.75rem);
+  }
+
+  .maintenance-request-modal .modal-body {
+    padding: var(--space-3);
+  }
+
+  .maintenance-asset-preview,
+  .maintenance-update-preview,
+  .maintenance-completion-preview,
+  .maintenance-risk-banner {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .maintenance-detail-overview,
+  .maintenance-schedule-card {
+    padding: var(--space-3);
+  }
+}
+
+/* =========================================================
+   REDUCED MOTION
+   ========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+  .maintenance-panel.active,
+  .maintenance-data-enter,
+  .maintenance-refreshing
+  [data-refresh-maintenance] svg,
+  .maintenance-priority.critical {
+    animation: none;
+  }
+
+  .maintenance-tab,
+  .maintenance-schedule-card,
+  .maintenance-schedule-progress-bar,
+  .switch-slider,
+  .switch-slider::before {
+    transition: none;
+  }
+}

@@ -1,0 +1,2952 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  />
+
+  <meta
+    name="description"
+    content="Analyze asset inventory, utilization, maintenance, financial value and audit activity in AssetFlow."
+  />
+
+  <meta
+    name="theme-color"
+    content="#ff4f78"
+  />
+
+  <title>Reports & Analytics | AssetFlow</title>
+
+  <!-- ====================================================
+       GLOBAL STYLES
+       ==================================================== -->
+
+  <link
+    rel="stylesheet"
+    href="../css/variables.css"
+  />
+
+  <link
+    rel="stylesheet"
+    href="../css/global.css"
+  />
+
+  <link
+    rel="stylesheet"
+    href="../css/layout.css"
+  />
+
+  <link
+    rel="stylesheet"
+    href="../css/components.css"
+  />
+
+  <link
+    rel="stylesheet"
+    href="../css/animations.css"
+  />
+
+  <link
+    rel="stylesheet"
+    href="../css/responsive.css"
+  />
+
+  <!-- Page-specific styles -->
+
+  <link
+    rel="stylesheet"
+    href="reports.css"
+  />
+</head>
+
+<body
+  data-auth="required"
+  class="page-transition"
+>
+  <a
+    class="skip-link"
+    href="#reportsMain"
+  >
+    Skip to reports and analytics
+  </a>
+
+  <!-- ====================================================
+       APPLICATION SHELL
+       ==================================================== -->
+
+  <div
+    class="app-shell"
+    id="appShell"
+  >
+    <!-- Shared sidebar -->
+
+    <div
+      id="sidebar-container"
+      data-component="sidebar"
+      data-required="true"
+    ></div>
+
+    <div class="app-content">
+      <!-- Shared navbar -->
+
+      <div
+        id="navbar-container"
+        data-component="navbar"
+        data-required="true"
+      ></div>
+
+      <!-- ==================================================
+           PAGE CONTENT
+           ================================================== -->
+
+      <main
+        class="main-content"
+        id="reportsMain"
+      >
+        <div class="page-container">
+          <!-- Page header -->
+
+          <header class="page-header">
+            <div class="page-header-content">
+              <div class="breadcrumbs">
+                <span class="breadcrumb-item">
+                  <a
+                    class="breadcrumb-link"
+                    href="../dashboard/index.html"
+                  >
+                    AssetFlow
+                  </a>
+
+                  <svg
+                    class="breadcrumb-separator"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    aria-hidden="true"
+                  >
+                    <path d="m9 18 6-6-6-6"></path>
+                  </svg>
+                </span>
+
+                <span
+                  class="breadcrumb-current"
+                  aria-current="page"
+                >
+                  Reports & Analytics
+                </span>
+              </div>
+
+              <h1 class="page-title">
+                Reports & Analytics
+              </h1>
+
+              <p class="page-description">
+                Monitor inventory health, resource utilization,
+                maintenance performance, asset value and audit
+                activity.
+              </p>
+            </div>
+
+            <div class="page-actions">
+              <button
+                type="button"
+                class="btn btn-outline"
+                id="refreshReportsButton"
+                data-refresh-reports
+              >
+                <svg
+                  width="18"
+                  height="18"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  aria-hidden="true"
+                >
+                  <path d="M20 11a8.1 8.1 0 0 0-15.5-2M4 4v5h5"></path>
+                  <path d="M4 13a8.1 8.1 0 0 0 15.5 2M20 20v-5h-5"></path>
+                </svg>
+
+                Refresh
+              </button>
+
+              <button
+                type="button"
+                class="btn btn-outline"
+                data-modal-open="#scheduleReportModal"
+                data-schedule-report
+                data-roles="Admin,AssetManager"
+              >
+                <svg
+                  width="18"
+                  height="18"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  aria-hidden="true"
+                >
+                  <rect
+                    x="3"
+                    y="5"
+                    width="18"
+                    height="16"
+                    rx="2"
+                  ></rect>
+
+                  <path d="M16 3v4"></path>
+                  <path d="M8 3v4"></path>
+                  <path d="M3 10h18"></path>
+                  <path d="M12 14v3"></path>
+                  <path d="M10.5 15.5h3"></path>
+                </svg>
+
+                Schedule
+              </button>
+
+              <button
+                type="button"
+                class="btn btn-primary"
+                data-modal-open="#exportReportModal"
+                data-open-export-report
+              >
+                <svg
+                  width="18"
+                  height="18"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  aria-hidden="true"
+                >
+                  <path d="M12 3v12"></path>
+                  <path d="m7 10 5 5 5-5"></path>
+                  <path d="M5 21h14"></path>
+                </svg>
+
+                Export Report
+              </button>
+            </div>
+          </header>
+
+          <!-- ==================================================
+               PAGE ERROR
+               ================================================== -->
+
+          <div
+            class="alert alert-danger reports-page-alert"
+            id="reportsPageErrorAlert"
+            role="alert"
+            hidden
+          >
+            <div class="alert-icon">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                aria-hidden="true"
+              >
+                <circle
+                  cx="12"
+                  cy="12"
+                  r="10"
+                ></circle>
+
+                <path d="M12 8v4"></path>
+                <path d="M12 16h.01"></path>
+              </svg>
+            </div>
+
+            <div class="alert-content">
+              <h2 class="alert-title">
+                Unable to load reports
+              </h2>
+
+              <p
+                class="alert-message"
+                id="reportsPageErrorMessage"
+              >
+                Please refresh the page and try again.
+              </p>
+            </div>
+
+            <div class="alert-actions">
+              <button
+                type="button"
+                class="btn btn-danger btn-sm"
+                data-retry-reports
+              >
+                Retry
+              </button>
+            </div>
+          </div>
+
+          <!-- ==================================================
+               REPORT FILTERS
+               ================================================== -->
+
+          <section
+            class="card reports-filter-card"
+            aria-labelledby="reportFiltersTitle"
+          >
+            <header class="reports-filter-header">
+              <div>
+                <h2
+                  class="reports-filter-title"
+                  id="reportFiltersTitle"
+                >
+                  Report Filters
+                </h2>
+
+                <p class="reports-filter-description">
+                  Apply filters across all dashboard indicators,
+                  charts and tables.
+                </p>
+              </div>
+
+              <span
+                class="reports-last-updated"
+                data-reports-last-updated
+              >
+                Updating...
+              </span>
+            </header>
+
+            <div class="reports-filter-grid">
+              <div class="form-group">
+                <label for="reportPeriodPreset">
+                  Reporting Period
+                </label>
+
+                <select
+                  id="reportPeriodPreset"
+                  data-report-period-preset
+                >
+                  <option value="current_month">
+                    Current Month
+                  </option>
+
+                  <option value="previous_month">
+                    Previous Month
+                  </option>
+
+                  <option value="current_quarter">
+                    Current Quarter
+                  </option>
+
+                  <option value="previous_quarter">
+                    Previous Quarter
+                  </option>
+
+                  <option
+                    value="current_year"
+                    selected
+                  >
+                    Current Year
+                  </option>
+
+                  <option value="previous_year">
+                    Previous Year
+                  </option>
+
+                  <option value="custom">
+                    Custom Range
+                  </option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label for="reportStartDate">
+                  Start Date
+                </label>
+
+                <input
+                  class="form-control"
+                  type="date"
+                  id="reportStartDate"
+                  data-report-start-date
+                />
+              </div>
+
+              <div class="form-group">
+                <label for="reportEndDate">
+                  End Date
+                </label>
+
+                <input
+                  class="form-control"
+                  type="date"
+                  id="reportEndDate"
+                  data-report-end-date
+                />
+              </div>
+
+              <div class="form-group">
+                <label for="reportDepartmentFilter">
+                  Department
+                </label>
+
+                <select
+                  id="reportDepartmentFilter"
+                  data-report-department-filter
+                >
+                  <option value="">
+                    All Departments
+                  </option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label for="reportLocationFilter">
+                  Location
+                </label>
+
+                <select
+                  id="reportLocationFilter"
+                  data-report-location-filter
+                >
+                  <option value="">
+                    All Locations
+                  </option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label for="reportCategoryFilter">
+                  Asset Category
+                </label>
+
+                <select
+                  id="reportCategoryFilter"
+                  data-report-category-filter
+                >
+                  <option value="">
+                    All Categories
+                  </option>
+                </select>
+              </div>
+
+              <div class="reports-filter-actions">
+                <button
+                  type="button"
+                  class="btn btn-outline"
+                  data-reset-report-filters
+                >
+                  Reset
+                </button>
+
+                <button
+                  type="button"
+                  class="btn btn-primary"
+                  data-apply-report-filters
+                >
+                  Apply Filters
+                </button>
+              </div>
+            </div>
+
+            <div
+              class="reports-active-filters"
+              data-report-active-filters
+              hidden
+            >
+              <span class="reports-active-filters-label">
+                Active filters:
+              </span>
+
+              <div
+                class="reports-filter-chips"
+                data-report-filter-chips
+              ></div>
+            </div>
+          </section>
+
+          <!-- ==================================================
+               SUMMARY
+               ================================================== -->
+
+          <section
+            class="page-section"
+            aria-labelledby="reportsSummaryTitle"
+          >
+            <div class="section-header">
+              <div class="section-title-group">
+                <h2
+                  class="section-title"
+                  id="reportsSummaryTitle"
+                >
+                  Executive Summary
+                </h2>
+
+                <p class="section-description">
+                  High-level asset and resource performance for the
+                  selected reporting period.
+                </p>
+              </div>
+            </div>
+
+            <div
+              class="content-grid reports-summary-grid stagger-container"
+            >
+              <!-- Total assets -->
+
+              <article class="kpi-card">
+                <div class="kpi-card-header">
+                  <p class="kpi-card-label">
+                    Total Assets
+                  </p>
+
+                  <div
+                    class="kpi-card-icon"
+                    aria-hidden="true"
+                  >
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="1.9"
+                    >
+                      <path d="M21 16V8"></path>
+                      <path d="m3.5 7 8.5 5 8.5-5"></path>
+                      <path d="M12 22V12"></path>
+                      <path d="M3 7l9-5 9 5v10l-9 5-9-5V7Z"></path>
+                    </svg>
+                  </div>
+                </div>
+
+                <div
+                  class="kpi-card-value"
+                  data-report-summary="total_assets"
+                >
+                  <span class="skeleton skeleton-title"></span>
+                </div>
+
+                <div class="kpi-card-footer">
+                  <span
+                    class="kpi-trend"
+                    data-report-trend="total_assets"
+                  >
+                    Inventory count
+                  </span>
+                </div>
+              </article>
+
+              <!-- Total value -->
+
+              <article class="kpi-card success">
+                <div class="kpi-card-header">
+                  <p class="kpi-card-label">
+                    Acquisition Value
+                  </p>
+
+                  <div
+                    class="kpi-card-icon"
+                    aria-hidden="true"
+                  >
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="1.9"
+                    >
+                      <circle
+                        cx="12"
+                        cy="12"
+                        r="9"
+                      ></circle>
+
+                      <path d="M8 8h8"></path>
+                      <path d="M8 12h6"></path>
+                      <path d="m9 8 6 9"></path>
+                    </svg>
+                  </div>
+                </div>
+
+                <div
+                  class="kpi-card-value"
+                  data-report-summary="total_value"
+                >
+                  <span class="skeleton skeleton-title"></span>
+                </div>
+
+                <div class="kpi-card-footer">
+                  <span>
+                    Recorded purchase value
+                  </span>
+                </div>
+              </article>
+
+              <!-- Utilization -->
+
+              <article class="kpi-card info">
+                <div class="kpi-card-header">
+                  <p class="kpi-card-label">
+                    Utilization Rate
+                  </p>
+
+                  <div
+                    class="kpi-card-icon"
+                    aria-hidden="true"
+                  >
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="1.9"
+                    >
+                      <path d="M4 19V9"></path>
+                      <path d="M10 19V5"></path>
+                      <path d="M16 19v-7"></path>
+                      <path d="M22 19V3"></path>
+                    </svg>
+                  </div>
+                </div>
+
+                <div
+                  class="kpi-card-value"
+                  data-report-summary="utilization_rate"
+                >
+                  <span class="skeleton skeleton-title"></span>
+                </div>
+
+                <div class="kpi-card-footer">
+                  <span>
+                    Assigned or actively booked
+                  </span>
+                </div>
+              </article>
+
+              <!-- Maintenance cost -->
+
+              <article class="kpi-card warning">
+                <div class="kpi-card-header">
+                  <p class="kpi-card-label">
+                    Maintenance Cost
+                  </p>
+
+                  <div
+                    class="kpi-card-icon"
+                    aria-hidden="true"
+                  >
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="1.9"
+                    >
+                      <path d="M14.7 6.3a4 4 0 0 0-5-5l2.1 2.1-2.4 2.4-2.1-2.1a4 4 0 0 0 5 5l7.3 7.3"></path>
+                      <path d="m5 19 4-4"></path>
+                    </svg>
+                  </div>
+                </div>
+
+                <div
+                  class="kpi-card-value"
+                  data-report-summary="maintenance_cost"
+                >
+                  <span class="skeleton skeleton-title"></span>
+                </div>
+
+                <div class="kpi-card-footer">
+                  <span>
+                    Completed service expenditure
+                  </span>
+                </div>
+              </article>
+
+              <!-- Assets under maintenance -->
+
+              <article class="kpi-card danger">
+                <div class="kpi-card-header">
+                  <p class="kpi-card-label">
+                    Assets Offline
+                  </p>
+
+                  <div
+                    class="kpi-card-icon"
+                    aria-hidden="true"
+                  >
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="1.9"
+                    >
+                      <path d="M12 2v10"></path>
+                      <path d="M18.4 6.6a9 9 0 1 1-12.8 0"></path>
+                    </svg>
+                  </div>
+                </div>
+
+                <div
+                  class="kpi-card-value"
+                  data-report-summary="offline_assets"
+                >
+                  <span class="skeleton skeleton-title"></span>
+                </div>
+
+                <div class="kpi-card-footer">
+                  <span>
+                    Unavailable for operational use
+                  </span>
+                </div>
+              </article>
+
+              <!-- Compliance -->
+
+              <article class="kpi-card success">
+                <div class="kpi-card-header">
+                  <p class="kpi-card-label">
+                    Compliance Rate
+                  </p>
+
+                  <div
+                    class="kpi-card-icon"
+                    aria-hidden="true"
+                  >
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="1.9"
+                    >
+                      <path d="M12 3 4 6v6c0 5 3.5 8 8 9 4.5-1 8-4 8-9V6l-8-3Z"></path>
+                      <path d="m9 12 2 2 4-5"></path>
+                    </svg>
+                  </div>
+                </div>
+
+                <div
+                  class="kpi-card-value"
+                  data-report-summary="compliance_rate"
+                >
+                  <span class="skeleton skeleton-title"></span>
+                </div>
+
+                <div class="kpi-card-footer">
+                  <span>
+                    Assets meeting policy requirements
+                  </span>
+                </div>
+              </article>
+            </div>
+          </section>
+
+          <!-- ==================================================
+               REPORT WORKSPACE
+               ================================================== -->
+
+          <section
+            class="page-section"
+            aria-labelledby="reportWorkspaceTitle"
+          >
+            <article class="card reports-workspace-card">
+              <header class="card-header reports-card-header">
+                <div class="card-header-content">
+                  <h2
+                    class="card-title"
+                    id="reportWorkspaceTitle"
+                  >
+                    Analytics Workspace
+                  </h2>
+
+                  <p class="card-subtitle">
+                    Explore detailed performance, financial and audit
+                    information.
+                  </p>
+                </div>
+              </header>
+
+              <!-- Report tabs -->
+
+              <div
+                class="reports-tabs"
+                role="tablist"
+                aria-label="Report sections"
+              >
+                <button
+                  type="button"
+                  class="reports-tab active"
+                  id="overviewReportTab"
+                  data-report-tab="overview"
+                  role="tab"
+                  aria-selected="true"
+                  aria-controls="overviewReportPanel"
+                >
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.9"
+                    aria-hidden="true"
+                  >
+                    <rect
+                      x="3"
+                      y="3"
+                      width="7"
+                      height="7"
+                      rx="1"
+                    ></rect>
+
+                    <rect
+                      x="14"
+                      y="3"
+                      width="7"
+                      height="7"
+                      rx="1"
+                    ></rect>
+
+                    <rect
+                      x="3"
+                      y="14"
+                      width="7"
+                      height="7"
+                      rx="1"
+                    ></rect>
+
+                    <rect
+                      x="14"
+                      y="14"
+                      width="7"
+                      height="7"
+                      rx="1"
+                    ></rect>
+                  </svg>
+
+                  Overview
+                </button>
+
+                <button
+                  type="button"
+                  class="reports-tab"
+                  id="inventoryReportTab"
+                  data-report-tab="inventory"
+                  role="tab"
+                  aria-selected="false"
+                  aria-controls="inventoryReportPanel"
+                  tabindex="-1"
+                >
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.9"
+                    aria-hidden="true"
+                  >
+                    <path d="M21 16V8"></path>
+                    <path d="m3.5 7 8.5 5 8.5-5"></path>
+                    <path d="M12 22V12"></path>
+                    <path d="M3 7l9-5 9 5v10l-9 5-9-5V7Z"></path>
+                  </svg>
+
+                  Asset Inventory
+                </button>
+
+                <button
+                  type="button"
+                  class="reports-tab"
+                  id="utilizationReportTab"
+                  data-report-tab="utilization"
+                  role="tab"
+                  aria-selected="false"
+                  aria-controls="utilizationReportPanel"
+                  tabindex="-1"
+                >
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.9"
+                    aria-hidden="true"
+                  >
+                    <path d="M4 19V9"></path>
+                    <path d="M10 19V5"></path>
+                    <path d="M16 19v-7"></path>
+                    <path d="M22 19V3"></path>
+                  </svg>
+
+                  Utilization
+                </button>
+
+                <button
+                  type="button"
+                  class="reports-tab"
+                  id="financialReportTab"
+                  data-report-tab="financial"
+                  role="tab"
+                  aria-selected="false"
+                  aria-controls="financialReportPanel"
+                  tabindex="-1"
+                  data-roles="Admin,AssetManager"
+                >
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.9"
+                    aria-hidden="true"
+                  >
+                    <circle
+                      cx="12"
+                      cy="12"
+                      r="9"
+                    ></circle>
+
+                    <path d="M8 8h8"></path>
+                    <path d="M8 12h6"></path>
+                    <path d="m9 8 6 9"></path>
+                  </svg>
+
+                  Financial
+                </button>
+
+                <button
+                  type="button"
+                  class="reports-tab"
+                  id="auditReportTab"
+                  data-report-tab="audit"
+                  role="tab"
+                  aria-selected="false"
+                  aria-controls="auditReportPanel"
+                  tabindex="-1"
+                  data-roles="Admin,AssetManager"
+                >
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.9"
+                    aria-hidden="true"
+                  >
+                    <path d="M9 11l3 3L22 4"></path>
+                    <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path>
+                  </svg>
+
+                  Audit & Compliance
+                </button>
+              </div>
+
+              <!-- ==============================================
+                   OVERVIEW PANEL
+                   ============================================== -->
+
+              <section
+                class="reports-panel active"
+                id="overviewReportPanel"
+                data-report-panel="overview"
+                role="tabpanel"
+                aria-labelledby="overviewReportTab"
+              >
+                <div class="reports-chart-grid">
+                  <!-- Asset status distribution -->
+
+                  <article class="report-chart-card">
+                    <header class="report-chart-header">
+                      <div>
+                        <h3>
+                          Asset Status Distribution
+                        </h3>
+
+                        <p>
+                          Current inventory by lifecycle status.
+                        </p>
+                      </div>
+
+                      <button
+                        type="button"
+                        class="btn btn-icon btn-outline"
+                        data-export-chart="asset_status"
+                        aria-label="Export asset status chart"
+                        title="Export chart"
+                      >
+                        <svg
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          aria-hidden="true"
+                        >
+                          <path d="M12 3v12"></path>
+                          <path d="m7 10 5 5 5-5"></path>
+                          <path d="M5 21h14"></path>
+                        </svg>
+                      </button>
+                    </header>
+
+                    <div class="report-chart-body">
+                      <div
+                        class="report-donut-chart"
+                        id="assetStatusChart"
+                        data-chart="asset-status"
+                        role="img"
+                        aria-label="Asset status distribution chart"
+                      >
+                        <div class="report-chart-skeleton">
+                          <span class="skeleton skeleton-circle"></span>
+                        </div>
+                      </div>
+
+                      <div
+                        class="report-chart-legend"
+                        id="assetStatusLegend"
+                      ></div>
+                    </div>
+                  </article>
+
+                  <!-- Category distribution -->
+
+                  <article class="report-chart-card">
+                    <header class="report-chart-header">
+                      <div>
+                        <h3>
+                          Assets by Category
+                        </h3>
+
+                        <p>
+                          Inventory concentration across categories.
+                        </p>
+                      </div>
+
+                      <button
+                        type="button"
+                        class="btn btn-icon btn-outline"
+                        data-export-chart="asset_category"
+                        aria-label="Export category chart"
+                        title="Export chart"
+                      >
+                        <svg
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          aria-hidden="true"
+                        >
+                          <path d="M12 3v12"></path>
+                          <path d="m7 10 5 5 5-5"></path>
+                          <path d="M5 21h14"></path>
+                        </svg>
+                      </button>
+                    </header>
+
+                    <div class="report-chart-body">
+                      <div
+                        class="report-bar-chart"
+                        id="assetCategoryChart"
+                        data-chart="asset-category"
+                        role="img"
+                        aria-label="Assets by category chart"
+                      >
+                        <div class="report-chart-skeleton">
+                          <span class="skeleton skeleton-text"></span>
+                          <span class="skeleton skeleton-text"></span>
+                          <span class="skeleton skeleton-text"></span>
+                          <span class="skeleton skeleton-text"></span>
+                        </div>
+                      </div>
+                    </div>
+                  </article>
+
+                  <!-- Department distribution -->
+
+                  <article class="report-chart-card">
+                    <header class="report-chart-header">
+                      <div>
+                        <h3>
+                          Assets by Department
+                        </h3>
+
+                        <p>
+                          Allocated inventory across organizational units.
+                        </p>
+                      </div>
+
+                      <button
+                        type="button"
+                        class="btn btn-icon btn-outline"
+                        data-export-chart="department_assets"
+                        aria-label="Export department asset chart"
+                        title="Export chart"
+                      >
+                        <svg
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          aria-hidden="true"
+                        >
+                          <path d="M12 3v12"></path>
+                          <path d="m7 10 5 5 5-5"></path>
+                          <path d="M5 21h14"></path>
+                        </svg>
+                      </button>
+                    </header>
+
+                    <div class="report-chart-body">
+                      <div
+                        class="report-horizontal-chart"
+                        id="departmentAssetsChart"
+                        data-chart="department-assets"
+                        role="img"
+                        aria-label="Assets by department chart"
+                      >
+                        <div class="report-chart-skeleton">
+                          <span class="skeleton skeleton-text"></span>
+                          <span class="skeleton skeleton-text"></span>
+                          <span class="skeleton skeleton-text"></span>
+                          <span class="skeleton skeleton-text"></span>
+                        </div>
+                      </div>
+                    </div>
+                  </article>
+
+                  <!-- Maintenance trend -->
+
+                  <article class="report-chart-card">
+                    <header class="report-chart-header">
+                      <div>
+                        <h3>
+                          Maintenance Trend
+                        </h3>
+
+                        <p>
+                          Reported and completed requests over time.
+                        </p>
+                      </div>
+
+                      <button
+                        type="button"
+                        class="btn btn-icon btn-outline"
+                        data-export-chart="maintenance_trend"
+                        aria-label="Export maintenance trend chart"
+                        title="Export chart"
+                      >
+                        <svg
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          aria-hidden="true"
+                        >
+                          <path d="M12 3v12"></path>
+                          <path d="m7 10 5 5 5-5"></path>
+                          <path d="M5 21h14"></path>
+                        </svg>
+                      </button>
+                    </header>
+
+                    <div class="report-chart-body">
+                      <div
+                        class="report-line-chart"
+                        id="maintenanceTrendChart"
+                        data-chart="maintenance-trend"
+                        role="img"
+                        aria-label="Maintenance trend chart"
+                      >
+                        <div class="report-chart-skeleton">
+                          <span class="skeleton skeleton-text"></span>
+                          <span class="skeleton skeleton-text"></span>
+                          <span class="skeleton skeleton-text"></span>
+                        </div>
+                      </div>
+                    </div>
+                  </article>
+                </div>
+
+                <!-- Insights -->
+
+                <div class="reports-insights-grid">
+                  <article class="report-insight-card">
+                    <div
+                      class="report-insight-icon success"
+                      aria-hidden="true"
+                    >
+                      <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="1.9"
+                      >
+                        <path d="m3 17 6-6 4 4 8-9"></path>
+                        <path d="M15 6h6v6"></path>
+                      </svg>
+                    </div>
+
+                    <div>
+                      <span class="report-insight-label">
+                        Most Utilized Category
+                      </span>
+
+                      <strong
+                        class="report-insight-value"
+                        data-report-insight="most_utilized_category"
+                      >
+                        Loading...
+                      </strong>
+                    </div>
+                  </article>
+
+                  <article class="report-insight-card">
+                    <div
+                      class="report-insight-icon warning"
+                      aria-hidden="true"
+                    >
+                      <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="1.9"
+                      >
+                        <path d="M12 3 2 21h20L12 3Z"></path>
+                        <path d="M12 9v4"></path>
+                        <path d="M12 17h.01"></path>
+                      </svg>
+                    </div>
+
+                    <div>
+                      <span class="report-insight-label">
+                        Highest Maintenance Cost
+                      </span>
+
+                      <strong
+                        class="report-insight-value"
+                        data-report-insight="highest_maintenance_asset"
+                      >
+                        Loading...
+                      </strong>
+                    </div>
+                  </article>
+
+                  <article class="report-insight-card">
+                    <div
+                      class="report-insight-icon info"
+                      aria-hidden="true"
+                    >
+                      <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="1.9"
+                      >
+                        <circle
+                          cx="12"
+                          cy="12"
+                          r="9"
+                        ></circle>
+
+                        <path d="M12 7v5l3 2"></path>
+                      </svg>
+                    </div>
+
+                    <div>
+                      <span class="report-insight-label">
+                        Average Repair Time
+                      </span>
+
+                      <strong
+                        class="report-insight-value"
+                        data-report-insight="average_repair_time"
+                      >
+                        Loading...
+                      </strong>
+                    </div>
+                  </article>
+
+                  <article class="report-insight-card">
+                    <div
+                      class="report-insight-icon danger"
+                      aria-hidden="true"
+                    >
+                      <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="1.9"
+                      >
+                        <path d="M12 2v10"></path>
+                        <path d="M18.4 6.6a9 9 0 1 1-12.8 0"></path>
+                      </svg>
+                    </div>
+
+                    <div>
+                      <span class="report-insight-label">
+                        Longest Offline Asset
+                      </span>
+
+                      <strong
+                        class="report-insight-value"
+                        data-report-insight="longest_offline_asset"
+                      >
+                        Loading...
+                      </strong>
+                    </div>
+                  </article>
+                </div>
+              </section>
+
+              <!-- ==============================================
+                   ASSET INVENTORY PANEL
+                   ============================================== -->
+
+              <section
+                class="reports-panel"
+                id="inventoryReportPanel"
+                data-report-panel="inventory"
+                role="tabpanel"
+                aria-labelledby="inventoryReportTab"
+                hidden
+              >
+                <div class="reports-panel-toolbar">
+                  <div>
+                    <h3 class="reports-panel-title">
+                      Asset Inventory Register
+                    </h3>
+
+                    <p class="reports-panel-description">
+                      Detailed inventory records matching the selected
+                      reporting filters.
+                    </p>
+                  </div>
+
+                  <div class="reports-panel-actions">
+                    <div class="reports-search-field">
+                      <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        aria-hidden="true"
+                      >
+                        <circle
+                          cx="11"
+                          cy="11"
+                          r="8"
+                        ></circle>
+
+                        <path d="m21 21-4.35-4.35"></path>
+                      </svg>
+
+                      <input
+                        type="search"
+                        id="inventoryReportSearch"
+                        placeholder="Search inventory..."
+                        autocomplete="off"
+                        data-inventory-report-search
+                      />
+                    </div>
+
+                    <select
+                      id="inventoryStatusFilter"
+                      data-inventory-status-filter
+                      aria-label="Filter inventory report by status"
+                    >
+                      <option value="">
+                        All Statuses
+                      </option>
+
+                      <option value="Available">
+                        Available
+                      </option>
+
+                      <option value="Allocated">
+                        Allocated
+                      </option>
+
+                      <option value="UnderMaintenance">
+                        Under Maintenance
+                      </option>
+
+                      <option value="Retired">
+                        Retired
+                      </option>
+
+                      <option value="Disposed">
+                        Disposed
+                      </option>
+
+                      <option value="Lost">
+                        Lost
+                      </option>
+                    </select>
+
+                    <button
+                      type="button"
+                      class="btn btn-outline"
+                      data-export-section="inventory"
+                    >
+                      Export
+                    </button>
+                  </div>
+                </div>
+
+                <div
+                  class="table-container report-table-container"
+                  id="inventoryReportTableContainer"
+                >
+                  <table class="data-table report-table inventory-report-table">
+                    <thead>
+                      <tr>
+                        <th scope="col">
+                          Asset
+                        </th>
+
+                        <th scope="col">
+                          Category
+                        </th>
+
+                        <th scope="col">
+                          Department
+                        </th>
+
+                        <th scope="col">
+                          Location
+                        </th>
+
+                        <th scope="col">
+                          Status
+                        </th>
+
+                        <th scope="col">
+                          Acquisition Date
+                        </th>
+
+                        <th scope="col">
+                          Acquisition Cost
+                        </th>
+
+                        <th
+                          scope="col"
+                          class="text-right"
+                        >
+                          Action
+                        </th>
+                      </tr>
+                    </thead>
+
+                    <tbody id="inventoryReportTableBody">
+                      <tr>
+                        <td colspan="8">
+                          <div class="skeleton skeleton-text"></div>
+                        </td>
+                      </tr>
+
+                      <tr>
+                        <td colspan="8">
+                          <div class="skeleton skeleton-text"></div>
+                        </td>
+                      </tr>
+
+                      <tr>
+                        <td colspan="8">
+                          <div class="skeleton skeleton-text"></div>
+                        </td>
+                      </tr>
+
+                      <tr>
+                        <td colspan="8">
+                          <div class="skeleton skeleton-text"></div>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+
+                <div
+                  id="inventoryReportEmptyState"
+                  hidden
+                >
+                  <div class="state-container">
+                    <div class="state-icon">
+                      <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="1.9"
+                        aria-hidden="true"
+                      >
+                        <path d="M21 16V8"></path>
+                        <path d="m3.5 7 8.5 5 8.5-5"></path>
+                        <path d="M12 22V12"></path>
+                        <path d="M3 7l9-5 9 5v10l-9 5-9-5V7Z"></path>
+                      </svg>
+                    </div>
+
+                    <h3 class="state-title">
+                      No inventory records
+                    </h3>
+
+                    <p class="state-description">
+                      No assets match the selected report filters.
+                    </p>
+                  </div>
+                </div>
+
+                <footer class="reports-pagination">
+                  <p
+                    class="pagination-summary"
+                    data-inventory-pagination-summary
+                  >
+                    Showing 0 assets
+                  </p>
+
+                  <div
+                    class="pagination"
+                    data-inventory-pagination
+                  ></div>
+                </footer>
+              </section>
+
+              <!-- ==============================================
+                   UTILIZATION PANEL
+                   ============================================== -->
+
+              <section
+                class="reports-panel"
+                id="utilizationReportPanel"
+                data-report-panel="utilization"
+                role="tabpanel"
+                aria-labelledby="utilizationReportTab"
+                hidden
+              >
+                <div class="reports-chart-grid">
+                  <article class="report-chart-card report-chart-card-wide">
+                    <header class="report-chart-header">
+                      <div>
+                        <h3>
+                          Asset Utilization Trend
+                        </h3>
+
+                        <p>
+                          Percentage of assets actively allocated or
+                          booked over time.
+                        </p>
+                      </div>
+
+                      <select
+                        id="utilizationMetricSelector"
+                        data-utilization-metric
+                        aria-label="Select utilization metric"
+                      >
+                        <option value="overall">
+                          Overall Utilization
+                        </option>
+
+                        <option value="allocation">
+                          Allocation Utilization
+                        </option>
+
+                        <option value="booking">
+                          Booking Utilization
+                        </option>
+                      </select>
+                    </header>
+
+                    <div class="report-chart-body">
+                      <div
+                        class="report-line-chart report-line-chart-large"
+                        id="utilizationTrendChart"
+                        data-chart="utilization-trend"
+                        role="img"
+                        aria-label="Asset utilization trend chart"
+                      >
+                        <div class="report-chart-skeleton">
+                          <span class="skeleton skeleton-text"></span>
+                          <span class="skeleton skeleton-text"></span>
+                          <span class="skeleton skeleton-text"></span>
+                        </div>
+                      </div>
+                    </div>
+                  </article>
+
+                  <article class="report-chart-card">
+                    <header class="report-chart-header">
+                      <div>
+                        <h3>
+                          Utilization by Category
+                        </h3>
+
+                        <p>
+                          Usage rate across asset categories.
+                        </p>
+                      </div>
+                    </header>
+
+                    <div class="report-chart-body">
+                      <div
+                        class="report-horizontal-chart"
+                        id="categoryUtilizationChart"
+                        data-chart="category-utilization"
+                        role="img"
+                        aria-label="Category utilization chart"
+                      >
+                        <div class="report-chart-skeleton">
+                          <span class="skeleton skeleton-text"></span>
+                          <span class="skeleton skeleton-text"></span>
+                          <span class="skeleton skeleton-text"></span>
+                        </div>
+                      </div>
+                    </div>
+                  </article>
+
+                  <article class="report-chart-card">
+                    <header class="report-chart-header">
+                      <div>
+                        <h3>
+                          Underutilized Assets
+                        </h3>
+
+                        <p>
+                          Assets with the lowest recorded activity.
+                        </p>
+                      </div>
+                    </header>
+
+                    <div
+                      class="report-ranking-list"
+                      id="underutilizedAssetsList"
+                      data-underutilized-assets-list
+                    >
+                      <div class="report-ranking-skeleton">
+                        <div class="skeleton skeleton-avatar"></div>
+                        <div>
+                          <div class="skeleton skeleton-text"></div>
+                          <div class="skeleton skeleton-text-sm"></div>
+                        </div>
+                      </div>
+
+                      <div class="report-ranking-skeleton">
+                        <div class="skeleton skeleton-avatar"></div>
+                        <div>
+                          <div class="skeleton skeleton-text"></div>
+                          <div class="skeleton skeleton-text-sm"></div>
+                        </div>
+                      </div>
+
+                      <div class="report-ranking-skeleton">
+                        <div class="skeleton skeleton-avatar"></div>
+                        <div>
+                          <div class="skeleton skeleton-text"></div>
+                          <div class="skeleton skeleton-text-sm"></div>
+                        </div>
+                      </div>
+                    </div>
+                  </article>
+                </div>
+
+                <div class="reports-panel-toolbar reports-table-toolbar">
+                  <div>
+                    <h3 class="reports-panel-title">
+                      Utilization Detail
+                    </h3>
+
+                    <p class="reports-panel-description">
+                      Asset-level activity and utilization performance.
+                    </p>
+                  </div>
+
+                  <button
+                    type="button"
+                    class="btn btn-outline"
+                    data-export-section="utilization"
+                  >
+                    Export
+                  </button>
+                </div>
+
+                <div class="table-container report-table-container">
+                  <table class="data-table report-table utilization-report-table">
+                    <thead>
+                      <tr>
+                        <th scope="col">
+                          Asset
+                        </th>
+
+                        <th scope="col">
+                          Department
+                        </th>
+
+                        <th scope="col">
+                          Allocation Days
+                        </th>
+
+                        <th scope="col">
+                          Booking Hours
+                        </th>
+
+                        <th scope="col">
+                          Idle Days
+                        </th>
+
+                        <th scope="col">
+                          Utilization Rate
+                        </th>
+
+                        <th scope="col">
+                          Performance
+                        </th>
+                      </tr>
+                    </thead>
+
+                    <tbody id="utilizationReportTableBody">
+                      <tr>
+                        <td colspan="7">
+                          <div class="skeleton skeleton-text"></div>
+                        </td>
+                      </tr>
+
+                      <tr>
+                        <td colspan="7">
+                          <div class="skeleton skeleton-text"></div>
+                        </td>
+                      </tr>
+
+                      <tr>
+                        <td colspan="7">
+                          <div class="skeleton skeleton-text"></div>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+
+                <div
+                  id="utilizationReportEmptyState"
+                  hidden
+                >
+                  <div class="state-container">
+                    <div class="state-icon">
+                      <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="1.9"
+                        aria-hidden="true"
+                      >
+                        <path d="M4 19V9"></path>
+                        <path d="M10 19V5"></path>
+                        <path d="M16 19v-7"></path>
+                        <path d="M22 19V3"></path>
+                      </svg>
+                    </div>
+
+                    <h3 class="state-title">
+                      No utilization data
+                    </h3>
+
+                    <p class="state-description">
+                      Utilization information will appear after assets
+                      are allocated or booked.
+                    </p>
+                  </div>
+                </div>
+              </section>
+
+              <!-- ==============================================
+                   FINANCIAL PANEL
+                   ============================================== -->
+
+              <section
+                class="reports-panel"
+                id="financialReportPanel"
+                data-report-panel="financial"
+                role="tabpanel"
+                aria-labelledby="financialReportTab"
+                hidden
+              >
+                <div class="financial-summary-grid">
+                  <article class="financial-summary-card">
+                    <span>
+                      Gross Acquisition Value
+                    </span>
+
+                    <strong data-financial-summary="gross_value">
+                      —
+                    </strong>
+                  </article>
+
+                  <article class="financial-summary-card">
+                    <span>
+                      Estimated Current Value
+                    </span>
+
+                    <strong data-financial-summary="current_value">
+                      —
+                    </strong>
+                  </article>
+
+                  <article class="financial-summary-card">
+                    <span>
+                      Recorded Depreciation
+                    </span>
+
+                    <strong data-financial-summary="depreciation">
+                      —
+                    </strong>
+                  </article>
+
+                  <article class="financial-summary-card">
+                    <span>
+                      Maintenance Expenditure
+                    </span>
+
+                    <strong data-financial-summary="maintenance_spend">
+                      —
+                    </strong>
+                  </article>
+                </div>
+
+                <div class="reports-chart-grid">
+                  <article class="report-chart-card report-chart-card-wide">
+                    <header class="report-chart-header">
+                      <div>
+                        <h3>
+                          Asset Value Trend
+                        </h3>
+
+                        <p>
+                          Acquisition value, estimated current value and
+                          maintenance expenditure.
+                        </p>
+                      </div>
+
+                      <select
+                        id="financialChartGrouping"
+                        data-financial-chart-grouping
+                        aria-label="Select financial chart grouping"
+                      >
+                        <option value="month">
+                          Monthly
+                        </option>
+
+                        <option value="quarter">
+                          Quarterly
+                        </option>
+
+                        <option value="year">
+                          Yearly
+                        </option>
+                      </select>
+                    </header>
+
+                    <div class="report-chart-body">
+                      <div
+                        class="report-line-chart report-line-chart-large"
+                        id="assetValueTrendChart"
+                        data-chart="asset-value-trend"
+                        role="img"
+                        aria-label="Asset value trend chart"
+                      >
+                        <div class="report-chart-skeleton">
+                          <span class="skeleton skeleton-text"></span>
+                          <span class="skeleton skeleton-text"></span>
+                          <span class="skeleton skeleton-text"></span>
+                        </div>
+                      </div>
+                    </div>
+                  </article>
+
+                  <article class="report-chart-card">
+                    <header class="report-chart-header">
+                      <div>
+                        <h3>
+                          Value by Category
+                        </h3>
+
+                        <p>
+                          Current asset value grouped by category.
+                        </p>
+                      </div>
+                    </header>
+
+                    <div class="report-chart-body">
+                      <div
+                        class="report-donut-chart"
+                        id="categoryValueChart"
+                        data-chart="category-value"
+                        role="img"
+                        aria-label="Asset value by category chart"
+                      >
+                        <div class="report-chart-skeleton">
+                          <span class="skeleton skeleton-circle"></span>
+                        </div>
+                      </div>
+
+                      <div
+                        class="report-chart-legend"
+                        id="categoryValueLegend"
+                      ></div>
+                    </div>
+                  </article>
+                </div>
+
+                <div class="reports-panel-toolbar reports-table-toolbar">
+                  <div>
+                    <h3 class="reports-panel-title">
+                      Financial Asset Register
+                    </h3>
+
+                    <p class="reports-panel-description">
+                      Asset acquisition, depreciation and maintenance
+                      expenditure.
+                    </p>
+                  </div>
+
+                  <button
+                    type="button"
+                    class="btn btn-outline"
+                    data-export-section="financial"
+                  >
+                    Export
+                  </button>
+                </div>
+
+                <div class="table-container report-table-container">
+                  <table class="data-table report-table financial-report-table">
+                    <thead>
+                      <tr>
+                        <th scope="col">
+                          Asset
+                        </th>
+
+                        <th scope="col">
+                          Acquisition Cost
+                        </th>
+
+                        <th scope="col">
+                          Acquisition Date
+                        </th>
+
+                        <th scope="col">
+                          Estimated Current Value
+                        </th>
+
+                        <th scope="col">
+                          Maintenance Cost
+                        </th>
+
+                        <th scope="col">
+                          Total Cost of Ownership
+                        </th>
+
+                        <th scope="col">
+                          Value Status
+                        </th>
+                      </tr>
+                    </thead>
+
+                    <tbody id="financialReportTableBody">
+                      <tr>
+                        <td colspan="7">
+                          <div class="skeleton skeleton-text"></div>
+                        </td>
+                      </tr>
+
+                      <tr>
+                        <td colspan="7">
+                          <div class="skeleton skeleton-text"></div>
+                        </td>
+                      </tr>
+
+                      <tr>
+                        <td colspan="7">
+                          <div class="skeleton skeleton-text"></div>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+
+                <div
+                  id="financialReportEmptyState"
+                  hidden
+                >
+                  <div class="state-container">
+                    <div class="state-icon">
+                      <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="1.9"
+                        aria-hidden="true"
+                      >
+                        <circle
+                          cx="12"
+                          cy="12"
+                          r="9"
+                        ></circle>
+
+                        <path d="M8 8h8"></path>
+                        <path d="M8 12h6"></path>
+                        <path d="m9 8 6 9"></path>
+                      </svg>
+                    </div>
+
+                    <h3 class="state-title">
+                      No financial data
+                    </h3>
+
+                    <p class="state-description">
+                      Financial information will appear when acquisition
+                      and maintenance costs are recorded.
+                    </p>
+                  </div>
+                </div>
+              </section>
+
+              <!-- ==============================================
+                   AUDIT PANEL
+                   ============================================== -->
+
+              <section
+                class="reports-panel"
+                id="auditReportPanel"
+                data-report-panel="audit"
+                role="tabpanel"
+                aria-labelledby="auditReportTab"
+                hidden
+              >
+                <div class="audit-summary-grid">
+                  <article class="audit-summary-card success">
+                    <span>
+                      Compliant Assets
+                    </span>
+
+                    <strong data-audit-summary="compliant">
+                      —
+                    </strong>
+                  </article>
+
+                  <article class="audit-summary-card warning">
+                    <span>
+                      Attention Required
+                    </span>
+
+                    <strong data-audit-summary="attention">
+                      —
+                    </strong>
+                  </article>
+
+                  <article class="audit-summary-card danger">
+                    <span>
+                      Policy Violations
+                    </span>
+
+                    <strong data-audit-summary="violations">
+                      —
+                    </strong>
+                  </article>
+
+                  <article class="audit-summary-card info">
+                    <span>
+                      Audit Events
+                    </span>
+
+                    <strong data-audit-summary="events">
+                      —
+                    </strong>
+                  </article>
+                </div>
+
+                <div class="reports-panel-toolbar">
+                  <div>
+                    <h3 class="reports-panel-title">
+                      Audit Activity
+                    </h3>
+
+                    <p class="reports-panel-description">
+                      User actions, lifecycle changes and policy-related
+                      events.
+                    </p>
+                  </div>
+
+                  <div class="reports-panel-actions">
+                    <div class="reports-search-field">
+                      <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        aria-hidden="true"
+                      >
+                        <circle
+                          cx="11"
+                          cy="11"
+                          r="8"
+                        ></circle>
+
+                        <path d="m21 21-4.35-4.35"></path>
+                      </svg>
+
+                      <input
+                        type="search"
+                        id="auditReportSearch"
+                        placeholder="Search audit activity..."
+                        autocomplete="off"
+                        data-audit-report-search
+                      />
+                    </div>
+
+                    <select
+                      id="auditActionFilter"
+                      data-audit-action-filter
+                      aria-label="Filter audit activity by action"
+                    >
+                      <option value="">
+                        All Actions
+                      </option>
+
+                      <option value="Created">
+                        Created
+                      </option>
+
+                      <option value="Updated">
+                        Updated
+                      </option>
+
+                      <option value="Allocated">
+                        Allocated
+                      </option>
+
+                      <option value="Transferred">
+                        Transferred
+                      </option>
+
+                      <option value="Returned">
+                        Returned
+                      </option>
+
+                      <option value="Maintenance">
+                        Maintenance
+                      </option>
+
+                      <option value="Deleted">
+                        Deleted
+                      </option>
+                    </select>
+
+                    <select
+                      id="auditEntityFilter"
+                      data-audit-entity-filter
+                      aria-label="Filter audit activity by entity"
+                    >
+                      <option value="">
+                        All Entities
+                      </option>
+
+                      <option value="Asset">
+                        Assets
+                      </option>
+
+                      <option value="Allocation">
+                        Allocations
+                      </option>
+
+                      <option value="Booking">
+                        Bookings
+                      </option>
+
+                      <option value="Maintenance">
+                        Maintenance
+                      </option>
+
+                      <option value="User">
+                        Users
+                      </option>
+                    </select>
+
+                    <button
+                      type="button"
+                      class="btn btn-outline"
+                      data-export-section="audit"
+                    >
+                      Export
+                    </button>
+                  </div>
+                </div>
+
+                <div class="table-container report-table-container">
+                  <table class="data-table report-table audit-report-table">
+                    <thead>
+                      <tr>
+                        <th scope="col">
+                          Timestamp
+                        </th>
+
+                        <th scope="col">
+                          User
+                        </th>
+
+                        <th scope="col">
+                          Action
+                        </th>
+
+                        <th scope="col">
+                          Entity
+                        </th>
+
+                        <th scope="col">
+                          Record
+                        </th>
+
+                        <th scope="col">
+                          Details
+                        </th>
+
+                        <th scope="col">
+                          Source
+                        </th>
+                      </tr>
+                    </thead>
+
+                    <tbody id="auditReportTableBody">
+                      <tr>
+                        <td colspan="7">
+                          <div class="skeleton skeleton-text"></div>
+                        </td>
+                      </tr>
+
+                      <tr>
+                        <td colspan="7">
+                          <div class="skeleton skeleton-text"></div>
+                        </td>
+                      </tr>
+
+                      <tr>
+                        <td colspan="7">
+                          <div class="skeleton skeleton-text"></div>
+                        </td>
+                      </tr>
+
+                      <tr>
+                        <td colspan="7">
+                          <div class="skeleton skeleton-text"></div>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+
+                <div
+                  id="auditReportEmptyState"
+                  hidden
+                >
+                  <div class="state-container">
+                    <div class="state-icon">
+                      <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="1.9"
+                        aria-hidden="true"
+                      >
+                        <path d="M9 11l3 3L22 4"></path>
+                        <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path>
+                      </svg>
+                    </div>
+
+                    <h3 class="state-title">
+                      No audit activity
+                    </h3>
+
+                    <p class="state-description">
+                      No audit records match the selected reporting
+                      criteria.
+                    </p>
+                  </div>
+                </div>
+
+                <footer class="reports-pagination">
+                  <p
+                    class="pagination-summary"
+                    data-audit-pagination-summary
+                  >
+                    Showing 0 events
+                  </p>
+
+                  <div
+                    class="pagination"
+                    data-audit-pagination
+                  ></div>
+                </footer>
+              </section>
+            </article>
+          </section>
+        </div>
+      </main>
+
+      <!-- Shared footer -->
+
+      <div
+        id="footer-container"
+        data-component="footer"
+      ></div>
+    </div>
+  </div>
+
+  <!-- ====================================================
+       EXPORT REPORT MODAL
+       ==================================================== -->
+
+  <div
+    class="modal-overlay"
+    id="exportReportModal"
+    aria-hidden="true"
+    data-close-on-overlay="false"
+  >
+    <section
+      class="modal export-report-modal"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="exportReportModalTitle"
+      aria-describedby="exportReportModalDescription"
+    >
+      <header class="modal-header">
+        <div class="modal-header-content">
+          <h2
+            class="modal-title"
+            id="exportReportModalTitle"
+          >
+            Export Report
+          </h2>
+
+          <p
+            class="modal-subtitle"
+            id="exportReportModalDescription"
+          >
+            Choose the report content and file format to export.
+          </p>
+        </div>
+
+        <button
+          type="button"
+          class="modal-close"
+          data-modal-close
+          aria-label="Close export report form"
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            aria-hidden="true"
+          >
+            <path d="M18 6 6 18"></path>
+            <path d="m6 6 12 12"></path>
+          </svg>
+        </button>
+      </header>
+
+      <form
+        id="exportReportForm"
+        data-export-report-form
+        novalidate
+      >
+        <div class="modal-body">
+          <div
+            class="alert alert-danger"
+            data-export-report-error
+            role="alert"
+            hidden
+          ></div>
+
+          <div class="form-group">
+            <label
+              class="form-label-required"
+              for="exportReportType"
+            >
+              Report Type
+            </label>
+
+            <select
+              id="exportReportType"
+              name="report_type"
+              required
+            >
+              <option value="overview">
+                Executive Overview
+              </option>
+
+              <option value="inventory">
+                Asset Inventory
+              </option>
+
+              <option value="utilization">
+                Asset Utilization
+              </option>
+
+              <option value="financial">
+                Financial Report
+              </option>
+
+              <option value="maintenance">
+                Maintenance Report
+              </option>
+
+              <option value="audit">
+                Audit & Compliance
+              </option>
+            </select>
+
+            <div class="form-error"></div>
+          </div>
+
+          <fieldset class="export-format-group">
+            <legend>
+              Export Format
+            </legend>
+
+            <label class="export-format-option">
+              <input
+                type="radio"
+                name="export_format"
+                value="csv"
+                checked
+              />
+
+              <span class="export-format-icon">
+                CSV
+              </span>
+
+              <span>
+                <strong>
+                  CSV Spreadsheet
+                </strong>
+
+                <small>
+                  Structured data for analysis in spreadsheet tools.
+                </small>
+              </span>
+            </label>
+
+            <label class="export-format-option">
+              <input
+                type="radio"
+                name="export_format"
+                value="pdf"
+              />
+
+              <span class="export-format-icon">
+                PDF
+              </span>
+
+              <span>
+                <strong>
+                  PDF Document
+                </strong>
+
+                <small>
+                  Printable report containing summary and charts.
+                </small>
+              </span>
+            </label>
+
+            <label class="export-format-option">
+              <input
+                type="radio"
+                name="export_format"
+                value="json"
+              />
+
+              <span class="export-format-icon">
+                JSON
+              </span>
+
+              <span>
+                <strong>
+                  JSON Data
+                </strong>
+
+                <small>
+                  Machine-readable report data for integrations.
+                </small>
+              </span>
+            </label>
+          </fieldset>
+
+          <div class="form-grid form-grid-2">
+            <div class="form-group">
+              <label for="exportReportStartDate">
+                Start Date
+              </label>
+
+              <input
+                class="form-control"
+                type="date"
+                id="exportReportStartDate"
+                name="start_date"
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="exportReportEndDate">
+                End Date
+              </label>
+
+              <input
+                class="form-control"
+                type="date"
+                id="exportReportEndDate"
+                name="end_date"
+              />
+            </div>
+          </div>
+
+          <label class="report-option-checkbox">
+            <input
+              type="checkbox"
+              id="exportIncludeSummary"
+              name="include_summary"
+              checked
+            />
+
+            <span>
+              <strong>
+                Include executive summary
+              </strong>
+
+              <small>
+                Add headline metrics and report insights.
+              </small>
+            </span>
+          </label>
+
+          <label class="report-option-checkbox">
+            <input
+              type="checkbox"
+              id="exportIncludeCharts"
+              name="include_charts"
+              checked
+            />
+
+            <span>
+              <strong>
+                Include charts
+              </strong>
+
+              <small>
+                Add visual charts when supported by the format.
+              </small>
+            </span>
+          </label>
+
+          <label class="report-option-checkbox">
+            <input
+              type="checkbox"
+              id="exportUseCurrentFilters"
+              name="use_current_filters"
+              checked
+            />
+
+            <span>
+              <strong>
+                Use current report filters
+              </strong>
+
+              <small>
+                Apply the department, category and location filters
+                selected on this page.
+              </small>
+            </span>
+          </label>
+        </div>
+
+        <footer class="modal-footer">
+          <button
+            type="button"
+            class="btn btn-outline"
+            data-modal-close
+          >
+            Cancel
+          </button>
+
+          <button
+            type="submit"
+            class="btn btn-primary"
+            id="exportReportSubmitButton"
+          >
+            Export Report
+          </button>
+        </footer>
+      </form>
+    </section>
+  </div>
+
+  <!-- ====================================================
+       SCHEDULE REPORT MODAL
+       ==================================================== -->
+
+  <div
+    class="modal-overlay"
+    id="scheduleReportModal"
+    aria-hidden="true"
+    data-close-on-overlay="false"
+  >
+    <section
+      class="modal schedule-report-modal"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="scheduleReportModalTitle"
+    >
+      <header class="modal-header">
+        <div class="modal-header-content">
+          <h2
+            class="modal-title"
+            id="scheduleReportModalTitle"
+          >
+            Schedule Recurring Report
+          </h2>
+
+          <p class="modal-subtitle">
+            Automatically generate and email reports on a recurring
+            schedule.
+          </p>
+        </div>
+
+        <button
+          type="button"
+          class="modal-close"
+          data-modal-close
+          aria-label="Close scheduled report form"
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            aria-hidden="true"
+          >
+            <path d="M18 6 6 18"></path>
+            <path d="m6 6 12 12"></path>
+          </svg>
+        </button>
+      </header>
+
+      <form
+        id="scheduleReportForm"
+        data-schedule-report-form
+        novalidate
+      >
+        <div class="modal-body">
+          <div
+            class="alert alert-danger"
+            data-schedule-report-error
+            role="alert"
+            hidden
+          ></div>
+
+          <div class="form-group">
+            <label
+              class="form-label-required"
+              for="scheduledReportName"
+            >
+              Schedule Name
+            </label>
+
+            <input
+              class="form-control"
+              type="text"
+              id="scheduledReportName"
+              name="name"
+              placeholder="e.g. Monthly Asset Performance Report"
+              maxlength="180"
+              required
+            />
+
+            <div class="form-error"></div>
+          </div>
+
+          <div class="form-grid form-grid-2">
+            <div class="form-group">
+              <label
+                class="form-label-required"
+                for="scheduledReportType"
+              >
+                Report Type
+              </label>
+
+              <select
+                id="scheduledReportType"
+                name="report_type"
+                required
+              >
+                <option value="overview">
+                  Executive Overview
+                </option>
+
+                <option value="inventory">
+                  Asset Inventory
+                </option>
+
+                <option value="utilization">
+                  Asset Utilization
+                </option>
+
+                <option value="financial">
+                  Financial Report
+                </option>
+
+                <option value="maintenance">
+                  Maintenance Report
+                </option>
+
+                <option value="audit">
+                  Audit & Compliance
+                </option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label
+                class="form-label-required"
+                for="scheduledReportFormat"
+              >
+                Format
+              </label>
+
+              <select
+                id="scheduledReportFormat"
+                name="format"
+                required
+              >
+                <option value="pdf">
+                  PDF
+                </option>
+
+                <option value="csv">
+                  CSV
+                </option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-grid form-grid-2">
+            <div class="form-group">
+              <label
+                class="form-label-required"
+                for="scheduledReportFrequency"
+              >
+                Frequency
+              </label>
+
+              <select
+                id="scheduledReportFrequency"
+                name="frequency"
+                required
+              >
+                <option value="daily">
+                  Daily
+                </option>
+
+                <option value="weekly">
+                  Weekly
+                </option>
+
+                <option
+                  value="monthly"
+                  selected
+                >
+                  Monthly
+                </option>
+
+                <option value="quarterly">
+                  Quarterly
+                </option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label
+                class="form-label-required"
+                for="scheduledReportTime"
+              >
+                Delivery Time
+              </label>
+
+              <input
+                class="form-control"
+                type="time"
+                id="scheduledReportTime"
+                name="delivery_time"
+                value="09:00"
+                required
+              />
+            </div>
+          </div>
+
+          <div
+            class="form-group"
+            id="scheduledReportWeekdayGroup"
+            hidden
+          >
+            <label for="scheduledReportWeekday">
+              Delivery Day
+            </label>
+
+            <select
+              id="scheduledReportWeekday"
+              name="weekday"
+            >
+              <option value="1">
+                Monday
+              </option>
+
+              <option value="2">
+                Tuesday
+              </option>
+
+              <option value="3">
+                Wednesday
+              </option>
+
+              <option value="4">
+                Thursday
+              </option>
+
+              <option value="5">
+                Friday
+              </option>
+
+              <option value="6">
+                Saturday
+              </option>
+
+              <option value="0">
+                Sunday
+              </option>
+            </select>
+          </div>
+
+          <div
+            class="form-group"
+            id="scheduledReportMonthDayGroup"
+          >
+            <label for="scheduledReportMonthDay">
+              Day of Month
+            </label>
+
+            <input
+              class="form-control"
+              type="number"
+              id="scheduledReportMonthDay"
+              name="month_day"
+              min="1"
+              max="28"
+              value="1"
+            />
+          </div>
+
+          <div class="form-group">
+            <label
+              class="form-label-required"
+              for="scheduledReportRecipients"
+            >
+              Email Recipients
+            </label>
+
+            <textarea
+              id="scheduledReportRecipients"
+              name="recipients"
+              rows="3"
+              maxlength="1000"
+              placeholder="Enter email addresses separated by commas"
+              required
+            ></textarea>
+
+            <p class="form-help">
+              Multiple email addresses can be separated using commas.
+            </p>
+
+            <div class="form-error"></div>
+          </div>
+
+          <label class="report-option-checkbox">
+            <input
+              type="checkbox"
+              id="scheduledReportActive"
+              name="is_active"
+              checked
+            />
+
+            <span>
+              <strong>
+                Activate this schedule immediately
+              </strong>
+
+              <small>
+                The report will be delivered according to the selected
+                recurrence.
+              </small>
+            </span>
+          </label>
+        </div>
+
+        <footer class="modal-footer">
+          <button
+            type="button"
+            class="btn btn-outline"
+            data-modal-close
+          >
+            Cancel
+          </button>
+
+          <button
+            type="submit"
+            class="btn btn-primary"
+            id="scheduleReportSubmitButton"
+          >
+            Create Schedule
+          </button>
+        </footer>
+      </form>
+    </section>
+  </div>
+
+  <!-- ====================================================
+       SHARED COMPONENTS
+       ==================================================== -->
+
+  <div
+    id="loader-container"
+    data-component="loader"
+  ></div>
+
+  <div
+    id="modal-container"
+    data-component="modal"
+  ></div>
+
+  <div
+    class="sidebar-overlay"
+    id="sidebarOverlay"
+    aria-hidden="true"
+  ></div>
+
+  <div
+    class="toast-container"
+    aria-live="polite"
+    aria-label="Notifications"
+  ></div>
+
+  <!-- ====================================================
+       JAVASCRIPT
+       ==================================================== -->
+
+  <script src="../js/api.js"></script>
+  <script src="../js/utils.js"></script>
+  <script src="../js/auth.js"></script>
+  <script src="../js/loader.js"></script>
+  <script src="../js/sidebar.js"></script>
+
+  <script src="reports.js"></script>
+</body>
+</html>

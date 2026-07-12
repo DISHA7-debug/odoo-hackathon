@@ -1,0 +1,1437 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  />
+
+  <meta
+    name="description"
+    content="AssetFlow dashboard for monitoring assets, bookings, maintenance and organizational activity."
+  />
+
+  <meta
+    name="theme-color"
+    content="#ff4f78"
+  />
+
+  <title>Dashboard | AssetFlow</title>
+
+  <!-- ====================================================
+       GLOBAL STYLES
+       ==================================================== -->
+
+  <link
+    rel="stylesheet"
+    href="../css/variables.css"
+  />
+
+  <link
+    rel="stylesheet"
+    href="../css/global.css"
+  />
+
+  <link
+    rel="stylesheet"
+    href="../css/layout.css"
+  />
+
+  <link
+    rel="stylesheet"
+    href="../css/components.css"
+  />
+
+  <link
+    rel="stylesheet"
+    href="../css/animations.css"
+  />
+
+  <link
+    rel="stylesheet"
+    href="../css/responsive.css"
+  />
+
+  <!-- Dashboard-specific styles -->
+
+  <link
+    rel="stylesheet"
+    href="dashboard.css"
+  />
+</head>
+
+<body
+  data-auth="required"
+  class="page-transition"
+>
+  <!-- Accessibility skip link -->
+
+  <a
+    class="skip-link"
+    href="#dashboardMain"
+  >
+    Skip to dashboard content
+  </a>
+
+  <!-- ====================================================
+       APPLICATION SHELL
+       ==================================================== -->
+
+  <div
+    class="app-shell"
+    id="appShell"
+  >
+    <!-- Shared sidebar -->
+
+    <div
+      id="sidebar-container"
+      data-component="sidebar"
+      data-required="true"
+    ></div>
+
+    <!-- Main application area -->
+
+    <div class="app-content">
+      <!-- Shared navbar -->
+
+      <div
+        id="navbar-container"
+        data-component="navbar"
+        data-required="true"
+      ></div>
+
+      <!-- ==================================================
+           DASHBOARD CONTENT
+           ================================================== -->
+
+      <main
+        class="main-content"
+        id="dashboardMain"
+      >
+        <div class="page-container">
+          <!-- Page header -->
+
+          <header class="page-header">
+            <div class="page-header-content">
+              <div class="breadcrumbs">
+                <span class="breadcrumb-item">
+                  <a
+                    class="breadcrumb-link"
+                    href="index.html"
+                  >
+                    AssetFlow
+                  </a>
+
+                  <svg
+                    class="breadcrumb-separator"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    aria-hidden="true"
+                  >
+                    <path d="m9 18 6-6-6-6"></path>
+                  </svg>
+                </span>
+
+                <span
+                  class="breadcrumb-current"
+                  aria-current="page"
+                >
+                  Dashboard
+                </span>
+              </div>
+
+              <h1 class="page-title">
+                Good morning,
+                <span data-dashboard-user-name>
+                  User
+                </span>
+              </h1>
+
+              <p class="page-description">
+                Here is an overview of your assets,
+                bookings, maintenance workflows and
+                organizational activity.
+              </p>
+            </div>
+
+            <div class="page-actions">
+              <button
+                type="button"
+                class="btn btn-outline"
+                id="refreshDashboardButton"
+                data-refresh-dashboard
+              >
+                <svg
+                  width="18"
+                  height="18"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  aria-hidden="true"
+                >
+                  <path d="M20 11a8.1 8.1 0 0 0-15.5-2M4 4v5h5"></path>
+                  <path d="M4 13a8.1 8.1 0 0 0 15.5 2M20 20v-5h-5"></path>
+                </svg>
+
+                Refresh
+              </button>
+
+              <button
+                type="button"
+                class="btn btn-primary"
+                id="dashboardQuickActionButton"
+                data-dropdown-trigger
+              >
+                <svg
+                  width="18"
+                  height="18"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  aria-hidden="true"
+                >
+                  <path d="M12 5v14"></path>
+                  <path d="M5 12h14"></path>
+                </svg>
+
+                Quick Action
+              </button>
+            </div>
+          </header>
+
+          <!-- ==================================================
+               DASHBOARD ERROR MESSAGE
+               ================================================== -->
+
+          <div
+            class="alert alert-danger dashboard-alert"
+            id="dashboardErrorAlert"
+            role="alert"
+            hidden
+          >
+            <div class="alert-icon">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                aria-hidden="true"
+              >
+                <circle
+                  cx="12"
+                  cy="12"
+                  r="10"
+                ></circle>
+
+                <path d="M12 8v4"></path>
+                <path d="M12 16h.01"></path>
+              </svg>
+            </div>
+
+            <div class="alert-content">
+              <h2 class="alert-title">
+                Dashboard could not be loaded
+              </h2>
+
+              <p
+                class="alert-message"
+                id="dashboardErrorMessage"
+              >
+                Please refresh the page and try again.
+              </p>
+            </div>
+
+            <div class="alert-actions">
+              <button
+                type="button"
+                class="btn btn-danger btn-sm"
+                data-retry-dashboard
+              >
+                Retry
+              </button>
+            </div>
+          </div>
+
+          <!-- ==================================================
+               KPI CARDS
+               ================================================== -->
+
+          <section
+            class="page-section"
+            aria-labelledby="dashboardOverviewTitle"
+          >
+            <div class="section-header">
+              <div class="section-title-group">
+                <h2
+                  class="section-title"
+                  id="dashboardOverviewTitle"
+                >
+                  Organization Overview
+                </h2>
+
+                <p class="section-description">
+                  Live operational statistics across
+                  AssetFlow.
+                </p>
+              </div>
+
+              <div class="section-actions">
+                <span
+                  class="dashboard-last-updated"
+                  data-last-updated
+                >
+                  Updating...
+                </span>
+              </div>
+            </div>
+
+            <div
+              class="content-grid dashboard-kpi-grid stagger-container"
+              id="dashboardKpiGrid"
+            >
+              <!-- Available assets -->
+
+              <article class="kpi-card success">
+                <div class="kpi-card-header">
+                  <div>
+                    <p class="kpi-card-label">
+                      Assets Available
+                    </p>
+                  </div>
+
+                  <div
+                    class="kpi-card-icon"
+                    aria-hidden="true"
+                  >
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="1.9"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    >
+                      <path d="M21 16V8"></path>
+                      <path d="m3.5 7 8.5 5 8.5-5"></path>
+                      <path d="M12 22V12"></path>
+                      <path d="M3 7l9-5 9 5v10l-9 5-9-5V7Z"></path>
+                    </svg>
+                  </div>
+                </div>
+
+                <div
+                  class="kpi-card-value"
+                  data-kpi="assets_available"
+                >
+                  <span class="skeleton skeleton-title"></span>
+                </div>
+
+                <div class="kpi-card-footer">
+                  <span class="kpi-trend positive">
+                    Ready for allocation
+                  </span>
+                </div>
+              </article>
+
+              <!-- Allocated assets -->
+
+              <article class="kpi-card info">
+                <div class="kpi-card-header">
+                  <div>
+                    <p class="kpi-card-label">
+                      Assets Allocated
+                    </p>
+                  </div>
+
+                  <div
+                    class="kpi-card-icon"
+                    aria-hidden="true"
+                  >
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="1.9"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    >
+                      <circle
+                        cx="9"
+                        cy="7"
+                        r="4"
+                      ></circle>
+
+                      <path d="M3 21v-2a6 6 0 0 1 6-6"></path>
+                      <path d="M16 11h6"></path>
+                      <path d="m19 8 3 3-3 3"></path>
+                    </svg>
+                  </div>
+                </div>
+
+                <div
+                  class="kpi-card-value"
+                  data-kpi="assets_allocated"
+                >
+                  <span class="skeleton skeleton-title"></span>
+                </div>
+
+                <div class="kpi-card-footer">
+                  <span>
+                    Currently assigned
+                  </span>
+                </div>
+              </article>
+
+              <!-- Maintenance -->
+
+              <article class="kpi-card warning">
+                <div class="kpi-card-header">
+                  <div>
+                    <p class="kpi-card-label">
+                      Maintenance Today
+                    </p>
+                  </div>
+
+                  <div
+                    class="kpi-card-icon"
+                    aria-hidden="true"
+                  >
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="1.9"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    >
+                      <path d="M14.7 6.3a4 4 0 0 0-5-5l2.1 2.1-2.4 2.4-2.1-2.1a4 4 0 0 0 5 5l7.3 7.3a2 2 0 0 1-2.8 2.8l-7.3-7.3"></path>
+                      <path d="m5 19 4-4"></path>
+                    </svg>
+                  </div>
+                </div>
+
+                <div
+                  class="kpi-card-value"
+                  data-kpi="maintenance_today"
+                >
+                  <span class="skeleton skeleton-title"></span>
+                </div>
+
+                <div class="kpi-card-footer">
+                  <span>
+                    Requiring attention
+                  </span>
+                </div>
+              </article>
+
+              <!-- Active bookings -->
+
+              <article class="kpi-card">
+                <div class="kpi-card-header">
+                  <div>
+                    <p class="kpi-card-label">
+                      Active Bookings
+                    </p>
+                  </div>
+
+                  <div
+                    class="kpi-card-icon"
+                    aria-hidden="true"
+                  >
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="1.9"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    >
+                      <rect
+                        x="3"
+                        y="5"
+                        width="18"
+                        height="16"
+                        rx="2"
+                      ></rect>
+
+                      <path d="M16 3v4"></path>
+                      <path d="M8 3v4"></path>
+                      <path d="M3 10h18"></path>
+                      <path d="m9 16 2 2 4-4"></path>
+                    </svg>
+                  </div>
+                </div>
+
+                <div
+                  class="kpi-card-value"
+                  data-kpi="active_bookings"
+                >
+                  <span class="skeleton skeleton-title"></span>
+                </div>
+
+                <div class="kpi-card-footer">
+                  <span>
+                    Shared resources in use
+                  </span>
+                </div>
+              </article>
+
+              <!-- Pending transfers -->
+
+              <article class="kpi-card warning">
+                <div class="kpi-card-header">
+                  <div>
+                    <p class="kpi-card-label">
+                      Pending Transfers
+                    </p>
+                  </div>
+
+                  <div
+                    class="kpi-card-icon"
+                    aria-hidden="true"
+                  >
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="1.9"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    >
+                      <path d="M17 3h4v4"></path>
+                      <path d="m21 3-7 7"></path>
+                      <path d="M7 21H3v-4"></path>
+                      <path d="m3 21 7-7"></path>
+                    </svg>
+                  </div>
+                </div>
+
+                <div
+                  class="kpi-card-value"
+                  data-kpi="pending_transfers"
+                >
+                  <span class="skeleton skeleton-title"></span>
+                </div>
+
+                <div class="kpi-card-footer">
+                  <span>
+                    Awaiting approval
+                  </span>
+                </div>
+              </article>
+
+              <!-- Upcoming returns -->
+
+              <article class="kpi-card danger">
+                <div class="kpi-card-header">
+                  <div>
+                    <p class="kpi-card-label">
+                      Upcoming Returns
+                    </p>
+                  </div>
+
+                  <div
+                    class="kpi-card-icon"
+                    aria-hidden="true"
+                  >
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="1.9"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    >
+                      <circle
+                        cx="12"
+                        cy="12"
+                        r="9"
+                      ></circle>
+
+                      <path d="M12 7v5l3 2"></path>
+                    </svg>
+                  </div>
+                </div>
+
+                <div
+                  class="kpi-card-value"
+                  data-kpi="upcoming_returns"
+                >
+                  <span class="skeleton skeleton-title"></span>
+                </div>
+
+                <div class="kpi-card-footer">
+                  <span>
+                    Due within seven days
+                  </span>
+                </div>
+              </article>
+            </div>
+          </section>
+
+          <!-- ==================================================
+               QUICK ACTIONS
+               ================================================== -->
+
+          <section
+            class="page-section"
+            aria-labelledby="quickActionsTitle"
+          >
+            <div class="section-header">
+              <div class="section-title-group">
+                <h2
+                  class="section-title"
+                  id="quickActionsTitle"
+                >
+                  Quick Actions
+                </h2>
+
+                <p class="section-description">
+                  Start common AssetFlow workflows.
+                </p>
+              </div>
+            </div>
+
+            <div class="content-grid content-grid-3">
+              <!-- Register asset -->
+
+              <a
+                class="quick-action"
+                href="../asset-registration/index.html?action=register"
+                data-roles="Admin,AssetManager"
+              >
+                <div class="quick-action-icon">
+                  <svg
+                    width="21"
+                    height="21"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.9"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    aria-hidden="true"
+                  >
+                    <path d="M21 16V8"></path>
+                    <path d="m3.5 7 8.5 5 8.5-5"></path>
+                    <path d="M12 22V12"></path>
+                    <path d="M3 7l9-5 9 5v10l-9 5-9-5V7Z"></path>
+                  </svg>
+                </div>
+
+                <div class="quick-action-content">
+                  <h3 class="quick-action-title">
+                    Register Asset
+                  </h3>
+
+                  <p class="quick-action-description">
+                    Add a new organizational asset.
+                  </p>
+                </div>
+
+                <svg
+                  class="quick-action-arrow"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  aria-hidden="true"
+                >
+                  <path d="M5 12h14"></path>
+                  <path d="m13 6 6 6-6 6"></path>
+                </svg>
+              </a>
+
+              <!-- Book resource -->
+
+              <a
+                class="quick-action"
+                href="../resource-booking/index.html?action=book"
+              >
+                <div class="quick-action-icon">
+                  <svg
+                    width="21"
+                    height="21"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.9"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    aria-hidden="true"
+                  >
+                    <rect
+                      x="3"
+                      y="5"
+                      width="18"
+                      height="16"
+                      rx="2"
+                    ></rect>
+
+                    <path d="M16 3v4"></path>
+                    <path d="M8 3v4"></path>
+                    <path d="M3 10h18"></path>
+                    <path d="m9 16 2 2 4-4"></path>
+                  </svg>
+                </div>
+
+                <div class="quick-action-content">
+                  <h3 class="quick-action-title">
+                    Book Resource
+                  </h3>
+
+                  <p class="quick-action-description">
+                    Reserve a shared room or resource.
+                  </p>
+                </div>
+
+                <svg
+                  class="quick-action-arrow"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  aria-hidden="true"
+                >
+                  <path d="M5 12h14"></path>
+                  <path d="m13 6 6 6-6 6"></path>
+                </svg>
+              </a>
+
+              <!-- Raise maintenance -->
+
+              <a
+                class="quick-action"
+                href="../maintenance-management/index.html?action=raise"
+              >
+                <div class="quick-action-icon">
+                  <svg
+                    width="21"
+                    height="21"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.9"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    aria-hidden="true"
+                  >
+                    <path d="M14.7 6.3a4 4 0 0 0-5-5l2.1 2.1-2.4 2.4-2.1-2.1a4 4 0 0 0 5 5l7.3 7.3a2 2 0 0 1-2.8 2.8l-7.3-7.3"></path>
+                    <path d="m5 19 4-4"></path>
+                  </svg>
+                </div>
+
+                <div class="quick-action-content">
+                  <h3 class="quick-action-title">
+                    Raise Maintenance Request
+                  </h3>
+
+                  <p class="quick-action-description">
+                    Report an asset issue for approval.
+                  </p>
+                </div>
+
+                <svg
+                  class="quick-action-arrow"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  aria-hidden="true"
+                >
+                  <path d="M5 12h14"></path>
+                  <path d="m13 6 6 6-6 6"></path>
+                </svg>
+              </a>
+            </div>
+          </section>
+
+          <!-- ==================================================
+               MAIN DASHBOARD GRID
+               ================================================== -->
+
+          <section
+            class="content-grid dashboard-main-grid page-section"
+          >
+            <!-- Asset utilization card -->
+
+            <article class="card dashboard-chart-card">
+              <header class="card-header">
+                <div class="card-header-content">
+                  <h2 class="card-title">
+                    Asset Utilization
+                  </h2>
+
+                  <p class="card-subtitle">
+                    Current distribution by asset status.
+                  </p>
+                </div>
+
+                <div class="card-actions">
+                  <select
+                    id="utilizationPeriodSelect"
+                    aria-label="Select utilization period"
+                  >
+                    <option value="7">
+                      Last 7 days
+                    </option>
+
+                    <option
+                      value="30"
+                      selected
+                    >
+                      Last 30 days
+                    </option>
+
+                    <option value="90">
+                      Last 90 days
+                    </option>
+                  </select>
+                </div>
+              </header>
+
+              <div class="card-body">
+                <div
+                  class="asset-utilization-chart"
+                  id="assetUtilizationChart"
+                  role="img"
+                  aria-label="Asset utilization status chart"
+                >
+                  <div class="chart-loading-state">
+                    <div class="loader-spinner"></div>
+
+                    <span>
+                      Loading chart...
+                    </span>
+                  </div>
+                </div>
+
+                <div
+                  class="utilization-legend"
+                  id="assetUtilizationLegend"
+                ></div>
+              </div>
+            </article>
+
+            <!-- Asset status summary -->
+
+            <article class="card dashboard-status-card">
+              <header class="card-header">
+                <div class="card-header-content">
+                  <h2 class="card-title">
+                    Asset Health
+                  </h2>
+
+                  <p class="card-subtitle">
+                    Current lifecycle status summary.
+                  </p>
+                </div>
+
+                <a
+                  class="btn btn-link"
+                  href="../asset-registration/index.html"
+                >
+                  View assets
+                </a>
+              </header>
+
+              <div class="card-body">
+                <div
+                  class="asset-health-list"
+                  id="assetHealthList"
+                >
+                  <div class="asset-health-item">
+                    <div class="skeleton skeleton-avatar"></div>
+
+                    <div class="asset-health-content">
+                      <div class="skeleton skeleton-text"></div>
+                      <div class="skeleton skeleton-text-sm"></div>
+                    </div>
+                  </div>
+
+                  <div class="asset-health-item">
+                    <div class="skeleton skeleton-avatar"></div>
+
+                    <div class="asset-health-content">
+                      <div class="skeleton skeleton-text"></div>
+                      <div class="skeleton skeleton-text-sm"></div>
+                    </div>
+                  </div>
+
+                  <div class="asset-health-item">
+                    <div class="skeleton skeleton-avatar"></div>
+
+                    <div class="asset-health-content">
+                      <div class="skeleton skeleton-text"></div>
+                      <div class="skeleton skeleton-text-sm"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </article>
+          </section>
+
+          <!-- ==================================================
+               OVERDUE RETURNS
+               ================================================== -->
+
+          <section
+            class="page-section"
+            aria-labelledby="overdueReturnsTitle"
+          >
+            <article class="card card-danger card-accent">
+              <header class="card-header">
+                <div class="card-header-content">
+                  <div class="dashboard-card-heading">
+                    <div
+                      class="dashboard-heading-icon danger"
+                      aria-hidden="true"
+                    >
+                      <svg
+                        width="20"
+                        height="20"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                      >
+                        <circle
+                          cx="12"
+                          cy="12"
+                          r="9"
+                        ></circle>
+
+                        <path d="M12 7v5"></path>
+                        <path d="M12 16h.01"></path>
+                      </svg>
+                    </div>
+
+                    <div>
+                      <h2
+                        class="card-title"
+                        id="overdueReturnsTitle"
+                      >
+                        Overdue Returns
+                      </h2>
+
+                      <p class="card-subtitle">
+                        Assets that have passed their expected
+                        return date.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="card-actions">
+                  <span
+                    class="badge badge-danger badge-dot"
+                    data-overdue-count
+                  >
+                    0 overdue
+                  </span>
+                </div>
+              </header>
+
+              <div class="card-body dashboard-table-body">
+                <div
+                  class="table-container dashboard-inline-table"
+                >
+                  <table class="data-table">
+                    <thead>
+                      <tr>
+                        <th scope="col">
+                          Asset
+                        </th>
+
+                        <th scope="col">
+                          Employee
+                        </th>
+
+                        <th scope="col">
+                          Department
+                        </th>
+
+                        <th scope="col">
+                          Expected Return
+                        </th>
+
+                        <th scope="col">
+                          Overdue By
+                        </th>
+
+                        <th
+                          scope="col"
+                          class="text-right"
+                        >
+                          Action
+                        </th>
+                      </tr>
+                    </thead>
+
+                    <tbody id="overdueReturnsTableBody">
+                      <tr>
+                        <td colspan="6">
+                          <div class="skeleton skeleton-text"></div>
+                        </td>
+                      </tr>
+
+                      <tr>
+                        <td colspan="6">
+                          <div class="skeleton skeleton-text"></div>
+                        </td>
+                      </tr>
+
+                      <tr>
+                        <td colspan="6">
+                          <div class="skeleton skeleton-text"></div>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+
+                <div
+                  id="overdueReturnsEmptyState"
+                  hidden
+                >
+                  <div class="state-container dashboard-compact-state">
+                    <div class="state-icon">
+                      <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        aria-hidden="true"
+                      >
+                        <path d="m5 12 4 4L19 6"></path>
+                      </svg>
+                    </div>
+
+                    <h3 class="state-title">
+                      No overdue returns
+                    </h3>
+
+                    <p class="state-description">
+                      All allocated assets are currently
+                      within their expected return dates.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </article>
+          </section>
+
+          <!-- ==================================================
+               BOOKINGS AND ACTIVITY
+               ================================================== -->
+
+          <section
+            class="content-grid dashboard-bottom-grid page-section"
+          >
+            <!-- Upcoming bookings -->
+
+            <article class="card">
+              <header class="card-header">
+                <div class="card-header-content">
+                  <h2 class="card-title">
+                    Upcoming Bookings
+                  </h2>
+
+                  <p class="card-subtitle">
+                    Shared resource reservations.
+                  </p>
+                </div>
+
+                <div class="card-actions">
+                  <a
+                    class="btn btn-link"
+                    href="../resource-booking/index.html"
+                  >
+                    View calendar
+                  </a>
+                </div>
+              </header>
+
+              <div class="card-body">
+                <div
+                  class="dashboard-booking-list"
+                  id="upcomingBookingsList"
+                >
+                  <div class="dashboard-booking-item">
+                    <div class="skeleton skeleton-avatar"></div>
+
+                    <div class="dashboard-booking-content">
+                      <div class="skeleton skeleton-text"></div>
+                      <div class="skeleton skeleton-text-sm"></div>
+                    </div>
+                  </div>
+
+                  <div class="dashboard-booking-item">
+                    <div class="skeleton skeleton-avatar"></div>
+
+                    <div class="dashboard-booking-content">
+                      <div class="skeleton skeleton-text"></div>
+                      <div class="skeleton skeleton-text-sm"></div>
+                    </div>
+                  </div>
+
+                  <div class="dashboard-booking-item">
+                    <div class="skeleton skeleton-avatar"></div>
+
+                    <div class="dashboard-booking-content">
+                      <div class="skeleton skeleton-text"></div>
+                      <div class="skeleton skeleton-text-sm"></div>
+                    </div>
+                  </div>
+                </div>
+
+                <div
+                  id="upcomingBookingsEmptyState"
+                  hidden
+                >
+                  <div class="state-container dashboard-compact-state">
+                    <div class="state-icon">
+                      <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        aria-hidden="true"
+                      >
+                        <rect
+                          x="3"
+                          y="5"
+                          width="18"
+                          height="16"
+                          rx="2"
+                        ></rect>
+
+                        <path d="M16 3v4"></path>
+                        <path d="M8 3v4"></path>
+                        <path d="M3 10h18"></path>
+                      </svg>
+                    </div>
+
+                    <h3 class="state-title">
+                      No upcoming bookings
+                    </h3>
+
+                    <p class="state-description">
+                      Book a shared resource to see it here.
+                    </p>
+
+                    <div class="state-action">
+                      <a
+                        class="btn btn-primary"
+                        href="../resource-booking/index.html?action=book"
+                      >
+                        Book Resource
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </article>
+
+            <!-- Recent activity -->
+
+            <article class="card">
+              <header class="card-header">
+                <div class="card-header-content">
+                  <h2 class="card-title">
+                    Recent Activity
+                  </h2>
+
+                  <p class="card-subtitle">
+                    Latest actions across AssetFlow.
+                  </p>
+                </div>
+
+                <div class="card-actions">
+                  <a
+                    class="btn btn-link"
+                    href="../notifications/index.html"
+                  >
+                    View all
+                  </a>
+                </div>
+              </header>
+
+              <div class="card-body">
+                <div
+                  class="timeline"
+                  id="recentActivityTimeline"
+                >
+                  <div class="timeline-item">
+                    <div class="skeleton skeleton-avatar"></div>
+
+                    <div class="timeline-content">
+                      <div class="skeleton skeleton-text"></div>
+                      <div class="skeleton skeleton-text-sm mt-2"></div>
+                    </div>
+                  </div>
+
+                  <div class="timeline-item">
+                    <div class="skeleton skeleton-avatar"></div>
+
+                    <div class="timeline-content">
+                      <div class="skeleton skeleton-text"></div>
+                      <div class="skeleton skeleton-text-sm mt-2"></div>
+                    </div>
+                  </div>
+
+                  <div class="timeline-item">
+                    <div class="skeleton skeleton-avatar"></div>
+
+                    <div class="timeline-content">
+                      <div class="skeleton skeleton-text"></div>
+                      <div class="skeleton skeleton-text-sm mt-2"></div>
+                    </div>
+                  </div>
+                </div>
+
+                <div
+                  id="recentActivityEmptyState"
+                  hidden
+                >
+                  <div class="state-container dashboard-compact-state">
+                    <div class="state-icon">
+                      <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        aria-hidden="true"
+                      >
+                        <path d="M12 8v4l3 2"></path>
+                        <circle
+                          cx="12"
+                          cy="12"
+                          r="9"
+                        ></circle>
+                      </svg>
+                    </div>
+
+                    <h3 class="state-title">
+                      No recent activity
+                    </h3>
+
+                    <p class="state-description">
+                      New actions will appear here.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </article>
+          </section>
+        </div>
+      </main>
+
+      <!-- Shared footer -->
+
+      <div
+        id="footer-container"
+        data-component="footer"
+      ></div>
+    </div>
+  </div>
+
+  <!-- ====================================================
+       SHARED COMPONENTS
+       ==================================================== -->
+
+  <div
+    id="loader-container"
+    data-component="loader"
+  ></div>
+
+  <div
+    id="modal-container"
+    data-component="modal"
+  ></div>
+
+  <div
+    class="sidebar-overlay"
+    id="sidebarOverlay"
+    aria-hidden="true"
+  ></div>
+
+  <div
+    class="toast-container"
+    aria-live="polite"
+    aria-label="Notifications"
+  ></div>
+
+  <!-- ====================================================
+       DASHBOARD QUICK ACTION MODAL
+       ==================================================== -->
+
+  <div
+    class="modal-overlay"
+    id="dashboardQuickActionModal"
+    aria-hidden="true"
+    data-close-on-overlay="true"
+  >
+    <section
+      class="modal modal-sm"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="dashboardQuickActionTitle"
+    >
+      <header class="modal-header">
+        <div>
+          <h2
+            class="modal-title"
+            id="dashboardQuickActionTitle"
+          >
+            Choose an action
+          </h2>
+
+          <p class="modal-subtitle">
+            Start a common AssetFlow workflow.
+          </p>
+        </div>
+
+        <button
+          type="button"
+          class="modal-close"
+          data-modal-close
+          aria-label="Close quick actions"
+        >
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            aria-hidden="true"
+          >
+            <path d="M18 6 6 18"></path>
+            <path d="m6 6 12 12"></path>
+          </svg>
+        </button>
+      </header>
+
+      <div class="modal-body">
+        <div class="dashboard-modal-actions">
+          <a
+            class="quick-action"
+            href="../asset-registration/index.html?action=register"
+            data-roles="Admin,AssetManager"
+          >
+            <div class="quick-action-icon">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                aria-hidden="true"
+              >
+                <path d="M12 5v14"></path>
+                <path d="M5 12h14"></path>
+              </svg>
+            </div>
+
+            <div class="quick-action-content">
+              <h3 class="quick-action-title">
+                Register Asset
+              </h3>
+
+              <p class="quick-action-description">
+                Add a new asset.
+              </p>
+            </div>
+          </a>
+
+          <a
+            class="quick-action"
+            href="../resource-booking/index.html?action=book"
+          >
+            <div class="quick-action-icon">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                aria-hidden="true"
+              >
+                <rect
+                  x="3"
+                  y="5"
+                  width="18"
+                  height="16"
+                  rx="2"
+                ></rect>
+
+                <path d="M16 3v4"></path>
+                <path d="M8 3v4"></path>
+                <path d="M3 10h18"></path>
+              </svg>
+            </div>
+
+            <div class="quick-action-content">
+              <h3 class="quick-action-title">
+                Book Resource
+              </h3>
+
+              <p class="quick-action-description">
+                Reserve a shared resource.
+              </p>
+            </div>
+          </a>
+
+          <a
+            class="quick-action"
+            href="../maintenance-management/index.html?action=raise"
+          >
+            <div class="quick-action-icon">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                aria-hidden="true"
+              >
+                <path d="M14.7 6.3a4 4 0 0 0-5-5l2.1 2.1-2.4 2.4-2.1-2.1a4 4 0 0 0 5 5l7.3 7.3a2 2 0 0 1-2.8 2.8l-7.3-7.3"></path>
+              </svg>
+            </div>
+
+            <div class="quick-action-content">
+              <h3 class="quick-action-title">
+                Raise Maintenance
+              </h3>
+
+              <p class="quick-action-description">
+                Report an asset issue.
+              </p>
+            </div>
+          </a>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- ====================================================
+       JAVASCRIPT
+       ==================================================== -->
+
+  <script src="../js/api.js"></script>
+  <script src="../js/utils.js"></script>
+  <script src="../js/auth.js"></script>
+  <script src="../js/loader.js"></script>
+  <script src="../js/sidebar.js"></script>
+
+  <script src="dashboard.js"></script>
+</body>
+</html>

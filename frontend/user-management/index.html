@@ -1,0 +1,3858 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  />
+
+  <meta
+    name="description"
+    content="Manage AssetFlow users, roles, departments, account access and invitations."
+  />
+
+  <meta
+    name="theme-color"
+    content="#ff4f78"
+  />
+
+  <title>User Management | AssetFlow</title>
+
+  <!-- ====================================================
+       GLOBAL STYLES
+       ==================================================== -->
+
+  <link
+    rel="stylesheet"
+    href="../css/variables.css"
+  />
+
+  <link
+    rel="stylesheet"
+    href="../css/global.css"
+  />
+
+  <link
+    rel="stylesheet"
+    href="../css/layout.css"
+  />
+
+  <link
+    rel="stylesheet"
+    href="../css/components.css"
+  />
+
+  <link
+    rel="stylesheet"
+    href="../css/animations.css"
+  />
+
+  <link
+    rel="stylesheet"
+    href="../css/responsive.css"
+  />
+
+  <!-- Page-specific styles -->
+
+  <link
+    rel="stylesheet"
+    href="user-management.css"
+  />
+</head>
+
+<body
+  data-auth="required"
+  data-roles="Admin"
+  class="page-transition"
+>
+  <a
+    class="skip-link"
+    href="#userManagementMain"
+  >
+    Skip to user management
+  </a>
+
+  <!-- ====================================================
+       APPLICATION SHELL
+       ==================================================== -->
+
+  <div
+    class="app-shell"
+    id="appShell"
+  >
+    <!-- Shared sidebar -->
+
+    <div
+      id="sidebar-container"
+      data-component="sidebar"
+      data-required="true"
+    ></div>
+
+    <div class="app-content">
+      <!-- Shared navbar -->
+
+      <div
+        id="navbar-container"
+        data-component="navbar"
+        data-required="true"
+      ></div>
+
+      <!-- ==================================================
+           PAGE CONTENT
+           ================================================== -->
+
+      <main
+        class="main-content"
+        id="userManagementMain"
+      >
+        <div class="page-container">
+          <!-- Page header -->
+
+          <header class="page-header">
+            <div class="page-header-content">
+              <div class="breadcrumbs">
+                <span class="breadcrumb-item">
+                  <a
+                    class="breadcrumb-link"
+                    href="../dashboard/index.html"
+                  >
+                    AssetFlow
+                  </a>
+
+                  <svg
+                    class="breadcrumb-separator"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    aria-hidden="true"
+                  >
+                    <path d="m9 18 6-6-6-6"></path>
+                  </svg>
+                </span>
+
+                <span
+                  class="breadcrumb-current"
+                  aria-current="page"
+                >
+                  User Management
+                </span>
+              </div>
+
+              <h1 class="page-title">
+                User Management
+              </h1>
+
+              <p class="page-description">
+                Manage employee accounts, organizational roles,
+                department access and account security.
+              </p>
+            </div>
+
+            <div class="page-actions">
+              <button
+                type="button"
+                class="btn btn-outline"
+                id="refreshUsersButton"
+                data-refresh-users
+              >
+                <svg
+                  width="18"
+                  height="18"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  aria-hidden="true"
+                >
+                  <path d="M20 11a8.1 8.1 0 0 0-15.5-2M4 4v5h5"></path>
+                  <path d="M4 13a8.1 8.1 0 0 0 15.5 2M20 20v-5h-5"></path>
+                </svg>
+
+                Refresh
+              </button>
+
+              <button
+                type="button"
+                class="btn btn-outline"
+                data-modal-open="#inviteUserModal"
+                data-open-user-invite
+              >
+                <svg
+                  width="18"
+                  height="18"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  aria-hidden="true"
+                >
+                  <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+                  <circle
+                    cx="9"
+                    cy="7"
+                    r="4"
+                  ></circle>
+                  <path d="M19 8v6"></path>
+                  <path d="M16 11h6"></path>
+                </svg>
+
+                Invite User
+              </button>
+
+              <button
+                type="button"
+                class="btn btn-primary"
+                data-modal-open="#userFormModal"
+                data-create-user
+              >
+                <svg
+                  width="18"
+                  height="18"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  aria-hidden="true"
+                >
+                  <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+                  <circle
+                    cx="9"
+                    cy="7"
+                    r="4"
+                  ></circle>
+                  <path d="M19 8v6"></path>
+                  <path d="M16 11h6"></path>
+                </svg>
+
+                Add User
+              </button>
+            </div>
+          </header>
+
+          <!-- ==================================================
+               PAGE ERROR
+               ================================================== -->
+
+          <div
+            class="alert alert-danger user-management-page-alert"
+            id="userManagementPageErrorAlert"
+            role="alert"
+            hidden
+          >
+            <div class="alert-icon">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                aria-hidden="true"
+              >
+                <circle
+                  cx="12"
+                  cy="12"
+                  r="10"
+                ></circle>
+
+                <path d="M12 8v4"></path>
+                <path d="M12 16h.01"></path>
+              </svg>
+            </div>
+
+            <div class="alert-content">
+              <h2 class="alert-title">
+                Unable to load user management
+              </h2>
+
+              <p
+                class="alert-message"
+                id="userManagementPageErrorMessage"
+              >
+                Please refresh the page and try again.
+              </p>
+            </div>
+
+            <div class="alert-actions">
+              <button
+                type="button"
+                class="btn btn-danger btn-sm"
+                data-retry-users
+              >
+                Retry
+              </button>
+            </div>
+          </div>
+
+          <!-- ==================================================
+               SUMMARY
+               ================================================== -->
+
+          <section
+            class="page-section"
+            aria-labelledby="userSummaryTitle"
+          >
+            <div class="section-header">
+              <div class="section-title-group">
+                <h2
+                  class="section-title"
+                  id="userSummaryTitle"
+                >
+                  Account Summary
+                </h2>
+
+                <p class="section-description">
+                  Current users, access roles and account activity.
+                </p>
+              </div>
+
+              <span
+                class="user-management-last-updated"
+                data-users-last-updated
+              >
+                Updating...
+              </span>
+            </div>
+
+            <div
+              class="content-grid user-summary-grid stagger-container"
+            >
+              <!-- Total users -->
+
+              <article class="kpi-card">
+                <div class="kpi-card-header">
+                  <p class="kpi-card-label">
+                    Total Users
+                  </p>
+
+                  <div
+                    class="kpi-card-icon"
+                    aria-hidden="true"
+                  >
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="1.9"
+                    >
+                      <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+                      <circle
+                        cx="9"
+                        cy="7"
+                        r="4"
+                      ></circle>
+                      <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
+                      <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                    </svg>
+                  </div>
+                </div>
+
+                <div
+                  class="kpi-card-value"
+                  data-user-summary="total"
+                >
+                  <span class="skeleton skeleton-title"></span>
+                </div>
+
+                <div class="kpi-card-footer">
+                  <span>
+                    Registered accounts
+                  </span>
+                </div>
+              </article>
+
+              <!-- Active users -->
+
+              <article class="kpi-card success">
+                <div class="kpi-card-header">
+                  <p class="kpi-card-label">
+                    Active Users
+                  </p>
+
+                  <div
+                    class="kpi-card-icon"
+                    aria-hidden="true"
+                  >
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="1.9"
+                    >
+                      <circle
+                        cx="12"
+                        cy="8"
+                        r="4"
+                      ></circle>
+                      <path d="M4 21a8 8 0 0 1 16 0"></path>
+                      <path d="m17 11 2 2 4-5"></path>
+                    </svg>
+                  </div>
+                </div>
+
+                <div
+                  class="kpi-card-value"
+                  data-user-summary="active"
+                >
+                  <span class="skeleton skeleton-title"></span>
+                </div>
+
+                <div class="kpi-card-footer">
+                  <span>
+                    Can access AssetFlow
+                  </span>
+                </div>
+              </article>
+
+              <!-- Inactive users -->
+
+              <article class="kpi-card danger">
+                <div class="kpi-card-header">
+                  <p class="kpi-card-label">
+                    Suspended Users
+                  </p>
+
+                  <div
+                    class="kpi-card-icon"
+                    aria-hidden="true"
+                  >
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="1.9"
+                    >
+                      <circle
+                        cx="12"
+                        cy="8"
+                        r="4"
+                      ></circle>
+                      <path d="M4 21a8 8 0 0 1 16 0"></path>
+                      <path d="M18 3 6 15"></path>
+                    </svg>
+                  </div>
+                </div>
+
+                <div
+                  class="kpi-card-value"
+                  data-user-summary="suspended"
+                >
+                  <span class="skeleton skeleton-title"></span>
+                </div>
+
+                <div class="kpi-card-footer">
+                  <span>
+                    Access temporarily disabled
+                  </span>
+                </div>
+              </article>
+
+              <!-- Pending invitations -->
+
+              <article class="kpi-card warning">
+                <div class="kpi-card-header">
+                  <p class="kpi-card-label">
+                    Pending Invitations
+                  </p>
+
+                  <div
+                    class="kpi-card-icon"
+                    aria-hidden="true"
+                  >
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="1.9"
+                    >
+                      <rect
+                        x="3"
+                        y="5"
+                        width="18"
+                        height="14"
+                        rx="2"
+                      ></rect>
+                      <path d="m3 7 9 6 9-6"></path>
+                      <path d="M18 3v4"></path>
+                      <path d="M16 5h4"></path>
+                    </svg>
+                  </div>
+                </div>
+
+                <div
+                  class="kpi-card-value"
+                  data-user-summary="pending_invitations"
+                >
+                  <span class="skeleton skeleton-title"></span>
+                </div>
+
+                <div class="kpi-card-footer">
+                  <span>
+                    Awaiting account activation
+                  </span>
+                </div>
+              </article>
+
+              <!-- Administrators -->
+
+              <article class="kpi-card info">
+                <div class="kpi-card-header">
+                  <p class="kpi-card-label">
+                    Administrators
+                  </p>
+
+                  <div
+                    class="kpi-card-icon"
+                    aria-hidden="true"
+                  >
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="1.9"
+                    >
+                      <path d="M12 3 4 6v6c0 5 3.5 8 8 9 4.5-1 8-4 8-9V6l-8-3Z"></path>
+                      <path d="m9 12 2 2 4-5"></path>
+                    </svg>
+                  </div>
+                </div>
+
+                <div
+                  class="kpi-card-value"
+                  data-user-summary="administrators"
+                >
+                  <span class="skeleton skeleton-title"></span>
+                </div>
+
+                <div class="kpi-card-footer">
+                  <span>
+                    Full system access
+                  </span>
+                </div>
+              </article>
+
+              <!-- Recently active -->
+
+              <article class="kpi-card success">
+                <div class="kpi-card-header">
+                  <p class="kpi-card-label">
+                    Active Today
+                  </p>
+
+                  <div
+                    class="kpi-card-icon"
+                    aria-hidden="true"
+                  >
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="1.9"
+                    >
+                      <circle
+                        cx="12"
+                        cy="12"
+                        r="9"
+                      ></circle>
+                      <path d="M12 7v5l3 2"></path>
+                    </svg>
+                  </div>
+                </div>
+
+                <div
+                  class="kpi-card-value"
+                  data-user-summary="active_today"
+                >
+                  <span class="skeleton skeleton-title"></span>
+                </div>
+
+                <div class="kpi-card-footer">
+                  <span>
+                    Signed in during the last 24 hours
+                  </span>
+                </div>
+              </article>
+            </div>
+          </section>
+
+          <!-- ==================================================
+               USER MANAGEMENT WORKSPACE
+               ================================================== -->
+
+          <section
+            class="page-section"
+            aria-labelledby="userManagementWorkspaceTitle"
+          >
+            <article class="card user-management-card">
+              <header class="card-header user-management-card-header">
+                <div class="card-header-content">
+                  <h2
+                    class="card-title"
+                    id="userManagementWorkspaceTitle"
+                  >
+                    Access Management
+                  </h2>
+
+                  <p class="card-subtitle">
+                    Review users, invitations, role assignments and
+                    security activity.
+                  </p>
+                </div>
+              </header>
+
+              <!-- Tabs -->
+
+              <div
+                class="user-management-tabs"
+                role="tablist"
+                aria-label="User management sections"
+              >
+                <button
+                  type="button"
+                  class="user-management-tab active"
+                  id="usersTab"
+                  data-user-tab="users"
+                  role="tab"
+                  aria-selected="true"
+                  aria-controls="usersPanel"
+                >
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.9"
+                    aria-hidden="true"
+                  >
+                    <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+                    <circle
+                      cx="9"
+                      cy="7"
+                      r="4"
+                    ></circle>
+                    <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
+                    <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                  </svg>
+
+                  Users
+
+                  <span
+                    class="user-management-tab-count"
+                    data-user-tab-count="users"
+                  >
+                    0
+                  </span>
+                </button>
+
+                <button
+                  type="button"
+                  class="user-management-tab"
+                  id="invitationsTab"
+                  data-user-tab="invitations"
+                  role="tab"
+                  aria-selected="false"
+                  aria-controls="invitationsPanel"
+                  tabindex="-1"
+                >
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.9"
+                    aria-hidden="true"
+                  >
+                    <rect
+                      x="3"
+                      y="5"
+                      width="18"
+                      height="14"
+                      rx="2"
+                    ></rect>
+                    <path d="m3 7 9 6 9-6"></path>
+                  </svg>
+
+                  Invitations
+
+                  <span
+                    class="user-management-tab-count"
+                    data-user-tab-count="invitations"
+                  >
+                    0
+                  </span>
+                </button>
+
+                <button
+                  type="button"
+                  class="user-management-tab"
+                  id="rolesTab"
+                  data-user-tab="roles"
+                  role="tab"
+                  aria-selected="false"
+                  aria-controls="rolesPanel"
+                  tabindex="-1"
+                >
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.9"
+                    aria-hidden="true"
+                  >
+                    <path d="M12 3 4 6v6c0 5 3.5 8 8 9 4.5-1 8-4 8-9V6l-8-3Z"></path>
+                    <path d="M9 12h6"></path>
+                    <path d="M12 9v6"></path>
+                  </svg>
+
+                  Roles & Permissions
+                </button>
+
+                <button
+                  type="button"
+                  class="user-management-tab"
+                  id="securityActivityTab"
+                  data-user-tab="security"
+                  role="tab"
+                  aria-selected="false"
+                  aria-controls="securityActivityPanel"
+                  tabindex="-1"
+                >
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.9"
+                    aria-hidden="true"
+                  >
+                    <path d="M12 3 4 6v6c0 5 3.5 8 8 9 4.5-1 8-4 8-9V6l-8-3Z"></path>
+                    <path d="M12 8v4"></path>
+                    <path d="M12 16h.01"></path>
+                  </svg>
+
+                  Security Activity
+                </button>
+              </div>
+
+              <!-- ==============================================
+                   USERS PANEL
+                   ============================================== -->
+
+              <section
+                class="user-management-panel active"
+                id="usersPanel"
+                data-user-panel="users"
+                role="tabpanel"
+                aria-labelledby="usersTab"
+              >
+                <!-- Filters -->
+
+                <div class="user-filter-panel">
+                  <div class="user-search-field">
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      aria-hidden="true"
+                    >
+                      <circle
+                        cx="11"
+                        cy="11"
+                        r="8"
+                      ></circle>
+
+                      <path d="m21 21-4.35-4.35"></path>
+                    </svg>
+
+                    <input
+                      type="search"
+                      id="userSearchInput"
+                      placeholder="Search name, email, role or employee ID..."
+                      autocomplete="off"
+                      aria-label="Search users"
+                      data-user-search
+                    />
+                  </div>
+
+                  <select
+                    id="userRoleFilter"
+                    data-user-role-filter
+                    aria-label="Filter users by role"
+                  >
+                    <option value="">
+                      All Roles
+                    </option>
+
+                    <option value="Admin">
+                      Admin
+                    </option>
+
+                    <option value="AssetManager">
+                      Asset Manager
+                    </option>
+
+                    <option value="DepartmentHead">
+                      Department Head
+                    </option>
+
+                    <option value="Employee">
+                      Employee
+                    </option>
+                  </select>
+
+                  <select
+                    id="userDepartmentFilter"
+                    data-user-department-filter
+                    aria-label="Filter users by department"
+                  >
+                    <option value="">
+                      All Departments
+                    </option>
+                  </select>
+
+                  <select
+                    id="userStatusFilter"
+                    data-user-status-filter
+                    aria-label="Filter users by account status"
+                  >
+                    <option value="">
+                      All Statuses
+                    </option>
+
+                    <option value="Active">
+                      Active
+                    </option>
+
+                    <option value="Suspended">
+                      Suspended
+                    </option>
+
+                    <option value="Pending">
+                      Pending
+                    </option>
+
+                    <option value="Locked">
+                      Locked
+                    </option>
+                  </select>
+
+                  <select
+                    id="userVerificationFilter"
+                    data-user-verification-filter
+                    aria-label="Filter users by verification status"
+                  >
+                    <option value="">
+                      All Verification States
+                    </option>
+
+                    <option value="Verified">
+                      Verified
+                    </option>
+
+                    <option value="Unverified">
+                      Unverified
+                    </option>
+                  </select>
+
+                  <button
+                    type="button"
+                    class="btn btn-outline"
+                    data-reset-user-filters
+                  >
+                    Reset
+                  </button>
+                </div>
+
+                <!-- Bulk action bar -->
+
+                <div
+                  class="user-bulk-action-bar"
+                  id="userBulkActionBar"
+                  data-user-bulk-action-bar
+                  hidden
+                >
+                  <div class="user-bulk-selection">
+                    <strong data-selected-user-count>
+                      0
+                    </strong>
+
+                    <span>
+                      users selected
+                    </span>
+                  </div>
+
+                  <div class="user-bulk-actions">
+                    <button
+                      type="button"
+                      class="btn btn-outline btn-sm"
+                      data-bulk-activate-users
+                    >
+                      Activate
+                    </button>
+
+                    <button
+                      type="button"
+                      class="btn btn-outline btn-sm"
+                      data-bulk-change-role
+                    >
+                      Change Role
+                    </button>
+
+                    <button
+                      type="button"
+                      class="btn btn-danger btn-sm"
+                      data-bulk-suspend-users
+                    >
+                      Suspend
+                    </button>
+
+                    <button
+                      type="button"
+                      class="btn btn-ghost btn-sm"
+                      data-clear-user-selection
+                    >
+                      Clear
+                    </button>
+                  </div>
+                </div>
+
+                <!-- User table -->
+
+                <div
+                  class="table-container user-table-container"
+                  id="userTableContainer"
+                >
+                  <table class="data-table user-table">
+                    <thead>
+                      <tr>
+                        <th
+                          scope="col"
+                          class="user-selection-column"
+                        >
+                          <label class="table-checkbox">
+                            <input
+                              type="checkbox"
+                              id="selectAllUsers"
+                              data-select-all-users
+                              aria-label="Select all visible users"
+                            />
+
+                            <span></span>
+                          </label>
+                        </th>
+
+                        <th scope="col">
+                          User
+                        </th>
+
+                        <th scope="col">
+                          Employee Details
+                        </th>
+
+                        <th scope="col">
+                          Department
+                        </th>
+
+                        <th scope="col">
+                          Role
+                        </th>
+
+                        <th scope="col">
+                          Last Active
+                        </th>
+
+                        <th scope="col">
+                          Status
+                        </th>
+
+                        <th
+                          scope="col"
+                          class="text-right"
+                        >
+                          Actions
+                        </th>
+                      </tr>
+                    </thead>
+
+                    <tbody id="userTableBody">
+                      <tr>
+                        <td colspan="8">
+                          <div class="skeleton skeleton-text"></div>
+                        </td>
+                      </tr>
+
+                      <tr>
+                        <td colspan="8">
+                          <div class="skeleton skeleton-text"></div>
+                        </td>
+                      </tr>
+
+                      <tr>
+                        <td colspan="8">
+                          <div class="skeleton skeleton-text"></div>
+                        </td>
+                      </tr>
+
+                      <tr>
+                        <td colspan="8">
+                          <div class="skeleton skeleton-text"></div>
+                        </td>
+                      </tr>
+
+                      <tr>
+                        <td colspan="8">
+                          <div class="skeleton skeleton-text"></div>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+
+                <!-- Empty state -->
+
+                <div
+                  id="userTableEmptyState"
+                  hidden
+                >
+                  <div class="state-container">
+                    <div class="state-icon">
+                      <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="1.9"
+                        aria-hidden="true"
+                      >
+                        <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+                        <circle
+                          cx="9"
+                          cy="7"
+                          r="4"
+                        ></circle>
+                        <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
+                        <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                      </svg>
+                    </div>
+
+                    <h3 class="state-title">
+                      No users found
+                    </h3>
+
+                    <p class="state-description">
+                      No user accounts match the current search and
+                      filter criteria.
+                    </p>
+
+                    <div class="state-action">
+                      <button
+                        type="button"
+                        class="btn btn-outline"
+                        data-reset-user-filters
+                      >
+                        Clear Filters
+                      </button>
+
+                      <button
+                        type="button"
+                        class="btn btn-primary"
+                        data-modal-open="#userFormModal"
+                        data-create-user
+                      >
+                        Add User
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Pagination -->
+
+                <footer class="user-management-pagination">
+                  <p
+                    class="pagination-summary"
+                    data-user-pagination-summary
+                  >
+                    Showing 0 users
+                  </p>
+
+                  <div
+                    class="pagination"
+                    data-user-pagination
+                  ></div>
+                </footer>
+              </section>
+
+              <!-- ==============================================
+                   INVITATIONS PANEL
+                   ============================================== -->
+
+              <section
+                class="user-management-panel"
+                id="invitationsPanel"
+                data-user-panel="invitations"
+                role="tabpanel"
+                aria-labelledby="invitationsTab"
+                hidden
+              >
+                <div class="user-panel-toolbar">
+                  <div>
+                    <h3 class="user-panel-title">
+                      User Invitations
+                    </h3>
+
+                    <p class="user-panel-description">
+                      Review pending, accepted, expired and revoked
+                      invitations.
+                    </p>
+                  </div>
+
+                  <div class="user-panel-actions">
+                    <div class="user-search-field compact">
+                      <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        aria-hidden="true"
+                      >
+                        <circle
+                          cx="11"
+                          cy="11"
+                          r="8"
+                        ></circle>
+
+                        <path d="m21 21-4.35-4.35"></path>
+                      </svg>
+
+                      <input
+                        type="search"
+                        id="invitationSearchInput"
+                        placeholder="Search invitations..."
+                        autocomplete="off"
+                        data-invitation-search
+                      />
+                    </div>
+
+                    <select
+                      id="invitationStatusFilter"
+                      data-invitation-status-filter
+                      aria-label="Filter invitation status"
+                    >
+                      <option value="">
+                        All Statuses
+                      </option>
+
+                      <option value="Pending">
+                        Pending
+                      </option>
+
+                      <option value="Accepted">
+                        Accepted
+                      </option>
+
+                      <option value="Expired">
+                        Expired
+                      </option>
+
+                      <option value="Revoked">
+                        Revoked
+                      </option>
+                    </select>
+
+                    <button
+                      type="button"
+                      class="btn btn-primary"
+                      data-modal-open="#inviteUserModal"
+                      data-open-user-invite
+                    >
+                      Send Invitation
+                    </button>
+                  </div>
+                </div>
+
+                <div class="table-container invitation-table-container">
+                  <table class="data-table invitation-table">
+                    <thead>
+                      <tr>
+                        <th scope="col">
+                          Invitee
+                        </th>
+
+                        <th scope="col">
+                          Role
+                        </th>
+
+                        <th scope="col">
+                          Department
+                        </th>
+
+                        <th scope="col">
+                          Invited By
+                        </th>
+
+                        <th scope="col">
+                          Sent On
+                        </th>
+
+                        <th scope="col">
+                          Expires
+                        </th>
+
+                        <th scope="col">
+                          Status
+                        </th>
+
+                        <th
+                          scope="col"
+                          class="text-right"
+                        >
+                          Actions
+                        </th>
+                      </tr>
+                    </thead>
+
+                    <tbody id="invitationTableBody">
+                      <tr>
+                        <td colspan="8">
+                          <div class="skeleton skeleton-text"></div>
+                        </td>
+                      </tr>
+
+                      <tr>
+                        <td colspan="8">
+                          <div class="skeleton skeleton-text"></div>
+                        </td>
+                      </tr>
+
+                      <tr>
+                        <td colspan="8">
+                          <div class="skeleton skeleton-text"></div>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+
+                <div
+                  id="invitationEmptyState"
+                  hidden
+                >
+                  <div class="state-container">
+                    <div class="state-icon">
+                      <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="1.9"
+                        aria-hidden="true"
+                      >
+                        <rect
+                          x="3"
+                          y="5"
+                          width="18"
+                          height="14"
+                          rx="2"
+                        ></rect>
+                        <path d="m3 7 9 6 9-6"></path>
+                      </svg>
+                    </div>
+
+                    <h3 class="state-title">
+                      No invitations found
+                    </h3>
+
+                    <p class="state-description">
+                      Send an invitation to onboard a new AssetFlow
+                      user.
+                    </p>
+
+                    <div class="state-action">
+                      <button
+                        type="button"
+                        class="btn btn-primary"
+                        data-modal-open="#inviteUserModal"
+                        data-open-user-invite
+                      >
+                        Invite User
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+                <footer class="user-management-pagination">
+                  <p
+                    class="pagination-summary"
+                    data-invitation-pagination-summary
+                  >
+                    Showing 0 invitations
+                  </p>
+
+                  <div
+                    class="pagination"
+                    data-invitation-pagination
+                  ></div>
+                </footer>
+              </section>
+
+              <!-- ==============================================
+                   ROLES PANEL
+                   ============================================== -->
+
+              <section
+                class="user-management-panel"
+                id="rolesPanel"
+                data-user-panel="roles"
+                role="tabpanel"
+                aria-labelledby="rolesTab"
+                hidden
+              >
+                <div class="user-panel-toolbar">
+                  <div>
+                    <h3 class="user-panel-title">
+                      System Roles
+                    </h3>
+
+                    <p class="user-panel-description">
+                      AssetFlow uses four predefined access roles with
+                      controlled permissions.
+                    </p>
+                  </div>
+
+                  <span class="badge badge-info badge-dot">
+                    Role-based access control
+                  </span>
+                </div>
+
+                <div class="role-card-grid">
+                  <!-- Admin role -->
+
+                  <article
+                    class="role-card admin"
+                    data-role-card="Admin"
+                  >
+                    <header class="role-card-header">
+                      <div class="role-card-icon">
+                        <svg
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="1.9"
+                          aria-hidden="true"
+                        >
+                          <path d="M12 3 4 6v6c0 5 3.5 8 8 9 4.5-1 8-4 8-9V6l-8-3Z"></path>
+                          <path d="m9 12 2 2 4-5"></path>
+                        </svg>
+                      </div>
+
+                      <div>
+                        <h4>
+                          Administrator
+                        </h4>
+
+                        <p>
+                          Complete control of AssetFlow.
+                        </p>
+                      </div>
+
+                      <span
+                        class="role-user-count"
+                        data-role-count="Admin"
+                      >
+                        0 users
+                      </span>
+                    </header>
+
+                    <ul class="role-permission-list">
+                      <li>
+                        Manage all users and roles
+                      </li>
+
+                      <li>
+                        Configure organization structure
+                      </li>
+
+                      <li>
+                        Register, allocate and retire assets
+                      </li>
+
+                      <li>
+                        Access financial and audit reports
+                      </li>
+
+                      <li>
+                        Approve transfers and administrative actions
+                      </li>
+                    </ul>
+
+                    <button
+                      type="button"
+                      class="btn btn-outline btn-sm"
+                      data-filter-by-role="Admin"
+                    >
+                      View Administrators
+                    </button>
+                  </article>
+
+                  <!-- Asset Manager role -->
+
+                  <article
+                    class="role-card asset-manager"
+                    data-role-card="AssetManager"
+                  >
+                    <header class="role-card-header">
+                      <div class="role-card-icon">
+                        <svg
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="1.9"
+                          aria-hidden="true"
+                        >
+                          <path d="M21 16V8"></path>
+                          <path d="m3.5 7 8.5 5 8.5-5"></path>
+                          <path d="M12 22V12"></path>
+                          <path d="M3 7l9-5 9 5v10l-9 5-9-5V7Z"></path>
+                        </svg>
+                      </div>
+
+                      <div>
+                        <h4>
+                          Asset Manager
+                        </h4>
+
+                        <p>
+                          Operational control of organizational assets.
+                        </p>
+                      </div>
+
+                      <span
+                        class="role-user-count"
+                        data-role-count="AssetManager"
+                      >
+                        0 users
+                      </span>
+                    </header>
+
+                    <ul class="role-permission-list">
+                      <li>
+                        Register and update assets
+                      </li>
+
+                      <li>
+                        Allocate, transfer and return assets
+                      </li>
+
+                      <li>
+                        Manage maintenance requests
+                      </li>
+
+                      <li>
+                        View inventory and financial reports
+                      </li>
+
+                      <li>
+                        Approve operational asset actions
+                      </li>
+                    </ul>
+
+                    <button
+                      type="button"
+                      class="btn btn-outline btn-sm"
+                      data-filter-by-role="AssetManager"
+                    >
+                      View Asset Managers
+                    </button>
+                  </article>
+
+                  <!-- Department Head role -->
+
+                  <article
+                    class="role-card department-head"
+                    data-role-card="DepartmentHead"
+                  >
+                    <header class="role-card-header">
+                      <div class="role-card-icon">
+                        <svg
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="1.9"
+                          aria-hidden="true"
+                        >
+                          <path d="M3 21h18"></path>
+                          <path d="M6 21V8l6-4 6 4v13"></path>
+                          <path d="M9 12h6"></path>
+                          <path d="M9 16h6"></path>
+                        </svg>
+                      </div>
+
+                      <div>
+                        <h4>
+                          Department Head
+                        </h4>
+
+                        <p>
+                          Oversight of a designated department.
+                        </p>
+                      </div>
+
+                      <span
+                        class="role-user-count"
+                        data-role-count="DepartmentHead"
+                      >
+                        0 users
+                      </span>
+                    </header>
+
+                    <ul class="role-permission-list">
+                      <li>
+                        View department assets and employees
+                      </li>
+
+                      <li>
+                        Monitor department allocations
+                      </li>
+
+                      <li>
+                        Review department requests
+                      </li>
+
+                      <li>
+                        Access department-level reports
+                      </li>
+
+                      <li>
+                        Approve permitted department actions
+                      </li>
+                    </ul>
+
+                    <button
+                      type="button"
+                      class="btn btn-outline btn-sm"
+                      data-filter-by-role="DepartmentHead"
+                    >
+                      View Department Heads
+                    </button>
+                  </article>
+
+                  <!-- Employee role -->
+
+                  <article
+                    class="role-card employee"
+                    data-role-card="Employee"
+                  >
+                    <header class="role-card-header">
+                      <div class="role-card-icon">
+                        <svg
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="1.9"
+                          aria-hidden="true"
+                        >
+                          <circle
+                            cx="12"
+                            cy="8"
+                            r="4"
+                          ></circle>
+                          <path d="M4 21a8 8 0 0 1 16 0"></path>
+                        </svg>
+                      </div>
+
+                      <div>
+                        <h4>
+                          Employee
+                        </h4>
+
+                        <p>
+                          Standard user access for organizational staff.
+                        </p>
+                      </div>
+
+                      <span
+                        class="role-user-count"
+                        data-role-count="Employee"
+                      >
+                        0 users
+                      </span>
+                    </header>
+
+                    <ul class="role-permission-list">
+                      <li>
+                        View personally allocated assets
+                      </li>
+
+                      <li>
+                        Request resource bookings
+                      </li>
+
+                      <li>
+                        Report asset maintenance issues
+                      </li>
+
+                      <li>
+                        Review personal request history
+                      </li>
+
+                      <li>
+                        Maintain personal account information
+                      </li>
+                    </ul>
+
+                    <button
+                      type="button"
+                      class="btn btn-outline btn-sm"
+                      data-filter-by-role="Employee"
+                    >
+                      View Employees
+                    </button>
+                  </article>
+                </div>
+
+                <div class="role-security-note">
+                  <div class="role-security-note-icon">
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="1.9"
+                      aria-hidden="true"
+                    >
+                      <circle
+                        cx="12"
+                        cy="12"
+                        r="9"
+                      ></circle>
+                      <path d="M12 8v4"></path>
+                      <path d="M12 16h.01"></path>
+                    </svg>
+                  </div>
+
+                  <div>
+                    <h4>
+                      Default registration role
+                    </h4>
+
+                    <p>
+                      All users who create their own account are assigned
+                      the Employee role. Only an administrator can promote
+                      an account to Asset Manager, Department Head or
+                      Administrator.
+                    </p>
+                  </div>
+                </div>
+              </section>
+
+              <!-- ==============================================
+                   SECURITY ACTIVITY PANEL
+                   ============================================== -->
+
+              <section
+                class="user-management-panel"
+                id="securityActivityPanel"
+                data-user-panel="security"
+                role="tabpanel"
+                aria-labelledby="securityActivityTab"
+                hidden
+              >
+                <div class="user-panel-toolbar">
+                  <div>
+                    <h3 class="user-panel-title">
+                      Security Activity
+                    </h3>
+
+                    <p class="user-panel-description">
+                      Review account logins, role changes, suspensions
+                      and password actions.
+                    </p>
+                  </div>
+
+                  <div class="user-panel-actions">
+                    <div class="user-search-field compact">
+                      <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        aria-hidden="true"
+                      >
+                        <circle
+                          cx="11"
+                          cy="11"
+                          r="8"
+                        ></circle>
+
+                        <path d="m21 21-4.35-4.35"></path>
+                      </svg>
+
+                      <input
+                        type="search"
+                        id="securityActivitySearchInput"
+                        placeholder="Search security activity..."
+                        autocomplete="off"
+                        data-security-activity-search
+                      />
+                    </div>
+
+                    <select
+                      id="securityActivityTypeFilter"
+                      data-security-activity-type-filter
+                      aria-label="Filter security activity type"
+                    >
+                      <option value="">
+                        All Activities
+                      </option>
+
+                      <option value="Login">
+                        Login
+                      </option>
+
+                      <option value="FailedLogin">
+                        Failed Login
+                      </option>
+
+                      <option value="RoleChanged">
+                        Role Changed
+                      </option>
+
+                      <option value="AccountSuspended">
+                        Account Suspended
+                      </option>
+
+                      <option value="AccountActivated">
+                        Account Activated
+                      </option>
+
+                      <option value="PasswordReset">
+                        Password Reset
+                      </option>
+
+                      <option value="AccountLocked">
+                        Account Locked
+                      </option>
+                    </select>
+
+                    <button
+                      type="button"
+                      class="btn btn-outline"
+                      data-export-security-activity
+                    >
+                      Export
+                    </button>
+                  </div>
+                </div>
+
+                <div class="table-container security-activity-table-container">
+                  <table class="data-table security-activity-table">
+                    <thead>
+                      <tr>
+                        <th scope="col">
+                          Timestamp
+                        </th>
+
+                        <th scope="col">
+                          User
+                        </th>
+
+                        <th scope="col">
+                          Activity
+                        </th>
+
+                        <th scope="col">
+                          Performed By
+                        </th>
+
+                        <th scope="col">
+                          Details
+                        </th>
+
+                        <th scope="col">
+                          Source
+                        </th>
+
+                        <th scope="col">
+                          Result
+                        </th>
+                      </tr>
+                    </thead>
+
+                    <tbody id="securityActivityTableBody">
+                      <tr>
+                        <td colspan="7">
+                          <div class="skeleton skeleton-text"></div>
+                        </td>
+                      </tr>
+
+                      <tr>
+                        <td colspan="7">
+                          <div class="skeleton skeleton-text"></div>
+                        </td>
+                      </tr>
+
+                      <tr>
+                        <td colspan="7">
+                          <div class="skeleton skeleton-text"></div>
+                        </td>
+                      </tr>
+
+                      <tr>
+                        <td colspan="7">
+                          <div class="skeleton skeleton-text"></div>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+
+                <div
+                  id="securityActivityEmptyState"
+                  hidden
+                >
+                  <div class="state-container">
+                    <div class="state-icon">
+                      <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="1.9"
+                        aria-hidden="true"
+                      >
+                        <path d="M12 3 4 6v6c0 5 3.5 8 8 9 4.5-1 8-4 8-9V6l-8-3Z"></path>
+                        <path d="M12 8v4"></path>
+                        <path d="M12 16h.01"></path>
+                      </svg>
+                    </div>
+
+                    <h3 class="state-title">
+                      No security activity
+                    </h3>
+
+                    <p class="state-description">
+                      No account security activity matches the selected
+                      filters.
+                    </p>
+                  </div>
+                </div>
+
+                <footer class="user-management-pagination">
+                  <p
+                    class="pagination-summary"
+                    data-security-pagination-summary
+                  >
+                    Showing 0 activities
+                  </p>
+
+                  <div
+                    class="pagination"
+                    data-security-pagination
+                  ></div>
+                </footer>
+              </section>
+            </article>
+          </section>
+        </div>
+      </main>
+
+      <!-- Shared footer -->
+
+      <div
+        id="footer-container"
+        data-component="footer"
+      ></div>
+    </div>
+  </div>
+
+  <!-- ====================================================
+       CREATE / EDIT USER MODAL
+       ==================================================== -->
+
+  <div
+    class="modal-overlay"
+    id="userFormModal"
+    aria-hidden="true"
+    data-close-on-overlay="false"
+  >
+    <section
+      class="modal user-form-modal"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="userFormModalTitle"
+      aria-describedby="userFormModalDescription"
+    >
+      <header class="modal-header">
+        <div class="modal-header-content">
+          <h2
+            class="modal-title"
+            id="userFormModalTitle"
+            data-user-form-title
+          >
+            Add User
+          </h2>
+
+          <p
+            class="modal-subtitle"
+            id="userFormModalDescription"
+          >
+            Create an AssetFlow account and assign organizational
+            access.
+          </p>
+        </div>
+
+        <button
+          type="button"
+          class="modal-close"
+          data-modal-close
+          aria-label="Close user form"
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            aria-hidden="true"
+          >
+            <path d="M18 6 6 18"></path>
+            <path d="m6 6 12 12"></path>
+          </svg>
+        </button>
+      </header>
+
+      <form
+        id="userForm"
+        data-user-form
+        novalidate
+      >
+        <input
+          type="hidden"
+          id="userId"
+          name="user_id"
+        />
+
+        <div class="modal-body">
+          <div
+            class="alert alert-danger"
+            data-user-form-error
+            role="alert"
+            hidden
+          ></div>
+
+          <!-- Personal information -->
+
+          <fieldset class="user-form-section">
+            <legend class="user-form-section-title">
+              Personal Information
+            </legend>
+
+            <div class="form-grid form-grid-2">
+              <div class="form-group">
+                <label
+                  class="form-label-required"
+                  for="userFullName"
+                >
+                  Full Name
+                </label>
+
+                <input
+                  class="form-control"
+                  type="text"
+                  id="userFullName"
+                  name="name"
+                  placeholder="Enter full name"
+                  maxlength="120"
+                  autocomplete="name"
+                  required
+                />
+
+                <div class="form-error"></div>
+              </div>
+
+              <div class="form-group">
+                <label
+                  class="form-label-required"
+                  for="userEmail"
+                >
+                  Email Address
+                </label>
+
+                <input
+                  class="form-control"
+                  type="email"
+                  id="userEmail"
+                  name="email"
+                  placeholder="name@company.com"
+                  maxlength="180"
+                  autocomplete="email"
+                  required
+                />
+
+                <div class="form-error"></div>
+              </div>
+            </div>
+
+            <div class="form-grid form-grid-2">
+              <div class="form-group">
+                <label for="userPhone">
+                  Phone Number
+                </label>
+
+                <input
+                  class="form-control"
+                  type="tel"
+                  id="userPhone"
+                  name="phone"
+                  placeholder="+91 98765 43210"
+                  maxlength="24"
+                  autocomplete="tel"
+                />
+
+                <div class="form-error"></div>
+              </div>
+
+              <div class="form-group">
+                <label for="userEmployeeId">
+                  Employee ID
+                </label>
+
+                <input
+                  class="form-control"
+                  type="text"
+                  id="userEmployeeId"
+                  name="employee_code"
+                  placeholder="e.g. EMP-1024"
+                  maxlength="60"
+                />
+
+                <div class="form-error"></div>
+              </div>
+            </div>
+          </fieldset>
+
+          <!-- Organization -->
+
+          <fieldset class="user-form-section">
+            <legend class="user-form-section-title">
+              Organization & Access
+            </legend>
+
+            <div class="form-grid form-grid-2">
+              <div class="form-group">
+                <label
+                  class="form-label-required"
+                  for="userRole"
+                >
+                  Role
+                </label>
+
+                <select
+                  id="userRole"
+                  name="role"
+                  required
+                >
+                  <option value="Employee">
+                    Employee
+                  </option>
+
+                  <option value="DepartmentHead">
+                    Department Head
+                  </option>
+
+                  <option value="AssetManager">
+                    Asset Manager
+                  </option>
+
+                  <option value="Admin">
+                    Administrator
+                  </option>
+                </select>
+
+                <p class="form-help">
+                  New self-registered accounts always start as
+                  Employee.
+                </p>
+
+                <div class="form-error"></div>
+              </div>
+
+              <div class="form-group">
+                <label for="userDepartment">
+                  Department
+                </label>
+
+                <select
+                  id="userDepartment"
+                  name="department_id"
+                >
+                  <option value="">
+                    Select department
+                  </option>
+                </select>
+
+                <div class="form-error"></div>
+              </div>
+            </div>
+
+            <div class="form-grid form-grid-2">
+              <div class="form-group">
+                <label for="userJobTitle">
+                  Job Title
+                </label>
+
+                <input
+                  class="form-control"
+                  type="text"
+                  id="userJobTitle"
+                  name="job_title"
+                  placeholder="e.g. IT Support Engineer"
+                  maxlength="120"
+                />
+
+                <div class="form-error"></div>
+              </div>
+
+              <div class="form-group">
+                <label for="userManager">
+                  Reporting Manager
+                </label>
+
+                <select
+                  id="userManager"
+                  name="manager_id"
+                >
+                  <option value="">
+                    No reporting manager
+                  </option>
+                </select>
+
+                <div class="form-error"></div>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="userLocation">
+                Primary Location
+              </label>
+
+              <select
+                id="userLocation"
+                name="location_id"
+              >
+                <option value="">
+                  Select location
+                </option>
+              </select>
+
+              <div class="form-error"></div>
+            </div>
+          </fieldset>
+
+          <!-- Account security -->
+
+          <fieldset class="user-form-section">
+            <legend class="user-form-section-title">
+              Account Security
+            </legend>
+
+            <div
+              class="form-grid form-grid-2"
+              data-create-user-password-fields
+            >
+              <div class="form-group">
+                <label
+                  class="form-label-required"
+                  for="userTemporaryPassword"
+                >
+                  Temporary Password
+                </label>
+
+                <div class="password-input-wrapper">
+                  <input
+                    class="form-control"
+                    type="password"
+                    id="userTemporaryPassword"
+                    name="password"
+                    placeholder="Create temporary password"
+                    minlength="8"
+                    maxlength="128"
+                    autocomplete="new-password"
+                  />
+
+                  <button
+                    type="button"
+                    class="password-toggle"
+                    data-password-toggle="#userTemporaryPassword"
+                    aria-label="Show password"
+                  >
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="1.9"
+                      aria-hidden="true"
+                    >
+                      <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z"></path>
+                      <circle
+                        cx="12"
+                        cy="12"
+                        r="3"
+                      ></circle>
+                    </svg>
+                  </button>
+                </div>
+
+                <div class="form-error"></div>
+              </div>
+
+              <div class="form-group">
+                <label
+                  class="form-label-required"
+                  for="userConfirmPassword"
+                >
+                  Confirm Password
+                </label>
+
+                <div class="password-input-wrapper">
+                  <input
+                    class="form-control"
+                    type="password"
+                    id="userConfirmPassword"
+                    name="confirm_password"
+                    placeholder="Confirm temporary password"
+                    minlength="8"
+                    maxlength="128"
+                    autocomplete="new-password"
+                  />
+
+                  <button
+                    type="button"
+                    class="password-toggle"
+                    data-password-toggle="#userConfirmPassword"
+                    aria-label="Show password"
+                  >
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="1.9"
+                      aria-hidden="true"
+                    >
+                      <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z"></path>
+                      <circle
+                        cx="12"
+                        cy="12"
+                        r="3"
+                      ></circle>
+                    </svg>
+                  </button>
+                </div>
+
+                <div class="form-error"></div>
+              </div>
+            </div>
+
+            <div
+              class="password-strength"
+              data-user-password-strength
+              hidden
+            >
+              <div class="password-strength-track">
+                <div
+                  class="password-strength-bar"
+                  data-password-strength-bar
+                ></div>
+              </div>
+
+              <span data-password-strength-label>
+                Password strength
+              </span>
+            </div>
+
+            <label class="switch-label">
+              <span>
+                <strong>
+                  Active Account
+                </strong>
+
+                <small>
+                  Allow this user to sign in and access AssetFlow.
+                </small>
+              </span>
+
+              <span class="switch">
+                <input
+                  type="checkbox"
+                  id="userActive"
+                  name="is_active"
+                  checked
+                />
+
+                <span class="switch-slider"></span>
+              </span>
+            </label>
+
+            <label class="switch-label">
+              <span>
+                <strong>
+                  Require Password Change
+                </strong>
+
+                <small>
+                  Ask the user to create a new password after their
+                  next sign-in.
+                </small>
+              </span>
+
+              <span class="switch">
+                <input
+                  type="checkbox"
+                  id="userForcePasswordChange"
+                  name="force_password_change"
+                  checked
+                />
+
+                <span class="switch-slider"></span>
+              </span>
+            </label>
+
+            <label class="switch-label">
+              <span>
+                <strong>
+                  Email Verified
+                </strong>
+
+                <small>
+                  Mark the email as verified when the account is
+                  created by an administrator.
+                </small>
+              </span>
+
+              <span class="switch">
+                <input
+                  type="checkbox"
+                  id="userEmailVerified"
+                  name="email_verified"
+                />
+
+                <span class="switch-slider"></span>
+              </span>
+            </label>
+          </fieldset>
+        </div>
+
+        <footer class="modal-footer">
+          <button
+            type="button"
+            class="btn btn-outline"
+            data-modal-close
+          >
+            Cancel
+          </button>
+
+          <button
+            type="submit"
+            class="btn btn-primary"
+            id="userFormSubmitButton"
+          >
+            Create User
+          </button>
+        </footer>
+      </form>
+    </section>
+  </div>
+
+  <!-- ====================================================
+       INVITE USER MODAL
+       ==================================================== -->
+
+  <div
+    class="modal-overlay"
+    id="inviteUserModal"
+    aria-hidden="true"
+    data-close-on-overlay="false"
+  >
+    <section
+      class="modal invite-user-modal"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="inviteUserModalTitle"
+      aria-describedby="inviteUserModalDescription"
+    >
+      <header class="modal-header">
+        <div class="modal-header-content">
+          <h2
+            class="modal-title"
+            id="inviteUserModalTitle"
+          >
+            Invite User
+          </h2>
+
+          <p
+            class="modal-subtitle"
+            id="inviteUserModalDescription"
+          >
+            Send a secure account activation invitation by email.
+          </p>
+        </div>
+
+        <button
+          type="button"
+          class="modal-close"
+          data-modal-close
+          aria-label="Close invitation form"
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            aria-hidden="true"
+          >
+            <path d="M18 6 6 18"></path>
+            <path d="m6 6 12 12"></path>
+          </svg>
+        </button>
+      </header>
+
+      <form
+        id="inviteUserForm"
+        data-invite-user-form
+        novalidate
+      >
+        <div class="modal-body">
+          <div
+            class="alert alert-danger"
+            data-invite-user-error
+            role="alert"
+            hidden
+          ></div>
+
+          <div class="form-group">
+            <label
+              class="form-label-required"
+              for="inviteUserName"
+            >
+              Full Name
+            </label>
+
+            <input
+              class="form-control"
+              type="text"
+              id="inviteUserName"
+              name="name"
+              placeholder="Enter invitee name"
+              maxlength="120"
+              autocomplete="name"
+              required
+            />
+
+            <div class="form-error"></div>
+          </div>
+
+          <div class="form-group">
+            <label
+              class="form-label-required"
+              for="inviteUserEmail"
+            >
+              Email Address
+            </label>
+
+            <input
+              class="form-control"
+              type="email"
+              id="inviteUserEmail"
+              name="email"
+              placeholder="name@company.com"
+              maxlength="180"
+              autocomplete="email"
+              required
+            />
+
+            <div class="form-error"></div>
+          </div>
+
+          <div class="form-grid form-grid-2">
+            <div class="form-group">
+              <label
+                class="form-label-required"
+                for="inviteUserRole"
+              >
+                Role
+              </label>
+
+              <select
+                id="inviteUserRole"
+                name="role"
+                required
+              >
+                <option value="Employee">
+                  Employee
+                </option>
+
+                <option value="DepartmentHead">
+                  Department Head
+                </option>
+
+                <option value="AssetManager">
+                  Asset Manager
+                </option>
+
+                <option value="Admin">
+                  Administrator
+                </option>
+              </select>
+
+              <div class="form-error"></div>
+            </div>
+
+            <div class="form-group">
+              <label for="inviteUserDepartment">
+                Department
+              </label>
+
+              <select
+                id="inviteUserDepartment"
+                name="department_id"
+              >
+                <option value="">
+                  Select department
+                </option>
+              </select>
+
+              <div class="form-error"></div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="inviteUserMessage">
+              Personal Message
+            </label>
+
+            <textarea
+              id="inviteUserMessage"
+              name="message"
+              rows="4"
+              maxlength="600"
+              placeholder="Add an optional welcome message..."
+            ></textarea>
+
+            <div class="form-character-count">
+              <span data-invitation-message-count>
+                0
+              </span>
+              / 600
+            </div>
+
+            <div class="form-error"></div>
+          </div>
+
+          <div class="form-group">
+            <label
+              class="form-label-required"
+              for="inviteExpiryDays"
+            >
+              Invitation Expiry
+            </label>
+
+            <select
+              id="inviteExpiryDays"
+              name="expiry_days"
+              required
+            >
+              <option value="1">
+                24 hours
+              </option>
+
+              <option
+                value="3"
+                selected
+              >
+                3 days
+              </option>
+
+              <option value="7">
+                7 days
+              </option>
+
+              <option value="14">
+                14 days
+              </option>
+            </select>
+
+            <div class="form-error"></div>
+          </div>
+
+          <label class="switch-label">
+            <span>
+              <strong>
+                Send Reminder
+              </strong>
+
+              <small>
+                Send a reminder email before the invitation expires.
+              </small>
+            </span>
+
+            <span class="switch">
+              <input
+                type="checkbox"
+                id="inviteSendReminder"
+                name="send_reminder"
+                checked
+              />
+
+              <span class="switch-slider"></span>
+            </span>
+          </label>
+
+          <div class="invitation-preview">
+            <div class="invitation-preview-icon">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.9"
+                aria-hidden="true"
+              >
+                <rect
+                  x="3"
+                  y="5"
+                  width="18"
+                  height="14"
+                  rx="2"
+                ></rect>
+                <path d="m3 7 9 6 9-6"></path>
+              </svg>
+            </div>
+
+            <div>
+              <strong>
+                Secure account activation
+              </strong>
+
+              <p>
+                The invitation email will contain a one-time activation
+                link. The invitee will create their own password before
+                signing in.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <footer class="modal-footer">
+          <button
+            type="button"
+            class="btn btn-outline"
+            data-modal-close
+          >
+            Cancel
+          </button>
+
+          <button
+            type="submit"
+            class="btn btn-primary"
+            id="inviteUserSubmitButton"
+          >
+            Send Invitation
+          </button>
+        </footer>
+      </form>
+    </section>
+  </div>
+
+  <!-- ====================================================
+       USER DETAILS MODAL
+       ==================================================== -->
+
+  <div
+    class="modal-overlay"
+    id="userDetailsModal"
+    aria-hidden="true"
+    data-close-on-overlay="true"
+  >
+    <section
+      class="modal user-details-modal"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="userDetailsModalTitle"
+    >
+      <header class="modal-header">
+        <div class="user-details-heading">
+          <div
+            class="user-details-avatar"
+            data-user-detail-avatar
+            aria-hidden="true"
+          >
+            AF
+          </div>
+
+          <div>
+            <h2
+              class="modal-title"
+              id="userDetailsModalTitle"
+              data-user-detail-name
+            >
+              User Details
+            </h2>
+
+            <p
+              class="modal-subtitle"
+              data-user-detail-email
+            >
+              Loading account details...
+            </p>
+          </div>
+        </div>
+
+        <button
+          type="button"
+          class="modal-close"
+          data-modal-close
+          aria-label="Close user details"
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            aria-hidden="true"
+          >
+            <path d="M18 6 6 18"></path>
+            <path d="m6 6 12 12"></path>
+          </svg>
+        </button>
+      </header>
+
+      <div class="modal-body">
+        <div class="user-detail-status-row">
+          <span
+            class="badge badge-success badge-dot"
+            data-user-detail-status
+          >
+            Active
+          </span>
+
+          <span
+            class="badge badge-info"
+            data-user-detail-role
+          >
+            Employee
+          </span>
+
+          <span
+            class="badge badge-neutral"
+            data-user-detail-verification
+          >
+            Email Unverified
+          </span>
+        </div>
+
+        <div class="user-detail-overview">
+          <div class="user-detail-grid">
+            <div class="user-detail-item">
+              <span class="user-detail-label">
+                Employee ID
+              </span>
+
+              <span
+                class="user-detail-value"
+                data-user-detail-employee-id
+              >
+                —
+              </span>
+            </div>
+
+            <div class="user-detail-item">
+              <span class="user-detail-label">
+                Department
+              </span>
+
+              <span
+                class="user-detail-value"
+                data-user-detail-department
+              >
+                —
+              </span>
+            </div>
+
+            <div class="user-detail-item">
+              <span class="user-detail-label">
+                Job Title
+              </span>
+
+              <span
+                class="user-detail-value"
+                data-user-detail-job-title
+              >
+                —
+              </span>
+            </div>
+
+            <div class="user-detail-item">
+              <span class="user-detail-label">
+                Reporting Manager
+              </span>
+
+              <span
+                class="user-detail-value"
+                data-user-detail-manager
+              >
+                —
+              </span>
+            </div>
+
+            <div class="user-detail-item">
+              <span class="user-detail-label">
+                Primary Location
+              </span>
+
+              <span
+                class="user-detail-value"
+                data-user-detail-location
+              >
+                —
+              </span>
+            </div>
+
+            <div class="user-detail-item">
+              <span class="user-detail-label">
+                Phone Number
+              </span>
+
+              <span
+                class="user-detail-value"
+                data-user-detail-phone
+              >
+                —
+              </span>
+            </div>
+
+            <div class="user-detail-item">
+              <span class="user-detail-label">
+                Account Created
+              </span>
+
+              <span
+                class="user-detail-value"
+                data-user-detail-created
+              >
+                —
+              </span>
+            </div>
+
+            <div class="user-detail-item">
+              <span class="user-detail-label">
+                Last Login
+              </span>
+
+              <span
+                class="user-detail-value"
+                data-user-detail-last-login
+              >
+                —
+              </span>
+            </div>
+
+            <div class="user-detail-item">
+              <span class="user-detail-label">
+                Password Changed
+              </span>
+
+              <span
+                class="user-detail-value"
+                data-user-detail-password-changed
+              >
+                —
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <div class="user-account-metrics">
+          <article class="user-account-metric">
+            <span>
+              Allocated Assets
+            </span>
+
+            <strong data-user-detail-assets>
+              0
+            </strong>
+          </article>
+
+          <article class="user-account-metric">
+            <span>
+              Active Bookings
+            </span>
+
+            <strong data-user-detail-bookings>
+              0
+            </strong>
+          </article>
+
+          <article class="user-account-metric">
+            <span>
+              Open Requests
+            </span>
+
+            <strong data-user-detail-requests>
+              0
+            </strong>
+          </article>
+
+          <article class="user-account-metric">
+            <span>
+              Security Events
+            </span>
+
+            <strong data-user-detail-security-events>
+              0
+            </strong>
+          </article>
+        </div>
+
+        <section class="user-detail-section">
+          <div class="user-detail-section-header">
+            <h3>
+              Recent Account Activity
+            </h3>
+
+            <span
+              class="text-muted"
+              data-user-activity-count
+            >
+              0 events
+            </span>
+          </div>
+
+          <div
+            class="user-activity-timeline"
+            data-user-activity-timeline
+          >
+            <div class="timeline-item">
+              <div class="skeleton skeleton-avatar"></div>
+
+              <div class="timeline-content">
+                <div class="skeleton skeleton-text"></div>
+                <div class="skeleton skeleton-text-sm mt-2"></div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <footer class="modal-footer user-details-footer">
+        <button
+          type="button"
+          class="btn btn-outline"
+          data-modal-close
+        >
+          Close
+        </button>
+
+        <button
+          type="button"
+          class="btn btn-outline"
+          data-reset-current-user-password
+        >
+          Reset Password
+        </button>
+
+        <button
+          type="button"
+          class="btn btn-outline"
+          data-edit-current-user
+        >
+          Edit User
+        </button>
+
+        <button
+          type="button"
+          class="btn btn-danger"
+          data-toggle-current-user-status
+        >
+          Suspend User
+        </button>
+      </footer>
+    </section>
+  </div>
+
+  <!-- ====================================================
+       CHANGE ROLE MODAL
+       ==================================================== -->
+
+  <div
+    class="modal-overlay"
+    id="changeUserRoleModal"
+    aria-hidden="true"
+    data-close-on-overlay="false"
+  >
+    <section
+      class="modal"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="changeUserRoleModalTitle"
+    >
+      <header class="modal-header">
+        <div class="modal-header-content">
+          <h2
+            class="modal-title"
+            id="changeUserRoleModalTitle"
+          >
+            Change User Role
+          </h2>
+
+          <p class="modal-subtitle">
+            Update the selected account permissions.
+          </p>
+        </div>
+
+        <button
+          type="button"
+          class="modal-close"
+          data-modal-close
+          aria-label="Close role change form"
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            aria-hidden="true"
+          >
+            <path d="M18 6 6 18"></path>
+            <path d="m6 6 12 12"></path>
+          </svg>
+        </button>
+      </header>
+
+      <form
+        id="changeUserRoleForm"
+        data-change-user-role-form
+        novalidate
+      >
+        <input
+          type="hidden"
+          id="changeRoleUserId"
+          name="user_id"
+        />
+
+        <div class="modal-body">
+          <div
+            class="alert alert-danger"
+            data-change-user-role-error
+            role="alert"
+            hidden
+          ></div>
+
+          <div class="role-change-user-preview">
+            <div
+              class="role-change-avatar"
+              data-role-change-avatar
+            >
+              AF
+            </div>
+
+            <div>
+              <h3 data-role-change-user-name>
+                Selected User
+              </h3>
+
+              <p data-role-change-user-email>
+                user@example.com
+              </p>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label
+              class="form-label-required"
+              for="changeUserRole"
+            >
+              New Role
+            </label>
+
+            <select
+              id="changeUserRole"
+              name="role"
+              required
+            >
+              <option value="Employee">
+                Employee
+              </option>
+
+              <option value="DepartmentHead">
+                Department Head
+              </option>
+
+              <option value="AssetManager">
+                Asset Manager
+              </option>
+
+              <option value="Admin">
+                Administrator
+              </option>
+            </select>
+
+            <div class="form-error"></div>
+          </div>
+
+          <div
+            class="form-group"
+            data-role-department-group
+          >
+            <label for="changeRoleDepartment">
+              Department
+            </label>
+
+            <select
+              id="changeRoleDepartment"
+              name="department_id"
+            >
+              <option value="">
+                Select department
+              </option>
+            </select>
+
+            <p class="form-help">
+              A department is recommended for Department Head and
+              Employee accounts.
+            </p>
+
+            <div class="form-error"></div>
+          </div>
+
+          <div class="form-group">
+            <label
+              class="form-label-required"
+              for="changeRoleReason"
+            >
+              Reason for Change
+            </label>
+
+            <textarea
+              id="changeRoleReason"
+              name="reason"
+              rows="4"
+              maxlength="600"
+              placeholder="Explain why the account role is being changed..."
+              required
+            ></textarea>
+
+            <div class="form-character-count">
+              <span data-role-change-reason-count>
+                0
+              </span>
+              / 600
+            </div>
+
+            <div class="form-error"></div>
+          </div>
+
+          <label class="switch-label">
+            <span>
+              <strong>
+                Notify User
+              </strong>
+
+              <small>
+                Send an email explaining the role and permission
+                changes.
+              </small>
+            </span>
+
+            <span class="switch">
+              <input
+                type="checkbox"
+                id="notifyUserRoleChange"
+                name="notify_user"
+                checked
+              />
+
+              <span class="switch-slider"></span>
+            </span>
+          </label>
+
+          <div class="role-change-warning">
+            <div>
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.9"
+                aria-hidden="true"
+              >
+                <path d="M12 3 2 21h20L12 3Z"></path>
+                <path d="M12 9v4"></path>
+                <path d="M12 17h.01"></path>
+              </svg>
+            </div>
+
+            <p>
+              Role changes apply immediately and may grant or remove
+              access to sensitive operational and financial data.
+            </p>
+          </div>
+        </div>
+
+        <footer class="modal-footer">
+          <button
+            type="button"
+            class="btn btn-outline"
+            data-modal-close
+          >
+            Cancel
+          </button>
+
+          <button
+            type="submit"
+            class="btn btn-primary"
+            id="changeUserRoleSubmitButton"
+          >
+            Change Role
+          </button>
+        </footer>
+      </form>
+    </section>
+  </div>
+
+  <!-- ====================================================
+       RESET PASSWORD MODAL
+       ==================================================== -->
+
+  <div
+    class="modal-overlay"
+    id="resetUserPasswordModal"
+    aria-hidden="true"
+    data-close-on-overlay="false"
+  >
+    <section
+      class="modal"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="resetUserPasswordModalTitle"
+    >
+      <header class="modal-header">
+        <div class="modal-header-content">
+          <h2
+            class="modal-title"
+            id="resetUserPasswordModalTitle"
+          >
+            Reset User Password
+          </h2>
+
+          <p class="modal-subtitle">
+            Send a password reset link or assign a temporary password.
+          </p>
+        </div>
+
+        <button
+          type="button"
+          class="modal-close"
+          data-modal-close
+          aria-label="Close password reset form"
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            aria-hidden="true"
+          >
+            <path d="M18 6 6 18"></path>
+            <path d="m6 6 12 12"></path>
+          </svg>
+        </button>
+      </header>
+
+      <form
+        id="resetUserPasswordForm"
+        data-reset-user-password-form
+        novalidate
+      >
+        <input
+          type="hidden"
+          id="passwordResetUserId"
+          name="user_id"
+        />
+
+        <div class="modal-body">
+          <div
+            class="alert alert-danger"
+            data-reset-user-password-error
+            role="alert"
+            hidden
+          ></div>
+
+          <div class="password-reset-user-preview">
+            <div
+              class="password-reset-avatar"
+              data-password-reset-avatar
+            >
+              AF
+            </div>
+
+            <div>
+              <h3 data-password-reset-user-name>
+                Selected User
+              </h3>
+
+              <p data-password-reset-user-email>
+                user@example.com
+              </p>
+            </div>
+          </div>
+
+          <fieldset class="password-reset-options">
+            <legend>
+              Reset Method
+            </legend>
+
+            <label class="password-reset-option">
+              <input
+                type="radio"
+                name="reset_method"
+                value="email"
+                checked
+              />
+
+              <span>
+                <strong>
+                  Email reset link
+                </strong>
+
+                <small>
+                  Send a secure password reset link to the user.
+                </small>
+              </span>
+            </label>
+
+            <label class="password-reset-option">
+              <input
+                type="radio"
+                name="reset_method"
+                value="temporary_password"
+              />
+
+              <span>
+                <strong>
+                  Assign temporary password
+                </strong>
+
+                <small>
+                  Create a temporary password that must be changed after
+                  sign-in.
+                </small>
+              </span>
+            </label>
+          </fieldset>
+
+          <div
+            class="form-group"
+            id="temporaryPasswordGroup"
+            hidden
+          >
+            <label
+              class="form-label-required"
+              for="resetTemporaryPassword"
+            >
+              Temporary Password
+            </label>
+
+            <div class="password-input-wrapper">
+              <input
+                class="form-control"
+                type="password"
+                id="resetTemporaryPassword"
+                name="temporary_password"
+                minlength="8"
+                maxlength="128"
+                autocomplete="new-password"
+                placeholder="Create temporary password"
+              />
+
+              <button
+                type="button"
+                class="password-toggle"
+                data-password-toggle="#resetTemporaryPassword"
+                aria-label="Show password"
+              >
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.9"
+                  aria-hidden="true"
+                >
+                  <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z"></path>
+                  <circle
+                    cx="12"
+                    cy="12"
+                    r="3"
+                  ></circle>
+                </svg>
+              </button>
+            </div>
+
+            <div class="form-error"></div>
+          </div>
+
+          <label class="switch-label">
+            <span>
+              <strong>
+                End Existing Sessions
+              </strong>
+
+              <small>
+                Sign the user out from all currently authenticated
+                devices.
+              </small>
+            </span>
+
+            <span class="switch">
+              <input
+                type="checkbox"
+                id="resetPasswordEndSessions"
+                name="end_sessions"
+                checked
+              />
+
+              <span class="switch-slider"></span>
+            </span>
+          </label>
+
+          <label class="switch-label">
+            <span>
+              <strong>
+                Require Password Change
+              </strong>
+
+              <small>
+                Require the user to create a new password after their
+                next successful sign-in.
+              </small>
+            </span>
+
+            <span class="switch">
+              <input
+                type="checkbox"
+                id="resetPasswordRequireChange"
+                name="require_password_change"
+                checked
+              />
+
+              <span class="switch-slider"></span>
+            </span>
+          </label>
+        </div>
+
+        <footer class="modal-footer">
+          <button
+            type="button"
+            class="btn btn-outline"
+            data-modal-close
+          >
+            Cancel
+          </button>
+
+          <button
+            type="submit"
+            class="btn btn-primary"
+            id="resetUserPasswordSubmitButton"
+          >
+            Reset Password
+          </button>
+        </footer>
+      </form>
+    </section>
+  </div>
+
+  <!-- ====================================================
+       ACCOUNT STATUS CONFIRMATION MODAL
+       ==================================================== -->
+
+  <div
+    class="modal-overlay"
+    id="userStatusModal"
+    aria-hidden="true"
+    data-close-on-overlay="false"
+  >
+    <section
+      class="modal confirmation-modal"
+      role="alertdialog"
+      aria-modal="true"
+      aria-labelledby="userStatusModalTitle"
+      aria-describedby="userStatusModalDescription"
+    >
+      <header class="modal-header">
+        <div class="modal-header-content">
+          <h2
+            class="modal-title"
+            id="userStatusModalTitle"
+            data-user-status-modal-title
+          >
+            Suspend User
+          </h2>
+
+          <p
+            class="modal-subtitle"
+            id="userStatusModalDescription"
+          >
+            Confirm this account access change.
+          </p>
+        </div>
+
+        <button
+          type="button"
+          class="modal-close"
+          data-modal-close
+          aria-label="Close account status confirmation"
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            aria-hidden="true"
+          >
+            <path d="M18 6 6 18"></path>
+            <path d="m6 6 12 12"></path>
+          </svg>
+        </button>
+      </header>
+
+      <form
+        id="userStatusForm"
+        data-user-status-form
+        novalidate
+      >
+        <input
+          type="hidden"
+          id="statusUserId"
+          name="user_id"
+        />
+
+        <input
+          type="hidden"
+          id="userTargetStatus"
+          name="target_status"
+        />
+
+        <div class="modal-body">
+          <div
+            class="alert alert-danger"
+            data-user-status-error
+            role="alert"
+            hidden
+          ></div>
+
+          <div
+            class="confirmation-icon danger"
+            data-user-status-confirmation-icon
+          >
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.9"
+              aria-hidden="true"
+            >
+              <circle
+                cx="12"
+                cy="12"
+                r="9"
+              ></circle>
+              <path d="M8 8l8 8"></path>
+              <path d="m16 8-8 8"></path>
+            </svg>
+          </div>
+
+          <h3
+            class="confirmation-title"
+            data-user-status-confirmation-title
+          >
+            Suspend this account?
+          </h3>
+
+          <p
+            class="confirmation-description"
+            data-user-status-confirmation-description
+          >
+            The user will be signed out and unable to access AssetFlow.
+          </p>
+
+          <div class="form-group">
+            <label
+              class="form-label-required"
+              for="userStatusReason"
+            >
+              Reason
+            </label>
+
+            <textarea
+              id="userStatusReason"
+              name="reason"
+              rows="4"
+              maxlength="600"
+              placeholder="Explain why this account status is being changed..."
+              required
+            ></textarea>
+
+            <div class="form-error"></div>
+          </div>
+
+          <label class="switch-label">
+            <span>
+              <strong>
+                Notify User
+              </strong>
+
+              <small>
+                Send an email explaining the account status change.
+              </small>
+            </span>
+
+            <span class="switch">
+              <input
+                type="checkbox"
+                id="notifyUserStatusChange"
+                name="notify_user"
+                checked
+              />
+
+              <span class="switch-slider"></span>
+            </span>
+          </label>
+        </div>
+
+        <footer class="modal-footer">
+          <button
+            type="button"
+            class="btn btn-outline"
+            data-modal-close
+          >
+            Cancel
+          </button>
+
+          <button
+            type="submit"
+            class="btn btn-danger"
+            id="userStatusSubmitButton"
+          >
+            Suspend User
+          </button>
+        </footer>
+      </form>
+    </section>
+  </div>
+
+  <!-- ====================================================
+       BULK ROLE MODAL
+       ==================================================== -->
+
+  <div
+    class="modal-overlay"
+    id="bulkUserRoleModal"
+    aria-hidden="true"
+    data-close-on-overlay="false"
+  >
+    <section
+      class="modal"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="bulkUserRoleModalTitle"
+    >
+      <header class="modal-header">
+        <div class="modal-header-content">
+          <h2
+            class="modal-title"
+            id="bulkUserRoleModalTitle"
+          >
+            Change Selected User Roles
+          </h2>
+
+          <p class="modal-subtitle">
+            Apply one role to all selected accounts.
+          </p>
+        </div>
+
+        <button
+          type="button"
+          class="modal-close"
+          data-modal-close
+          aria-label="Close bulk role form"
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            aria-hidden="true"
+          >
+            <path d="M18 6 6 18"></path>
+            <path d="m6 6 12 12"></path>
+          </svg>
+        </button>
+      </header>
+
+      <form
+        id="bulkUserRoleForm"
+        data-bulk-user-role-form
+        novalidate
+      >
+        <div class="modal-body">
+          <div
+            class="alert alert-danger"
+            data-bulk-user-role-error
+            role="alert"
+            hidden
+          ></div>
+
+          <div class="bulk-user-summary">
+            <strong data-bulk-role-user-count>
+              0
+            </strong>
+
+            <span>
+              selected user accounts will be updated
+            </span>
+          </div>
+
+          <div class="form-group">
+            <label
+              class="form-label-required"
+              for="bulkUserRole"
+            >
+              New Role
+            </label>
+
+            <select
+              id="bulkUserRole"
+              name="role"
+              required
+            >
+              <option value="Employee">
+                Employee
+              </option>
+
+              <option value="DepartmentHead">
+                Department Head
+              </option>
+
+              <option value="AssetManager">
+                Asset Manager
+              </option>
+
+              <option value="Admin">
+                Administrator
+              </option>
+            </select>
+
+            <div class="form-error"></div>
+          </div>
+
+          <div class="form-group">
+            <label
+              class="form-label-required"
+              for="bulkRoleReason"
+            >
+              Reason
+            </label>
+
+            <textarea
+              id="bulkRoleReason"
+              name="reason"
+              rows="4"
+              maxlength="600"
+              placeholder="Explain why these roles are being changed..."
+              required
+            ></textarea>
+
+            <div class="form-error"></div>
+          </div>
+
+          <label class="switch-label">
+            <span>
+              <strong>
+                Notify Selected Users
+              </strong>
+
+              <small>
+                Email every affected user about their new permissions.
+              </small>
+            </span>
+
+            <span class="switch">
+              <input
+                type="checkbox"
+                id="bulkRoleNotifyUsers"
+                name="notify_users"
+                checked
+              />
+
+              <span class="switch-slider"></span>
+            </span>
+          </label>
+        </div>
+
+        <footer class="modal-footer">
+          <button
+            type="button"
+            class="btn btn-outline"
+            data-modal-close
+          >
+            Cancel
+          </button>
+
+          <button
+            type="submit"
+            class="btn btn-primary"
+            id="bulkUserRoleSubmitButton"
+          >
+            Update Roles
+          </button>
+        </footer>
+      </form>
+    </section>
+  </div>
+
+  <!-- ====================================================
+       SHARED COMPONENTS
+       ==================================================== -->
+
+  <div
+    id="loader-container"
+    data-component="loader"
+  ></div>
+
+  <div
+    id="modal-container"
+    data-component="modal"
+  ></div>
+
+  <div
+    class="sidebar-overlay"
+    id="sidebarOverlay"
+    aria-hidden="true"
+  ></div>
+
+  <div
+    class="toast-container"
+    aria-live="polite"
+    aria-label="Notifications"
+  ></div>
+
+  <!-- ====================================================
+       JAVASCRIPT
+       ==================================================== -->
+
+  <script src="../js/api.js"></script>
+  <script src="../js/utils.js"></script>
+  <script src="../js/auth.js"></script>
+  <script src="../js/loader.js"></script>
+  <script src="../js/sidebar.js"></script>
+
+  <script src="user-management.js"></script>
+</body>
+</html>

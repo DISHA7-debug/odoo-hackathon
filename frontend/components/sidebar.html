@@ -1,0 +1,552 @@
+<!-- ======================================================
+     AssetFlow — Shared Sidebar
+     File: frontend/components/sidebar.html
+     Loaded dynamically through js/loader.js
+     ====================================================== -->
+
+<aside
+  class="sidebar"
+  id="sidebar"
+  aria-label="Primary navigation"
+>
+  <!-- ====================================================
+       BRAND HEADER
+       ==================================================== -->
+
+  <header class="sidebar-header">
+    <a
+      class="sidebar-brand"
+      href="{{FRONTEND_ROOT}}dashboard/index.html"
+      data-route="dashboard/index.html"
+      aria-label="AssetFlow Dashboard"
+    >
+      <span
+        class="sidebar-brand-logo"
+        aria-hidden="true"
+      >
+        <svg
+          width="26"
+          height="26"
+          viewBox="0 0 32 32"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <rect
+            x="4"
+            y="4"
+            width="10"
+            height="10"
+            rx="3"
+            fill="currentColor"
+          />
+
+          <rect
+            x="18"
+            y="4"
+            width="10"
+            height="10"
+            rx="3"
+            fill="currentColor"
+            opacity="0.75"
+          />
+
+          <rect
+            x="4"
+            y="18"
+            width="10"
+            height="10"
+            rx="3"
+            fill="currentColor"
+            opacity="0.75"
+          />
+
+          <path
+            d="M18 23C18 20.2386 20.2386 18 23 18C25.7614 18 28 20.2386 28 23C28 25.7614 25.7614 28 23 28H18V23Z"
+            fill="currentColor"
+          />
+        </svg>
+      </span>
+
+      <span class="sidebar-brand-text">
+        <span class="sidebar-brand-name">
+          AssetFlow
+        </span>
+
+        <span class="sidebar-brand-tagline">
+          Asset Management
+        </span>
+      </span>
+    </a>
+
+    <button
+      type="button"
+      class="sidebar-toggle"
+      id="sidebarToggle"
+      data-sidebar-toggle
+      aria-label="Collapse sidebar"
+      aria-expanded="true"
+      title="Collapse sidebar"
+    >
+      <svg
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        aria-hidden="true"
+      >
+        <path d="m15 18-6-6 6-6"></path>
+      </svg>
+    </button>
+  </header>
+
+  <!-- ====================================================
+       NAVIGATION
+       ==================================================== -->
+
+  <nav class="sidebar-nav">
+    <!-- Main section -->
+
+    <section class="sidebar-section">
+      <span class="sidebar-section-title">
+        Overview
+      </span>
+
+      <ul class="sidebar-menu">
+        <li class="sidebar-item">
+          <a
+            class="sidebar-link"
+            href="{{FRONTEND_ROOT}}dashboard/index.html"
+            data-route="dashboard/index.html"
+            data-nav-link
+          >
+            <span class="sidebar-link-icon">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.9"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+              >
+                <rect
+                  x="3"
+                  y="3"
+                  width="7"
+                  height="7"
+                  rx="2"
+                ></rect>
+
+                <rect
+                  x="14"
+                  y="3"
+                  width="7"
+                  height="7"
+                  rx="2"
+                ></rect>
+
+                <rect
+                  x="3"
+                  y="14"
+                  width="7"
+                  height="7"
+                  rx="2"
+                ></rect>
+
+                <rect
+                  x="14"
+                  y="14"
+                  width="7"
+                  height="7"
+                  rx="2"
+                ></rect>
+              </svg>
+            </span>
+
+            <span class="sidebar-link-label">
+              Dashboard
+            </span>
+          </a>
+        </li>
+
+        <li
+          class="sidebar-item"
+          data-roles="Admin"
+        >
+          <a
+            class="sidebar-link"
+            href="{{FRONTEND_ROOT}}organization-setup/index.html"
+            data-route="organization-setup/index.html"
+            data-nav-link
+          >
+            <span class="sidebar-link-icon">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.9"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+              >
+                <path d="M3 21h18"></path>
+                <path d="M6 21V7l6-4 6 4v14"></path>
+                <path d="M9 10h1"></path>
+                <path d="M14 10h1"></path>
+                <path d="M9 14h1"></path>
+                <path d="M14 14h1"></path>
+                <path d="M10 21v-3h4v3"></path>
+              </svg>
+            </span>
+
+            <span class="sidebar-link-label">
+              Organization Setup
+            </span>
+          </a>
+        </li>
+      </ul>
+    </section>
+
+    <!-- Asset management section -->
+
+    <section class="sidebar-section">
+      <span class="sidebar-section-title">
+        Asset Operations
+      </span>
+
+      <ul class="sidebar-menu">
+        <li
+          class="sidebar-item"
+          data-roles="Admin,AssetManager,DepartmentHead,Employee"
+        >
+          <a
+            class="sidebar-link"
+            href="{{FRONTEND_ROOT}}asset-registration/index.html"
+            data-route="asset-registration/index.html"
+            data-nav-link
+          >
+            <span class="sidebar-link-icon">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.9"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+              >
+                <path d="M21 16V8"></path>
+                <path d="m3.5 7 8.5 5 8.5-5"></path>
+                <path d="M12 22V12"></path>
+                <path d="M3 7l9-5 9 5v10l-9 5-9-5V7Z"></path>
+              </svg>
+            </span>
+
+            <span class="sidebar-link-label">
+              Asset Directory
+            </span>
+          </a>
+        </li>
+
+        <li
+          class="sidebar-item"
+          data-roles="Admin,AssetManager,DepartmentHead,Employee"
+        >
+          <a
+            class="sidebar-link"
+            href="{{FRONTEND_ROOT}}asset-allocation/index.html"
+            data-route="asset-allocation/index.html"
+            data-nav-link
+          >
+            <span class="sidebar-link-icon">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.9"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+              >
+                <circle
+                  cx="9"
+                  cy="7"
+                  r="4"
+                ></circle>
+
+                <path d="M3 21v-2a6 6 0 0 1 6-6"></path>
+                <path d="M16 3h5v5"></path>
+                <path d="m21 3-6 6"></path>
+                <path d="M21 16v5h-5"></path>
+                <path d="m15 15 6 6"></path>
+              </svg>
+            </span>
+
+            <span class="sidebar-link-label">
+              Allocation & Transfers
+            </span>
+
+            <span
+              class="sidebar-link-badge"
+              data-transfer-count
+              hidden
+            >
+              0
+            </span>
+          </a>
+        </li>
+
+        <li class="sidebar-item">
+          <a
+            class="sidebar-link"
+            href="{{FRONTEND_ROOT}}resource-booking/index.html"
+            data-route="resource-booking/index.html"
+            data-nav-link
+          >
+            <span class="sidebar-link-icon">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.9"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+              >
+                <rect
+                  x="3"
+                  y="5"
+                  width="18"
+                  height="16"
+                  rx="2"
+                ></rect>
+
+                <path d="M16 3v4"></path>
+                <path d="M8 3v4"></path>
+                <path d="M3 10h18"></path>
+                <path d="m9 16 2 2 4-4"></path>
+              </svg>
+            </span>
+
+            <span class="sidebar-link-label">
+              Resource Booking
+            </span>
+          </a>
+        </li>
+
+        <li class="sidebar-item">
+          <a
+            class="sidebar-link"
+            href="{{FRONTEND_ROOT}}maintenance-management/index.html"
+            data-route="maintenance-management/index.html"
+            data-nav-link
+          >
+            <span class="sidebar-link-icon">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.9"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+              >
+                <path d="M14.7 6.3a4 4 0 0 0-5-5l2.1 2.1-2.4 2.4-2.1-2.1a4 4 0 0 0 5 5l7.3 7.3a2 2 0 0 1-2.8 2.8l-7.3-7.3"></path>
+                <path d="m5 19 4-4"></path>
+                <path d="m3 21 2-2"></path>
+              </svg>
+            </span>
+
+            <span class="sidebar-link-label">
+              Maintenance
+            </span>
+
+            <span
+              class="sidebar-link-badge"
+              data-maintenance-count
+              hidden
+            >
+              0
+            </span>
+          </a>
+        </li>
+      </ul>
+    </section>
+
+    <!-- Governance section -->
+
+    <section class="sidebar-section">
+      <span class="sidebar-section-title">
+        Governance
+      </span>
+
+      <ul class="sidebar-menu">
+        <li
+          class="sidebar-item"
+          data-roles="Admin,AssetManager,DepartmentHead"
+        >
+          <a
+            class="sidebar-link"
+            href="{{FRONTEND_ROOT}}asset-audit/index.html"
+            data-route="asset-audit/index.html"
+            data-nav-link
+          >
+            <span class="sidebar-link-icon">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.9"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+              >
+                <path d="M9 5H6a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-3"></path>
+                <rect
+                  x="9"
+                  y="3"
+                  width="6"
+                  height="4"
+                  rx="1"
+                ></rect>
+                <path d="m9 14 2 2 5-5"></path>
+              </svg>
+            </span>
+
+            <span class="sidebar-link-label">
+              Asset Audit
+            </span>
+          </a>
+        </li>
+
+        <li
+          class="sidebar-item"
+          data-roles="Admin,AssetManager"
+        >
+          <a
+            class="sidebar-link"
+            href="{{FRONTEND_ROOT}}reports/index.html"
+            data-route="reports/index.html"
+            data-nav-link
+          >
+            <span class="sidebar-link-icon">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.9"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+              >
+                <path d="M4 19V9"></path>
+                <path d="M10 19V5"></path>
+                <path d="M16 19v-7"></path>
+                <path d="M22 19H2"></path>
+              </svg>
+            </span>
+
+            <span class="sidebar-link-label">
+              Reports & Analytics
+            </span>
+          </a>
+        </li>
+
+        <li class="sidebar-item">
+          <a
+            class="sidebar-link"
+            href="{{FRONTEND_ROOT}}notifications/index.html"
+            data-route="notifications/index.html"
+            data-nav-link
+          >
+            <span class="sidebar-link-icon">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.9"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+              >
+                <path d="M18 8a6 6 0 1 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"></path>
+                <path d="M10 21h4"></path>
+              </svg>
+            </span>
+
+            <span class="sidebar-link-label">
+              Notifications
+            </span>
+
+            <span
+              class="sidebar-link-badge"
+              data-notification-count
+              hidden
+            >
+              0
+            </span>
+          </a>
+        </li>
+      </ul>
+    </section>
+  </nav>
+
+  <!-- ====================================================
+       CURRENT USER
+       ==================================================== -->
+
+  <footer class="sidebar-footer">
+    <div class="sidebar-user">
+      <div
+        class="sidebar-user-avatar"
+        data-user-initials
+        aria-hidden="true"
+      >
+        AF
+      </div>
+
+      <div class="sidebar-user-details">
+        <span
+          class="sidebar-user-name"
+          data-user-name
+        >
+          AssetFlow User
+        </span>
+
+        <span
+          class="sidebar-user-role"
+          data-user-role
+        >
+          Employee
+        </span>
+      </div>
+
+      <button
+        type="button"
+        class="sidebar-user-action tooltip"
+        data-logout
+        data-tooltip="Sign out"
+        aria-label="Sign out"
+        title="Sign out"
+      >
+        <svg
+          width="18"
+          height="18"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.9"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+        >
+          <path d="M10 17l5-5-5-5"></path>
+          <path d="M15 12H3"></path>
+          <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path>
+        </svg>
+      </button>
+    </div>
+  </footer>
+</aside>

@@ -1,0 +1,618 @@
+<!-- ======================================================
+     AssetFlow — Shared Navbar
+     File: frontend/components/navbar.html
+     Loaded dynamically through js/loader.js
+     ====================================================== -->
+
+<header
+  class="topbar"
+  id="topbar"
+  role="banner"
+>
+  <!-- ====================================================
+       LEFT SIDE
+       ==================================================== -->
+
+  <div class="topbar-left">
+    <button
+      type="button"
+      class="mobile-menu-button"
+      id="mobileMenuButton"
+      data-mobile-menu
+      aria-label="Open navigation menu"
+      aria-expanded="false"
+      aria-controls="sidebar"
+    >
+      <svg
+        width="21"
+        height="21"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        aria-hidden="true"
+      >
+        <path d="M4 6h16"></path>
+        <path d="M4 12h16"></path>
+        <path d="M4 18h16"></path>
+      </svg>
+    </button>
+
+    <div class="topbar-page-info">
+      <h1
+        class="topbar-page-title"
+        data-page-title
+      >
+        Dashboard
+      </h1>
+
+      <p
+        class="topbar-page-subtitle"
+        data-page-subtitle
+      >
+        Manage your assets and resources
+      </p>
+    </div>
+  </div>
+
+  <!-- ====================================================
+       RIGHT SIDE
+       ==================================================== -->
+
+  <div class="topbar-right">
+    <!-- Global search -->
+
+    <div
+      class="topbar-search"
+      role="search"
+    >
+      <svg
+        class="topbar-search-icon"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        aria-hidden="true"
+      >
+        <circle
+          cx="11"
+          cy="11"
+          r="8"
+        ></circle>
+
+        <path d="m21 21-4.35-4.35"></path>
+      </svg>
+
+      <input
+        type="search"
+        id="globalSearchInput"
+        placeholder="Search assets, people, bookings..."
+        autocomplete="off"
+        aria-label="Search AssetFlow"
+        data-global-search
+      />
+    </div>
+
+    <!-- Quick create dropdown -->
+
+    <div class="dropdown">
+      <button
+        type="button"
+        class="topbar-action tooltip"
+        data-dropdown-toggle
+        data-tooltip="Quick actions"
+        aria-label="Open quick actions"
+        aria-expanded="false"
+        aria-haspopup="menu"
+      >
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+        >
+          <path d="M12 5v14"></path>
+          <path d="M5 12h14"></path>
+        </svg>
+      </button>
+
+      <div
+        class="dropdown-menu"
+        role="menu"
+        aria-label="Quick actions"
+      >
+        <div class="dropdown-header">
+          <div class="dropdown-title">
+            Quick Actions
+          </div>
+        </div>
+
+        <a
+          class="dropdown-item"
+          href="{{FRONTEND_ROOT}}asset-registration/index.html?action=register"
+          data-route="asset-registration/index.html?action=register"
+          data-roles="Admin,AssetManager"
+          role="menuitem"
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.9"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
+            <path d="M21 16V8"></path>
+            <path d="m3.5 7 8.5 5 8.5-5"></path>
+            <path d="M12 22V12"></path>
+            <path d="M3 7l9-5 9 5v10l-9 5-9-5V7Z"></path>
+          </svg>
+
+          <span>Register Asset</span>
+        </a>
+
+        <a
+          class="dropdown-item"
+          href="{{FRONTEND_ROOT}}resource-booking/index.html?action=book"
+          data-route="resource-booking/index.html?action=book"
+          role="menuitem"
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.9"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
+            <rect
+              x="3"
+              y="5"
+              width="18"
+              height="16"
+              rx="2"
+            ></rect>
+
+            <path d="M16 3v4"></path>
+            <path d="M8 3v4"></path>
+            <path d="M3 10h18"></path>
+            <path d="m9 16 2 2 4-4"></path>
+          </svg>
+
+          <span>Book Resource</span>
+        </a>
+
+        <a
+          class="dropdown-item"
+          href="{{FRONTEND_ROOT}}maintenance-management/index.html?action=raise"
+          data-route="maintenance-management/index.html?action=raise"
+          role="menuitem"
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.9"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
+            <path d="M14.7 6.3a4 4 0 0 0-5-5l2.1 2.1-2.4 2.4-2.1-2.1a4 4 0 0 0 5 5l7.3 7.3a2 2 0 0 1-2.8 2.8l-7.3-7.3"></path>
+            <path d="m5 19 4-4"></path>
+            <path d="m3 21 2-2"></path>
+          </svg>
+
+          <span>Raise Maintenance Request</span>
+        </a>
+
+        <div class="dropdown-divider"></div>
+
+        <a
+          class="dropdown-item"
+          href="{{FRONTEND_ROOT}}asset-audit/index.html?action=create"
+          data-route="asset-audit/index.html?action=create"
+          data-roles="Admin,AssetManager"
+          role="menuitem"
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.9"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
+            <path d="M9 5H6a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-3"></path>
+            <rect
+              x="9"
+              y="3"
+              width="6"
+              height="4"
+              rx="1"
+            ></rect>
+            <path d="m9 14 2 2 5-5"></path>
+          </svg>
+
+          <span>Create Audit Cycle</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- Notifications dropdown -->
+
+    <div class="dropdown">
+      <button
+        type="button"
+        class="topbar-action tooltip"
+        data-dropdown-toggle
+        data-notification-button
+        data-tooltip="Notifications"
+        aria-label="Notifications"
+        aria-expanded="false"
+        aria-haspopup="menu"
+      >
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.9"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+        >
+          <path d="M18 8a6 6 0 1 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"></path>
+          <path d="M10 21h4"></path>
+        </svg>
+
+        <span
+          class="topbar-action-badge"
+          data-notification-count
+          hidden
+          aria-hidden="true"
+        >
+          0
+        </span>
+      </button>
+
+      <div
+        class="dropdown-menu notification-dropdown"
+        role="menu"
+        aria-label="Recent notifications"
+        style="width: 360px; max-width: calc(100vw - 2rem);"
+      >
+        <div class="dropdown-header">
+          <div
+            class="flex align-center justify-between gap-3"
+          >
+            <div>
+              <div class="dropdown-title">
+                Notifications
+              </div>
+
+              <div
+                class="text-muted"
+                style="font-size: 0.72rem; margin-top: 2px;"
+              >
+                Recent system activity
+              </div>
+            </div>
+
+            <button
+              type="button"
+              class="btn btn-link"
+              data-mark-all-notifications-read
+            >
+              Mark all read
+            </button>
+          </div>
+        </div>
+
+        <div
+          class="notification-dropdown-list"
+          id="navbarNotificationList"
+          data-navbar-notifications
+          style="max-height: 360px; overflow-y: auto;"
+        >
+          <div
+            class="notification-item unread"
+            data-notification-preview
+          >
+            <div class="notification-icon">
+              <svg
+                width="18"
+                height="18"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.9"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+              >
+                <path d="M21 16V8"></path>
+                <path d="m3.5 7 8.5 5 8.5-5"></path>
+                <path d="M12 22V12"></path>
+                <path d="M3 7l9-5 9 5v10l-9 5-9-5V7Z"></path>
+              </svg>
+            </div>
+
+            <div class="notification-content">
+              <p class="notification-message">
+                An asset has been assigned to you.
+              </p>
+
+              <div class="notification-time">
+                Just now
+              </div>
+            </div>
+
+            <span
+              class="notification-unread-dot"
+              aria-label="Unread"
+            ></span>
+          </div>
+
+          <div
+            class="notification-item"
+            data-notification-preview
+          >
+            <div class="notification-icon">
+              <svg
+                width="18"
+                height="18"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.9"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+              >
+                <rect
+                  x="3"
+                  y="5"
+                  width="18"
+                  height="16"
+                  rx="2"
+                ></rect>
+
+                <path d="M16 3v4"></path>
+                <path d="M8 3v4"></path>
+                <path d="M3 10h18"></path>
+              </svg>
+            </div>
+
+            <div class="notification-content">
+              <p class="notification-message">
+                Your resource booking begins in 30 minutes.
+              </p>
+
+              <div class="notification-time">
+                20 minutes ago
+              </div>
+            </div>
+          </div>
+
+          <div
+            class="notification-item"
+            data-notification-preview
+          >
+            <div class="notification-icon">
+              <svg
+                width="18"
+                height="18"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.9"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+              >
+                <path d="M14.7 6.3a4 4 0 0 0-5-5l2.1 2.1-2.4 2.4-2.1-2.1a4 4 0 0 0 5 5l7.3 7.3a2 2 0 0 1-2.8 2.8l-7.3-7.3"></path>
+                <path d="m5 19 4-4"></path>
+              </svg>
+            </div>
+
+            <div class="notification-content">
+              <p class="notification-message">
+                Maintenance request AF-0044 was approved.
+              </p>
+
+              <div class="notification-time">
+                1 hour ago
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div
+          style="
+            padding: 0.75rem;
+            border-top: 1px solid var(--color-border-light);
+          "
+        >
+          <a
+            class="btn btn-outline btn-block"
+            href="{{FRONTEND_ROOT}}notifications/index.html"
+            data-route="notifications/index.html"
+          >
+            View all notifications
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- User menu -->
+
+    <div class="dropdown">
+      <button
+        type="button"
+        class="topbar-user"
+        data-dropdown-toggle
+        aria-label="Open user menu"
+        aria-expanded="false"
+        aria-haspopup="menu"
+      >
+        <span
+          class="topbar-user-avatar"
+          data-user-initials
+          aria-hidden="true"
+        >
+          AF
+        </span>
+
+        <span class="topbar-user-info">
+          <span
+            class="topbar-user-name"
+            data-user-name
+          >
+            AssetFlow User
+          </span>
+
+          <span
+            class="topbar-user-role"
+            data-user-role
+          >
+            Employee
+          </span>
+        </span>
+
+        <svg
+          class="topbar-user-chevron"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+        >
+          <path d="m6 9 6 6 6-6"></path>
+        </svg>
+      </button>
+
+      <div
+        class="dropdown-menu"
+        role="menu"
+        aria-label="User menu"
+      >
+        <div class="dropdown-header">
+          <div
+            class="table-user"
+            style="align-items: center;"
+          >
+            <div
+              class="avatar"
+              data-user-initials
+              aria-hidden="true"
+            >
+              AF
+            </div>
+
+            <div style="min-width: 0;">
+              <div
+                class="table-primary truncate"
+                data-user-name
+              >
+                AssetFlow User
+              </div>
+
+              <div
+                class="table-secondary truncate"
+                data-user-email
+              >
+                user@example.com
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <button
+          type="button"
+          class="dropdown-item"
+          data-profile-action
+          role="menuitem"
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.9"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
+            <circle
+              cx="12"
+              cy="8"
+              r="4"
+            ></circle>
+
+            <path d="M4 21a8 8 0 0 1 16 0"></path>
+          </svg>
+
+          <span>My Profile</span>
+        </button>
+
+        <button
+          type="button"
+          class="dropdown-item"
+          data-theme-toggle
+          role="menuitem"
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.9"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
+            <path d="M12 3a9 9 0 1 0 9 9c0-.46-.04-.91-.1-1.35A7 7 0 0 1 12 3Z"></path>
+          </svg>
+
+          <span data-theme-toggle-label>
+            Dark Mode
+          </span>
+        </button>
+
+        <div class="dropdown-divider"></div>
+
+        <button
+          type="button"
+          class="dropdown-item danger"
+          data-logout
+          role="menuitem"
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.9"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
+            <path d="M10 17l5-5-5-5"></path>
+            <path d="M15 12H3"></path>
+            <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path>
+          </svg>
+
+          <span>Sign Out</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</header>
