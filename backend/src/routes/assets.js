@@ -130,8 +130,14 @@ router.get('/:id', async (req, res, next) => {
       )
       .orderBy('aa.created_at', 'desc');
 
-    // TODO: coordinate with Arush — join maintenance_requests when table exists
-    const maintenance_history = [];
+    const maintenance_history = await db('maintenance_requests as mr')
+      .leftJoin('users as u', 'mr.raised_by', 'u.id')
+      .where('mr.asset_id', id)
+      .select(
+        'mr.*',
+        'u.name as raised_by_name'
+      )
+      .orderBy('mr.created_at', 'desc');
 
     res.json({
       ...asset,

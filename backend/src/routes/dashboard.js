@@ -45,16 +45,23 @@ router.get('/kpis', async (req, res, next) => {
         'aa.expected_return_date'
       );
 
-    // TODO: coordinate with Arush — maintenance_today from maintenance_requests
-    const maintenance_today = 0;
-    // TODO: coordinate with Arush — active_bookings from bookings table
-    const active_bookings = 0;
+    const [{ count: maintenance_today }] = await db('maintenance_requests')
+      .whereNotIn('status', ['Resolved', 'Rejected'])
+      .where(function whereMaintenanceToday() {
+        this.whereRaw('DATE(created_at) = CURRENT_DATE')
+          .orWhereIn('status', ['Approved', 'TechnicianAssigned', 'InProgress']);
+      })
+      .count('* as count');
+
+    const [{ count: active_bookings }] = await db('bookings')
+      .whereIn('status', ['Upcoming', 'Ongoing'])
+      .count('* as count');
 
     res.json({
       assets_available: parseInt(assets_available, 10),
       assets_allocated: parseInt(assets_allocated, 10),
-      maintenance_today,
-      active_bookings,
+      maintenance_today: parseInt(maintenance_today, 10),
+      active_bookings: parseInt(active_bookings, 10),
       pending_transfers: parseInt(pending_transfers, 10),
       upcoming_returns: parseInt(upcoming_returns, 10),
       overdue_returns,

@@ -25,6 +25,13 @@ function errorHandler(err, req, res, next) {
     });
   }
 
+  if (err.code === '23P01') {
+    return res.status(409).json({
+      error: true,
+      message: 'Slot overlaps with an existing booking',
+    });
+  }
+
   console.error('[error]', err.message);
 
   return res.status(500).json({

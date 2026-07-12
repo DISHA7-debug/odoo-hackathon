@@ -11,6 +11,18 @@ const ASSET_STATUSES = [
   'Lost', 'Retired', 'Disposed',
 ];
 const TRANSFER_DECISIONS = ['Approved', 'Rejected'];
+const BOOKING_STATUSES = ['Upcoming', 'Ongoing', 'Completed', 'Cancelled'];
+const MAINTENANCE_PRIORITIES = ['Low', 'Medium', 'High', 'Urgent'];
+const MAINTENANCE_STATUSES = [
+  'Pending', 'Approved', 'Rejected', 'TechnicianAssigned', 'InProgress', 'Resolved',
+];
+const AUDIT_CYCLE_STATUSES = ['Open', 'Closed'];
+const AUDIT_FINDING_RESULTS = ['Verified', 'Missing', 'Damaged'];
+
+const timestampString = z.string().regex(
+  /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d+)?(Z|[+-]\d{2}:\d{2})?$/,
+  'Invalid timestamp format, use ISO 8601 (e.g. 2026-07-13T09:30:00)'
+);
 
 function isValidCalendarDate(val) {
   const [year, month, day] = val.split('-').map(Number);
@@ -100,6 +112,41 @@ const transferDecisionSchema = z.object({
   decision: z.enum(TRANSFER_DECISIONS, { message: 'Invalid decision value' }),
 });
 
+const bookingCreateSchema = z.object({
+  resource_asset_id: z.number().int().positive('resource_asset_id is required'),
+  start_time: timestampString,
+  end_time: timestampString,
+});
+
+const maintenanceCreateSchema = z.object({
+  asset_id: z.number().int().positive('asset_id is required'),
+  issue_description: z.string().min(1, 'issue_description is required'),
+  priority: z.enum(MAINTENANCE_PRIORITIES, { message: 'Invalid priority value' }),
+  photo_url: z.string().url().optional().or(z.literal('')),
+});
+
+const maintenanceStatusSchema = z.object({
+  status: z.enum(MAINTENANCE_STATUSES, { message: 'Invalid status value' }),
+  technician: z.string().min(1).max(120).optional(),
+});
+
+const auditCycleCreateSchema = z.object({
+  scope_department_id: z.number().int().positive().nullable().optional(),
+  scope_location: z.string().max(160).optional(),
+  date_range_start: dateString,
+  date_range_end: dateString,
+});
+
+const auditAssignAuditorSchema = z.object({
+  auditor_id: z.number().int().positive('auditor_id is required'),
+});
+
+const auditFindingSchema = z.object({
+  asset_id: z.number().int().positive('asset_id is required'),
+  result: z.enum(AUDIT_FINDING_RESULTS, { message: 'Invalid result value' }),
+  notes: z.string().optional(),
+});
+
 module.exports = {
   ROLES,
   USER_STATUSES,
@@ -118,4 +165,15 @@ module.exports = {
   returnSchema,
   transferRequestSchema,
   transferDecisionSchema,
+  BOOKING_STATUSES,
+  MAINTENANCE_PRIORITIES,
+  MAINTENANCE_STATUSES,
+  AUDIT_CYCLE_STATUSES,
+  AUDIT_FINDING_RESULTS,
+  bookingCreateSchema,
+  maintenanceCreateSchema,
+  maintenanceStatusSchema,
+  auditCycleCreateSchema,
+  auditAssignAuditorSchema,
+  auditFindingSchema,
 };
