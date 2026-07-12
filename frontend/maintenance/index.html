@@ -1,0 +1,2940 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  />
+
+  <meta
+    name="description"
+    content="Create, track and resolve asset maintenance requests in AssetFlow."
+  />
+
+  <meta
+    name="theme-color"
+    content="#ff4f78"
+  />
+
+  <title>Maintenance | AssetFlow</title>
+
+  <!-- ====================================================
+       GLOBAL STYLES
+       ==================================================== -->
+
+  <link
+    rel="stylesheet"
+    href="../css/variables.css"
+  />
+
+  <link
+    rel="stylesheet"
+    href="../css/global.css"
+  />
+
+  <link
+    rel="stylesheet"
+    href="../css/layout.css"
+  />
+
+  <link
+    rel="stylesheet"
+    href="../css/components.css"
+  />
+
+  <link
+    rel="stylesheet"
+    href="../css/animations.css"
+  />
+
+  <link
+    rel="stylesheet"
+    href="../css/responsive.css"
+  />
+
+  <!-- Page-specific styles -->
+
+  <link
+    rel="stylesheet"
+    href="maintenance.css"
+  />
+</head>
+
+<body
+  data-auth="required"
+  class="page-transition"
+>
+  <a
+    class="skip-link"
+    href="#maintenanceMain"
+  >
+    Skip to maintenance management
+  </a>
+
+  <!-- ====================================================
+       APPLICATION SHELL
+       ==================================================== -->
+
+  <div
+    class="app-shell"
+    id="appShell"
+  >
+    <!-- Shared sidebar -->
+
+    <div
+      id="sidebar-container"
+      data-component="sidebar"
+      data-required="true"
+    ></div>
+
+    <!-- Main application content -->
+
+    <div class="app-content">
+      <!-- Shared navbar -->
+
+      <div
+        id="navbar-container"
+        data-component="navbar"
+        data-required="true"
+      ></div>
+
+      <!-- ==================================================
+           PAGE CONTENT
+           ================================================== -->
+
+      <main
+        class="main-content"
+        id="maintenanceMain"
+      >
+        <div class="page-container">
+          <!-- Page header -->
+
+          <header class="page-header">
+            <div class="page-header-content">
+              <div class="breadcrumbs">
+                <span class="breadcrumb-item">
+                  <a
+                    class="breadcrumb-link"
+                    href="../dashboard/index.html"
+                  >
+                    AssetFlow
+                  </a>
+
+                  <svg
+                    class="breadcrumb-separator"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    aria-hidden="true"
+                  >
+                    <path d="m9 18 6-6-6-6"></path>
+                  </svg>
+                </span>
+
+                <span
+                  class="breadcrumb-current"
+                  aria-current="page"
+                >
+                  Maintenance
+                </span>
+              </div>
+
+              <h1 class="page-title">
+                Maintenance Management
+              </h1>
+
+              <p class="page-description">
+                Report faults, assign technicians, track repair
+                progress and return serviced assets to active use.
+              </p>
+            </div>
+
+            <div class="page-actions">
+              <button
+                type="button"
+                class="btn btn-outline"
+                id="refreshMaintenanceButton"
+                data-refresh-maintenance
+              >
+                <svg
+                  width="18"
+                  height="18"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  aria-hidden="true"
+                >
+                  <path d="M20 11a8.1 8.1 0 0 0-15.5-2M4 4v5h5"></path>
+                  <path d="M4 13a8.1 8.1 0 0 0 15.5 2M20 20v-5h-5"></path>
+                </svg>
+
+                Refresh
+              </button>
+
+              <button
+                type="button"
+                class="btn btn-primary"
+                data-modal-open="#maintenanceRequestModal"
+                data-create-maintenance-request
+              >
+                <svg
+                  width="18"
+                  height="18"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  aria-hidden="true"
+                >
+                  <path d="M12 5v14"></path>
+                  <path d="M5 12h14"></path>
+                </svg>
+
+                Report Maintenance
+              </button>
+            </div>
+          </header>
+
+          <!-- ==================================================
+               PAGE ERROR
+               ================================================== -->
+
+          <div
+            class="alert alert-danger maintenance-page-alert"
+            id="maintenancePageErrorAlert"
+            role="alert"
+            hidden
+          >
+            <div class="alert-icon">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                aria-hidden="true"
+              >
+                <circle
+                  cx="12"
+                  cy="12"
+                  r="10"
+                ></circle>
+
+                <path d="M12 8v4"></path>
+                <path d="M12 16h.01"></path>
+              </svg>
+            </div>
+
+            <div class="alert-content">
+              <h2 class="alert-title">
+                Unable to load maintenance records
+              </h2>
+
+              <p
+                class="alert-message"
+                id="maintenancePageErrorMessage"
+              >
+                Please refresh the page and try again.
+              </p>
+            </div>
+
+            <div class="alert-actions">
+              <button
+                type="button"
+                class="btn btn-danger btn-sm"
+                data-retry-maintenance
+              >
+                Retry
+              </button>
+            </div>
+          </div>
+
+          <!-- ==================================================
+               SUMMARY
+               ================================================== -->
+
+          <section
+            class="page-section"
+            aria-labelledby="maintenanceSummaryTitle"
+          >
+            <div class="section-header">
+              <div class="section-title-group">
+                <h2
+                  class="section-title"
+                  id="maintenanceSummaryTitle"
+                >
+                  Maintenance Summary
+                </h2>
+
+                <p class="section-description">
+                  Current repair workload and asset downtime.
+                </p>
+              </div>
+
+              <span
+                class="maintenance-last-updated"
+                data-maintenance-last-updated
+              >
+                Updating...
+              </span>
+            </div>
+
+            <div
+              class="content-grid maintenance-summary-grid stagger-container"
+            >
+              <!-- Open requests -->
+
+              <article class="kpi-card warning">
+                <div class="kpi-card-header">
+                  <p class="kpi-card-label">
+                    Open Requests
+                  </p>
+
+                  <div
+                    class="kpi-card-icon"
+                    aria-hidden="true"
+                  >
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="1.9"
+                    >
+                      <path d="M14.7 6.3a4 4 0 0 0-5-5l2.1 2.1-2.4 2.4-2.1-2.1a4 4 0 0 0 5 5l7.3 7.3"></path>
+                      <path d="m5 19 4-4"></path>
+                    </svg>
+                  </div>
+                </div>
+
+                <div
+                  class="kpi-card-value"
+                  data-maintenance-summary="open"
+                >
+                  <span class="skeleton skeleton-title"></span>
+                </div>
+
+                <div class="kpi-card-footer">
+                  <span>
+                    Awaiting resolution
+                  </span>
+                </div>
+              </article>
+
+              <!-- Critical -->
+
+              <article class="kpi-card danger">
+                <div class="kpi-card-header">
+                  <p class="kpi-card-label">
+                    Critical Issues
+                  </p>
+
+                  <div
+                    class="kpi-card-icon"
+                    aria-hidden="true"
+                  >
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="1.9"
+                    >
+                      <path d="M12 3 2 21h20L12 3Z"></path>
+                      <path d="M12 9v4"></path>
+                      <path d="M12 17h.01"></path>
+                    </svg>
+                  </div>
+                </div>
+
+                <div
+                  class="kpi-card-value"
+                  data-maintenance-summary="critical"
+                >
+                  <span class="skeleton skeleton-title"></span>
+                </div>
+
+                <div class="kpi-card-footer">
+                  <span>
+                    Require immediate action
+                  </span>
+                </div>
+              </article>
+
+              <!-- In progress -->
+
+              <article class="kpi-card info">
+                <div class="kpi-card-header">
+                  <p class="kpi-card-label">
+                    In Progress
+                  </p>
+
+                  <div
+                    class="kpi-card-icon"
+                    aria-hidden="true"
+                  >
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="1.9"
+                    >
+                      <circle
+                        cx="12"
+                        cy="12"
+                        r="9"
+                      ></circle>
+
+                      <path d="M12 7v5l3 2"></path>
+                    </svg>
+                  </div>
+                </div>
+
+                <div
+                  class="kpi-card-value"
+                  data-maintenance-summary="in_progress"
+                >
+                  <span class="skeleton skeleton-title"></span>
+                </div>
+
+                <div class="kpi-card-footer">
+                  <span>
+                    Currently being serviced
+                  </span>
+                </div>
+              </article>
+
+              <!-- Awaiting parts -->
+
+              <article class="kpi-card">
+                <div class="kpi-card-header">
+                  <p class="kpi-card-label">
+                    Awaiting Parts
+                  </p>
+
+                  <div
+                    class="kpi-card-icon"
+                    aria-hidden="true"
+                  >
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="1.9"
+                    >
+                      <path d="M21 16V8"></path>
+                      <path d="m3.5 7 8.5 5 8.5-5"></path>
+                      <path d="M12 22V12"></path>
+                      <path d="M3 7l9-5 9 5v10l-9 5-9-5V7Z"></path>
+                    </svg>
+                  </div>
+                </div>
+
+                <div
+                  class="kpi-card-value"
+                  data-maintenance-summary="awaiting_parts"
+                >
+                  <span class="skeleton skeleton-title"></span>
+                </div>
+
+                <div class="kpi-card-footer">
+                  <span>
+                    Blocked by procurement
+                  </span>
+                </div>
+              </article>
+
+              <!-- Completed -->
+
+              <article class="kpi-card success">
+                <div class="kpi-card-header">
+                  <p class="kpi-card-label">
+                    Completed This Month
+                  </p>
+
+                  <div
+                    class="kpi-card-icon"
+                    aria-hidden="true"
+                  >
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="1.9"
+                    >
+                      <circle
+                        cx="12"
+                        cy="12"
+                        r="9"
+                      ></circle>
+
+                      <path d="m8 12 3 3 5-6"></path>
+                    </svg>
+                  </div>
+                </div>
+
+                <div
+                  class="kpi-card-value"
+                  data-maintenance-summary="completed_month"
+                >
+                  <span class="skeleton skeleton-title"></span>
+                </div>
+
+                <div class="kpi-card-footer">
+                  <span>
+                    Successfully resolved
+                  </span>
+                </div>
+              </article>
+
+              <!-- Downtime -->
+
+              <article class="kpi-card danger">
+                <div class="kpi-card-header">
+                  <p class="kpi-card-label">
+                    Assets Offline
+                  </p>
+
+                  <div
+                    class="kpi-card-icon"
+                    aria-hidden="true"
+                  >
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="1.9"
+                    >
+                      <path d="M12 2v10"></path>
+                      <path d="M18.4 6.6a9 9 0 1 1-12.8 0"></path>
+                    </svg>
+                  </div>
+                </div>
+
+                <div
+                  class="kpi-card-value"
+                  data-maintenance-summary="offline"
+                >
+                  <span class="skeleton skeleton-title"></span>
+                </div>
+
+                <div class="kpi-card-footer">
+                  <span>
+                    Unavailable due to maintenance
+                  </span>
+                </div>
+              </article>
+            </div>
+          </section>
+
+          <!-- ==================================================
+               MAINTENANCE MANAGEMENT CARD
+               ================================================== -->
+
+          <section
+            class="page-section"
+            aria-labelledby="maintenanceManagementTitle"
+          >
+            <article class="card maintenance-management-card">
+              <header class="card-header maintenance-card-header">
+                <div class="card-header-content">
+                  <h2
+                    class="card-title"
+                    id="maintenanceManagementTitle"
+                  >
+                    Maintenance Workbench
+                  </h2>
+
+                  <p class="card-subtitle">
+                    Review issues, assign service responsibility and
+                    track completed maintenance activity.
+                  </p>
+                </div>
+              </header>
+
+              <!-- Tabs -->
+
+              <div
+                class="maintenance-tabs"
+                role="tablist"
+                aria-label="Maintenance sections"
+              >
+                <button
+                  type="button"
+                  class="maintenance-tab active"
+                  id="maintenanceRequestsTab"
+                  data-maintenance-tab="requests"
+                  role="tab"
+                  aria-selected="true"
+                  aria-controls="maintenanceRequestsPanel"
+                >
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.9"
+                    aria-hidden="true"
+                  >
+                    <path d="M14.7 6.3a4 4 0 0 0-5-5l2.1 2.1-2.4 2.4-2.1-2.1a4 4 0 0 0 5 5l7.3 7.3"></path>
+                    <path d="m5 19 4-4"></path>
+                  </svg>
+
+                  Active Requests
+
+                  <span
+                    class="maintenance-tab-count"
+                    data-maintenance-tab-count="requests"
+                  >
+                    0
+                  </span>
+                </button>
+
+                <button
+                  type="button"
+                  class="maintenance-tab"
+                  id="maintenanceScheduleTab"
+                  data-maintenance-tab="schedule"
+                  role="tab"
+                  aria-selected="false"
+                  aria-controls="maintenanceSchedulePanel"
+                  tabindex="-1"
+                >
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.9"
+                    aria-hidden="true"
+                  >
+                    <rect
+                      x="3"
+                      y="5"
+                      width="18"
+                      height="16"
+                      rx="2"
+                    ></rect>
+
+                    <path d="M16 3v4"></path>
+                    <path d="M8 3v4"></path>
+                    <path d="M3 10h18"></path>
+                  </svg>
+
+                  Preventive Schedule
+
+                  <span
+                    class="maintenance-tab-count"
+                    data-maintenance-tab-count="scheduled"
+                  >
+                    0
+                  </span>
+                </button>
+
+                <button
+                  type="button"
+                  class="maintenance-tab"
+                  id="maintenanceHistoryTab"
+                  data-maintenance-tab="history"
+                  role="tab"
+                  aria-selected="false"
+                  aria-controls="maintenanceHistoryPanel"
+                  tabindex="-1"
+                >
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.9"
+                    aria-hidden="true"
+                  >
+                    <path d="M3 12a9 9 0 1 0 3-6.7"></path>
+                    <path d="M3 4v5h5"></path>
+                    <path d="M12 7v5l3 2"></path>
+                  </svg>
+
+                  Maintenance History
+                </button>
+              </div>
+
+              <!-- ==============================================
+                   ACTIVE REQUESTS PANEL
+                   ============================================== -->
+
+              <section
+                class="maintenance-panel active"
+                id="maintenanceRequestsPanel"
+                data-maintenance-panel="requests"
+                role="tabpanel"
+                aria-labelledby="maintenanceRequestsTab"
+              >
+                <!-- Filters -->
+
+                <div class="maintenance-filter-panel">
+                  <div class="maintenance-search-field">
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      aria-hidden="true"
+                    >
+                      <circle
+                        cx="11"
+                        cy="11"
+                        r="8"
+                      ></circle>
+
+                      <path d="m21 21-4.35-4.35"></path>
+                    </svg>
+
+                    <input
+                      type="search"
+                      id="maintenanceSearchInput"
+                      placeholder="Search asset, issue, request ID or technician..."
+                      autocomplete="off"
+                      aria-label="Search maintenance requests"
+                      data-maintenance-search
+                    />
+                  </div>
+
+                  <select
+                    id="maintenanceStatusFilter"
+                    data-maintenance-status-filter
+                    aria-label="Filter maintenance status"
+                  >
+                    <option value="">
+                      All statuses
+                    </option>
+
+                    <option value="Reported">
+                      Reported
+                    </option>
+
+                    <option value="Assigned">
+                      Assigned
+                    </option>
+
+                    <option value="InProgress">
+                      In Progress
+                    </option>
+
+                    <option value="AwaitingParts">
+                      Awaiting Parts
+                    </option>
+
+                    <option value="OnHold">
+                      On Hold
+                    </option>
+
+                    <option value="Completed">
+                      Completed
+                    </option>
+
+                    <option value="Cancelled">
+                      Cancelled
+                    </option>
+                  </select>
+
+                  <select
+                    id="maintenancePriorityFilter"
+                    data-maintenance-priority-filter
+                    aria-label="Filter maintenance priority"
+                  >
+                    <option value="">
+                      All priorities
+                    </option>
+
+                    <option value="Critical">
+                      Critical
+                    </option>
+
+                    <option value="High">
+                      High
+                    </option>
+
+                    <option value="Medium">
+                      Medium
+                    </option>
+
+                    <option value="Low">
+                      Low
+                    </option>
+                  </select>
+
+                  <select
+                    id="maintenanceTechnicianFilter"
+                    data-maintenance-technician-filter
+                    aria-label="Filter by technician"
+                  >
+                    <option value="">
+                      All technicians
+                    </option>
+                  </select>
+
+                  <select
+                    id="maintenanceDepartmentFilter"
+                    data-maintenance-department-filter
+                    aria-label="Filter by department"
+                  >
+                    <option value="">
+                      All departments
+                    </option>
+                  </select>
+
+                  <button
+                    type="button"
+                    class="btn btn-outline"
+                    data-reset-maintenance-filters
+                  >
+                    Reset
+                  </button>
+                </div>
+
+                <!-- Table -->
+
+                <div
+                  class="table-container maintenance-table-container"
+                >
+                  <table class="data-table maintenance-table">
+                    <thead>
+                      <tr>
+                        <th scope="col">
+                          Request / Asset
+                        </th>
+
+                        <th scope="col">
+                          Issue
+                        </th>
+
+                        <th scope="col">
+                          Priority
+                        </th>
+
+                        <th scope="col">
+                          Assigned Technician
+                        </th>
+
+                        <th scope="col">
+                          Reported
+                        </th>
+
+                        <th scope="col">
+                          Status
+                        </th>
+
+                        <th
+                          scope="col"
+                          class="text-right"
+                        >
+                          Actions
+                        </th>
+                      </tr>
+                    </thead>
+
+                    <tbody id="maintenanceRequestsTableBody">
+                      <tr>
+                        <td colspan="7">
+                          <div class="skeleton skeleton-text"></div>
+                        </td>
+                      </tr>
+
+                      <tr>
+                        <td colspan="7">
+                          <div class="skeleton skeleton-text"></div>
+                        </td>
+                      </tr>
+
+                      <tr>
+                        <td colspan="7">
+                          <div class="skeleton skeleton-text"></div>
+                        </td>
+                      </tr>
+
+                      <tr>
+                        <td colspan="7">
+                          <div class="skeleton skeleton-text"></div>
+                        </td>
+                      </tr>
+
+                      <tr>
+                        <td colspan="7">
+                          <div class="skeleton skeleton-text"></div>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+
+                <!-- Empty state -->
+
+                <div
+                  id="maintenanceRequestsEmptyState"
+                  hidden
+                >
+                  <div class="state-container">
+                    <div class="state-icon">
+                      <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="1.9"
+                        aria-hidden="true"
+                      >
+                        <path d="M14.7 6.3a4 4 0 0 0-5-5l2.1 2.1-2.4 2.4-2.1-2.1a4 4 0 0 0 5 5l7.3 7.3"></path>
+                        <path d="m5 19 4-4"></path>
+                      </svg>
+                    </div>
+
+                    <h3 class="state-title">
+                      No maintenance requests
+                    </h3>
+
+                    <p class="state-description">
+                      No maintenance records match the current search
+                      and filter criteria.
+                    </p>
+
+                    <div class="state-action">
+                      <button
+                        type="button"
+                        class="btn btn-outline"
+                        data-reset-maintenance-filters
+                      >
+                        Clear Filters
+                      </button>
+
+                      <button
+                        type="button"
+                        class="btn btn-primary"
+                        data-modal-open="#maintenanceRequestModal"
+                        data-create-maintenance-request
+                      >
+                        Report Maintenance
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Pagination -->
+
+                <footer class="maintenance-pagination">
+                  <p
+                    class="pagination-summary"
+                    data-maintenance-pagination-summary
+                  >
+                    Showing 0 requests
+                  </p>
+
+                  <div
+                    class="pagination"
+                    data-maintenance-pagination
+                  ></div>
+                </footer>
+              </section>
+
+              <!-- ==============================================
+                   PREVENTIVE SCHEDULE PANEL
+                   ============================================== -->
+
+              <section
+                class="maintenance-panel"
+                id="maintenanceSchedulePanel"
+                data-maintenance-panel="schedule"
+                role="tabpanel"
+                aria-labelledby="maintenanceScheduleTab"
+                hidden
+              >
+                <div class="maintenance-panel-toolbar">
+                  <div>
+                    <h3 class="maintenance-panel-title">
+                      Preventive Maintenance Schedule
+                    </h3>
+
+                    <p class="maintenance-panel-description">
+                      Schedule recurring inspections and service
+                      activities before asset failures occur.
+                    </p>
+                  </div>
+
+                  <div class="maintenance-schedule-actions">
+                    <select
+                      id="maintenanceScheduleStatusFilter"
+                      data-maintenance-schedule-status-filter
+                      aria-label="Filter preventive schedules"
+                    >
+                      <option value="">
+                        All schedules
+                      </option>
+
+                      <option value="Active">
+                        Active
+                      </option>
+
+                      <option value="DueSoon">
+                        Due Soon
+                      </option>
+
+                      <option value="Overdue">
+                        Overdue
+                      </option>
+
+                      <option value="Paused">
+                        Paused
+                      </option>
+                    </select>
+
+                    <button
+                      type="button"
+                      class="btn btn-primary"
+                      data-modal-open="#preventiveMaintenanceModal"
+                      data-create-maintenance-schedule
+                      data-roles="Admin,AssetManager"
+                    >
+                      Add Schedule
+                    </button>
+                  </div>
+                </div>
+
+                <div
+                  class="maintenance-schedule-grid"
+                  id="maintenanceScheduleGrid"
+                >
+                  <article class="maintenance-schedule-card">
+                    <div class="skeleton skeleton-avatar"></div>
+
+                    <div class="maintenance-schedule-card-content">
+                      <div class="skeleton skeleton-text"></div>
+                      <div class="skeleton skeleton-text-sm"></div>
+                      <div class="skeleton skeleton-text-sm"></div>
+                    </div>
+                  </article>
+
+                  <article class="maintenance-schedule-card">
+                    <div class="skeleton skeleton-avatar"></div>
+
+                    <div class="maintenance-schedule-card-content">
+                      <div class="skeleton skeleton-text"></div>
+                      <div class="skeleton skeleton-text-sm"></div>
+                      <div class="skeleton skeleton-text-sm"></div>
+                    </div>
+                  </article>
+
+                  <article class="maintenance-schedule-card">
+                    <div class="skeleton skeleton-avatar"></div>
+
+                    <div class="maintenance-schedule-card-content">
+                      <div class="skeleton skeleton-text"></div>
+                      <div class="skeleton skeleton-text-sm"></div>
+                      <div class="skeleton skeleton-text-sm"></div>
+                    </div>
+                  </article>
+                </div>
+
+                <div
+                  id="maintenanceScheduleEmptyState"
+                  hidden
+                >
+                  <div class="state-container">
+                    <div class="state-icon">
+                      <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="1.9"
+                        aria-hidden="true"
+                      >
+                        <rect
+                          x="3"
+                          y="5"
+                          width="18"
+                          height="16"
+                          rx="2"
+                        ></rect>
+
+                        <path d="M16 3v4"></path>
+                        <path d="M8 3v4"></path>
+                        <path d="M3 10h18"></path>
+                      </svg>
+                    </div>
+
+                    <h3 class="state-title">
+                      No preventive schedules
+                    </h3>
+
+                    <p class="state-description">
+                      Create recurring maintenance schedules for
+                      important organizational assets.
+                    </p>
+
+                    <div class="state-action">
+                      <button
+                        type="button"
+                        class="btn btn-primary"
+                        data-modal-open="#preventiveMaintenanceModal"
+                        data-create-maintenance-schedule
+                        data-roles="Admin,AssetManager"
+                      >
+                        Create Schedule
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </section>
+
+              <!-- ==============================================
+                   HISTORY PANEL
+                   ============================================== -->
+
+              <section
+                class="maintenance-panel"
+                id="maintenanceHistoryPanel"
+                data-maintenance-panel="history"
+                role="tabpanel"
+                aria-labelledby="maintenanceHistoryTab"
+                hidden
+              >
+                <div class="maintenance-panel-toolbar">
+                  <div>
+                    <h3 class="maintenance-panel-title">
+                      Completed Maintenance
+                    </h3>
+
+                    <p class="maintenance-panel-description">
+                      Review resolved repair jobs, service cost and
+                      asset condition after maintenance.
+                    </p>
+                  </div>
+
+                  <div class="maintenance-history-filters">
+                    <input
+                      type="date"
+                      id="maintenanceHistoryFromDate"
+                      data-maintenance-history-from
+                      aria-label="Maintenance history start date"
+                    />
+
+                    <input
+                      type="date"
+                      id="maintenanceHistoryToDate"
+                      data-maintenance-history-to
+                      aria-label="Maintenance history end date"
+                    />
+
+                    <button
+                      type="button"
+                      class="btn btn-outline"
+                      data-export-maintenance-history
+                    >
+                      Export
+                    </button>
+                  </div>
+                </div>
+
+                <div
+                  class="table-container maintenance-history-table-container"
+                >
+                  <table class="data-table maintenance-history-table">
+                    <thead>
+                      <tr>
+                        <th scope="col">
+                          Asset
+                        </th>
+
+                        <th scope="col">
+                          Issue
+                        </th>
+
+                        <th scope="col">
+                          Technician
+                        </th>
+
+                        <th scope="col">
+                          Completed On
+                        </th>
+
+                        <th scope="col">
+                          Resolution
+                        </th>
+
+                        <th scope="col">
+                          Cost
+                        </th>
+
+                        <th
+                          scope="col"
+                          class="text-right"
+                        >
+                          Action
+                        </th>
+                      </tr>
+                    </thead>
+
+                    <tbody id="maintenanceHistoryTableBody">
+                      <tr>
+                        <td colspan="7">
+                          <div class="skeleton skeleton-text"></div>
+                        </td>
+                      </tr>
+
+                      <tr>
+                        <td colspan="7">
+                          <div class="skeleton skeleton-text"></div>
+                        </td>
+                      </tr>
+
+                      <tr>
+                        <td colspan="7">
+                          <div class="skeleton skeleton-text"></div>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+
+                <div
+                  id="maintenanceHistoryEmptyState"
+                  hidden
+                >
+                  <div class="state-container">
+                    <div class="state-icon">
+                      <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="1.9"
+                        aria-hidden="true"
+                      >
+                        <circle
+                          cx="12"
+                          cy="12"
+                          r="9"
+                        ></circle>
+
+                        <path d="m8 12 3 3 5-6"></path>
+                      </svg>
+                    </div>
+
+                    <h3 class="state-title">
+                      No completed maintenance
+                    </h3>
+
+                    <p class="state-description">
+                      Completed and resolved maintenance records will
+                      appear here.
+                    </p>
+                  </div>
+                </div>
+              </section>
+            </article>
+          </section>
+        </div>
+      </main>
+
+      <!-- Shared footer -->
+
+      <div
+        id="footer-container"
+        data-component="footer"
+      ></div>
+    </div>
+  </div>
+
+  <!-- ====================================================
+       MAINTENANCE REQUEST MODAL
+       ==================================================== -->
+
+  <div
+    class="modal-overlay"
+    id="maintenanceRequestModal"
+    aria-hidden="true"
+    data-close-on-overlay="false"
+  >
+    <section
+      class="modal maintenance-request-modal"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="maintenanceRequestModalTitle"
+      aria-describedby="maintenanceRequestModalDescription"
+    >
+      <header class="modal-header">
+        <div class="modal-header-content">
+          <h2
+            class="modal-title"
+            id="maintenanceRequestModalTitle"
+            data-maintenance-form-title
+          >
+            Report Maintenance Issue
+          </h2>
+
+          <p
+            class="modal-subtitle"
+            id="maintenanceRequestModalDescription"
+          >
+            Describe the issue and identify the affected asset.
+          </p>
+        </div>
+
+        <button
+          type="button"
+          class="modal-close"
+          data-modal-close
+          aria-label="Close maintenance request form"
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            aria-hidden="true"
+          >
+            <path d="M18 6 6 18"></path>
+            <path d="m6 6 12 12"></path>
+          </svg>
+        </button>
+      </header>
+
+      <form
+        id="maintenanceRequestForm"
+        data-maintenance-request-form
+        novalidate
+      >
+        <input
+          type="hidden"
+          id="maintenanceRequestId"
+          name="maintenance_request_id"
+        />
+
+        <div class="modal-body">
+          <div
+            class="alert alert-danger"
+            data-maintenance-form-error
+            role="alert"
+            hidden
+          ></div>
+
+          <!-- Asset -->
+
+          <fieldset class="maintenance-form-section">
+            <legend class="maintenance-form-section-title">
+              Affected Asset
+            </legend>
+
+            <div class="form-group">
+              <label
+                class="form-label-required"
+                for="maintenanceAssetId"
+              >
+                Asset
+              </label>
+
+              <select
+                id="maintenanceAssetId"
+                name="asset_id"
+                required
+              >
+                <option value="">
+                  Select asset
+                </option>
+              </select>
+
+              <div class="form-error"></div>
+            </div>
+
+            <div
+              class="maintenance-asset-preview"
+              id="maintenanceAssetPreview"
+              hidden
+            >
+              <div
+                class="maintenance-asset-preview-icon"
+                aria-hidden="true"
+              >
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.9"
+                >
+                  <path d="M21 16V8"></path>
+                  <path d="m3.5 7 8.5 5 8.5-5"></path>
+                  <path d="M12 22V12"></path>
+                  <path d="M3 7l9-5 9 5v10l-9 5-9-5V7Z"></path>
+                </svg>
+              </div>
+
+              <div class="maintenance-asset-preview-content">
+                <h3 data-maintenance-preview-name>
+                  Asset Name
+                </h3>
+
+                <p>
+                  <span data-maintenance-preview-tag>
+                    Asset tag
+                  </span>
+
+                  <span aria-hidden="true">
+                    ·
+                  </span>
+
+                  <span data-maintenance-preview-location>
+                    Location
+                  </span>
+                </p>
+              </div>
+
+              <span
+                class="badge badge-neutral badge-dot"
+                data-maintenance-preview-status
+              >
+                Status
+              </span>
+            </div>
+          </fieldset>
+
+          <!-- Issue -->
+
+          <fieldset class="maintenance-form-section">
+            <legend class="maintenance-form-section-title">
+              Issue Information
+            </legend>
+
+            <div class="form-grid form-grid-2">
+              <div class="form-group">
+                <label
+                  class="form-label-required"
+                  for="maintenanceIssueType"
+                >
+                  Issue Type
+                </label>
+
+                <select
+                  id="maintenanceIssueType"
+                  name="issue_type"
+                  required
+                >
+                  <option value="">
+                    Select issue type
+                  </option>
+
+                  <option value="HardwareFailure">
+                    Hardware Failure
+                  </option>
+
+                  <option value="SoftwareIssue">
+                    Software Issue
+                  </option>
+
+                  <option value="PhysicalDamage">
+                    Physical Damage
+                  </option>
+
+                  <option value="ElectricalIssue">
+                    Electrical Issue
+                  </option>
+
+                  <option value="PerformanceIssue">
+                    Performance Issue
+                  </option>
+
+                  <option value="SafetyIssue">
+                    Safety Issue
+                  </option>
+
+                  <option value="PreventiveService">
+                    Preventive Service
+                  </option>
+
+                  <option value="Other">
+                    Other
+                  </option>
+                </select>
+
+                <div class="form-error"></div>
+              </div>
+
+              <div class="form-group">
+                <label
+                  class="form-label-required"
+                  for="maintenancePriority"
+                >
+                  Priority
+                </label>
+
+                <select
+                  id="maintenancePriority"
+                  name="priority"
+                  required
+                >
+                  <option value="Low">
+                    Low
+                  </option>
+
+                  <option
+                    value="Medium"
+                    selected
+                  >
+                    Medium
+                  </option>
+
+                  <option value="High">
+                    High
+                  </option>
+
+                  <option value="Critical">
+                    Critical
+                  </option>
+                </select>
+
+                <div class="form-error"></div>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label
+                class="form-label-required"
+                for="maintenanceIssueTitle"
+              >
+                Issue Title
+              </label>
+
+              <input
+                class="form-control"
+                type="text"
+                id="maintenanceIssueTitle"
+                name="title"
+                placeholder="Briefly describe the maintenance issue"
+                maxlength="180"
+                required
+              />
+
+              <div class="form-error"></div>
+            </div>
+
+            <div class="form-group">
+              <label
+                class="form-label-required"
+                for="maintenanceIssueDescription"
+              >
+                Detailed Description
+              </label>
+
+              <textarea
+                id="maintenanceIssueDescription"
+                name="description"
+                rows="5"
+                maxlength="1200"
+                placeholder="Explain symptoms, error messages, physical damage or troubleshooting already attempted..."
+                required
+              ></textarea>
+
+              <div class="form-character-count">
+                <span data-maintenance-description-count>
+                  0
+                </span>
+                / 1200
+              </div>
+
+              <div class="form-error"></div>
+            </div>
+          </fieldset>
+
+          <!-- Operational impact -->
+
+          <fieldset class="maintenance-form-section">
+            <legend class="maintenance-form-section-title">
+              Operational Impact
+            </legend>
+
+            <div class="form-grid form-grid-2">
+              <div class="form-group">
+                <label for="maintenanceDetectedDate">
+                  Issue Detected On
+                </label>
+
+                <input
+                  class="form-control"
+                  type="date"
+                  id="maintenanceDetectedDate"
+                  name="detected_date"
+                />
+
+                <div class="form-error"></div>
+              </div>
+
+              <div class="form-group">
+                <label for="maintenancePreferredCompletion">
+                  Preferred Completion
+                </label>
+
+                <input
+                  class="form-control"
+                  type="date"
+                  id="maintenancePreferredCompletion"
+                  name="preferred_completion_date"
+                />
+
+                <div class="form-error"></div>
+              </div>
+            </div>
+
+            <label class="switch-label">
+              <span>
+                <strong>Asset Cannot Be Used</strong>
+
+                <small>
+                  Mark the asset unavailable while maintenance is
+                  being processed.
+                </small>
+              </span>
+
+              <span class="switch">
+                <input
+                  type="checkbox"
+                  id="maintenanceAssetOffline"
+                  name="asset_offline"
+                />
+
+                <span class="switch-slider"></span>
+              </span>
+            </label>
+
+            <label class="switch-label">
+              <span>
+                <strong>Safety Risk</strong>
+
+                <small>
+                  Flag this issue as a potential safety or compliance
+                  concern.
+                </small>
+              </span>
+
+              <span class="switch">
+                <input
+                  type="checkbox"
+                  id="maintenanceSafetyRisk"
+                  name="safety_risk"
+                />
+
+                <span class="switch-slider"></span>
+              </span>
+            </label>
+          </fieldset>
+
+          <!-- Assignment -->
+
+          <fieldset
+            class="maintenance-form-section"
+            data-maintenance-assignment-section
+          >
+            <legend class="maintenance-form-section-title">
+              Assignment
+            </legend>
+
+            <div class="form-grid form-grid-2">
+              <div class="form-group">
+                <label for="maintenanceTechnicianId">
+                  Assigned Technician
+                </label>
+
+                <select
+                  id="maintenanceTechnicianId"
+                  name="technician_id"
+                >
+                  <option value="">
+                    Assign later
+                  </option>
+                </select>
+
+                <div class="form-error"></div>
+              </div>
+
+              <div class="form-group">
+                <label for="maintenanceVendor">
+                  External Vendor
+                </label>
+
+                <input
+                  class="form-control"
+                  type="text"
+                  id="maintenanceVendor"
+                  name="vendor"
+                  placeholder="Optional service provider"
+                  maxlength="180"
+                />
+
+                <div class="form-error"></div>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="maintenanceInitialNotes">
+                Internal Notes
+              </label>
+
+              <textarea
+                id="maintenanceInitialNotes"
+                name="internal_notes"
+                rows="3"
+                maxlength="600"
+                placeholder="Add internal instructions for the technician or maintenance team..."
+              ></textarea>
+
+              <div class="form-character-count">
+                <span data-maintenance-notes-count>
+                  0
+                </span>
+                / 600
+              </div>
+
+              <div class="form-error"></div>
+            </div>
+          </fieldset>
+        </div>
+
+        <footer class="modal-footer">
+          <button
+            type="button"
+            class="btn btn-outline"
+            data-modal-close
+          >
+            Cancel
+          </button>
+
+          <button
+            type="submit"
+            class="btn btn-primary"
+            id="maintenanceRequestSubmitButton"
+          >
+            Submit Request
+          </button>
+        </footer>
+      </form>
+    </section>
+  </div>
+
+  <!-- ====================================================
+       UPDATE MAINTENANCE MODAL
+       ==================================================== -->
+
+  <div
+    class="modal-overlay"
+    id="maintenanceUpdateModal"
+    aria-hidden="true"
+    data-close-on-overlay="false"
+  >
+    <section
+      class="modal maintenance-update-modal"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="maintenanceUpdateModalTitle"
+    >
+      <header class="modal-header">
+        <div class="modal-header-content">
+          <h2
+            class="modal-title"
+            id="maintenanceUpdateModalTitle"
+          >
+            Update Maintenance Request
+          </h2>
+
+          <p class="modal-subtitle">
+            Change ownership, progress status and service estimates.
+          </p>
+        </div>
+
+        <button
+          type="button"
+          class="modal-close"
+          data-modal-close
+          aria-label="Close maintenance update form"
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            aria-hidden="true"
+          >
+            <path d="M18 6 6 18"></path>
+            <path d="m6 6 12 12"></path>
+          </svg>
+        </button>
+      </header>
+
+      <form
+        id="maintenanceUpdateForm"
+        data-maintenance-update-form
+        novalidate
+      >
+        <input
+          type="hidden"
+          id="maintenanceUpdateRequestId"
+          name="maintenance_request_id"
+        />
+
+        <div class="modal-body">
+          <div
+            class="alert alert-danger"
+            data-maintenance-update-error
+            role="alert"
+            hidden
+          ></div>
+
+          <div class="maintenance-update-preview">
+            <div
+              class="maintenance-update-preview-icon"
+              aria-hidden="true"
+            >
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.9"
+              >
+                <path d="M14.7 6.3a4 4 0 0 0-5-5l2.1 2.1-2.4 2.4-2.1-2.1a4 4 0 0 0 5 5l7.3 7.3"></path>
+                <path d="m5 19 4-4"></path>
+              </svg>
+            </div>
+
+            <div>
+              <h3 data-maintenance-update-asset>
+                Asset Name
+              </h3>
+
+              <p data-maintenance-update-title>
+                Maintenance issue
+              </p>
+            </div>
+          </div>
+
+          <div class="form-grid form-grid-2">
+            <div class="form-group">
+              <label
+                class="form-label-required"
+                for="maintenanceUpdateStatus"
+              >
+                Status
+              </label>
+
+              <select
+                id="maintenanceUpdateStatus"
+                name="status"
+                required
+              >
+                <option value="Reported">
+                  Reported
+                </option>
+
+                <option value="Assigned">
+                  Assigned
+                </option>
+
+                <option value="InProgress">
+                  In Progress
+                </option>
+
+                <option value="AwaitingParts">
+                  Awaiting Parts
+                </option>
+
+                <option value="OnHold">
+                  On Hold
+                </option>
+
+                <option value="Completed">
+                  Completed
+                </option>
+
+                <option value="Cancelled">
+                  Cancelled
+                </option>
+              </select>
+
+              <div class="form-error"></div>
+            </div>
+
+            <div class="form-group">
+              <label for="maintenanceUpdateTechnician">
+                Assigned Technician
+              </label>
+
+              <select
+                id="maintenanceUpdateTechnician"
+                name="technician_id"
+              >
+                <option value="">
+                  Unassigned
+                </option>
+              </select>
+
+              <div class="form-error"></div>
+            </div>
+          </div>
+
+          <div class="form-grid form-grid-2">
+            <div class="form-group">
+              <label for="maintenanceEstimatedCompletion">
+                Estimated Completion
+              </label>
+
+              <input
+                class="form-control"
+                type="date"
+                id="maintenanceEstimatedCompletion"
+                name="estimated_completion_date"
+              />
+
+              <div class="form-error"></div>
+            </div>
+
+            <div class="form-group">
+              <label for="maintenanceEstimatedCost">
+                Estimated Cost
+              </label>
+
+              <div class="form-input-wrapper">
+                <span class="form-input-prefix">
+                  ₹
+                </span>
+
+                <input
+                  class="form-control has-prefix"
+                  type="number"
+                  id="maintenanceEstimatedCost"
+                  name="estimated_cost"
+                  min="0"
+                  step="0.01"
+                  placeholder="0.00"
+                  inputmode="decimal"
+                />
+              </div>
+
+              <div class="form-error"></div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="maintenancePartsRequired">
+              Parts or Materials Required
+            </label>
+
+            <textarea
+              id="maintenancePartsRequired"
+              name="parts_required"
+              rows="3"
+              maxlength="500"
+              placeholder="List replacement parts, accessories or materials..."
+            ></textarea>
+
+            <div class="form-error"></div>
+          </div>
+
+          <div class="form-group">
+            <label
+              class="form-label-required"
+              for="maintenanceProgressNote"
+            >
+              Progress Note
+            </label>
+
+            <textarea
+              id="maintenanceProgressNote"
+              name="progress_note"
+              rows="4"
+              maxlength="800"
+              placeholder="Describe work completed, findings or blockers..."
+              required
+            ></textarea>
+
+            <div class="form-character-count">
+              <span data-maintenance-progress-count>
+                0
+              </span>
+              / 800
+            </div>
+
+            <div class="form-error"></div>
+          </div>
+        </div>
+
+        <footer class="modal-footer">
+          <button
+            type="button"
+            class="btn btn-outline"
+            data-modal-close
+          >
+            Cancel
+          </button>
+
+          <button
+            type="submit"
+            class="btn btn-primary"
+            id="maintenanceUpdateSubmitButton"
+          >
+            Save Update
+          </button>
+        </footer>
+      </form>
+    </section>
+  </div>
+
+  <!-- ====================================================
+       COMPLETE MAINTENANCE MODAL
+       ==================================================== -->
+
+  <div
+    class="modal-overlay"
+    id="completeMaintenanceModal"
+    aria-hidden="true"
+    data-close-on-overlay="false"
+  >
+    <section
+      class="modal"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="completeMaintenanceModalTitle"
+    >
+      <header class="modal-header">
+        <div class="modal-header-content">
+          <h2
+            class="modal-title"
+            id="completeMaintenanceModalTitle"
+          >
+            Complete Maintenance
+          </h2>
+
+          <p class="modal-subtitle">
+            Record the final resolution and return the asset to its
+            appropriate lifecycle status.
+          </p>
+        </div>
+
+        <button
+          type="button"
+          class="modal-close"
+          data-modal-close
+          aria-label="Close maintenance completion form"
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            aria-hidden="true"
+          >
+            <path d="M18 6 6 18"></path>
+            <path d="m6 6 12 12"></path>
+          </svg>
+        </button>
+      </header>
+
+      <form
+        id="completeMaintenanceForm"
+        data-complete-maintenance-form
+        novalidate
+      >
+        <input
+          type="hidden"
+          id="completeMaintenanceRequestId"
+          name="maintenance_request_id"
+        />
+
+        <div class="modal-body">
+          <div
+            class="alert alert-danger"
+            data-complete-maintenance-error
+            role="alert"
+            hidden
+          ></div>
+
+          <div class="maintenance-completion-preview">
+            <div
+              class="maintenance-completion-icon"
+              aria-hidden="true"
+            >
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.9"
+              >
+                <circle
+                  cx="12"
+                  cy="12"
+                  r="9"
+                ></circle>
+
+                <path d="m8 12 3 3 5-6"></path>
+              </svg>
+            </div>
+
+            <div>
+              <h3 data-completion-asset-name>
+                Asset Name
+              </h3>
+
+              <p data-completion-issue-title>
+                Maintenance issue
+              </p>
+            </div>
+          </div>
+
+          <div class="form-grid form-grid-2">
+            <div class="form-group">
+              <label
+                class="form-label-required"
+                for="maintenanceCompletedDate"
+              >
+                Completion Date
+              </label>
+
+              <input
+                class="form-control"
+                type="date"
+                id="maintenanceCompletedDate"
+                name="completed_date"
+                required
+              />
+
+              <div class="form-error"></div>
+            </div>
+
+            <div class="form-group">
+              <label
+                class="form-label-required"
+                for="maintenanceFinalCost"
+              >
+                Final Cost
+              </label>
+
+              <div class="form-input-wrapper">
+                <span class="form-input-prefix">
+                  ₹
+                </span>
+
+                <input
+                  class="form-control has-prefix"
+                  type="number"
+                  id="maintenanceFinalCost"
+                  name="final_cost"
+                  min="0"
+                  step="0.01"
+                  placeholder="0.00"
+                  inputmode="decimal"
+                  required
+                />
+              </div>
+
+              <div class="form-error"></div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label
+              class="form-label-required"
+              for="maintenanceResolution"
+            >
+              Resolution Summary
+            </label>
+
+            <textarea
+              id="maintenanceResolution"
+              name="resolution"
+              rows="5"
+              maxlength="1200"
+              placeholder="Describe the diagnosis, work performed and final result..."
+              required
+            ></textarea>
+
+            <div class="form-character-count">
+              <span data-maintenance-resolution-count>
+                0
+              </span>
+              / 1200
+            </div>
+
+            <div class="form-error"></div>
+          </div>
+
+          <div class="form-grid form-grid-2">
+            <div class="form-group">
+              <label
+                class="form-label-required"
+                for="maintenancePostCondition"
+              >
+                Asset Condition
+              </label>
+
+              <select
+                id="maintenancePostCondition"
+                name="post_maintenance_condition"
+                required
+              >
+                <option value="">
+                  Select condition
+                </option>
+
+                <option value="Excellent">
+                  Excellent
+                </option>
+
+                <option value="Good">
+                  Good
+                </option>
+
+                <option value="Fair">
+                  Fair
+                </option>
+
+                <option value="NeedsMonitoring">
+                  Needs Monitoring
+                </option>
+
+                <option value="NotRepairable">
+                  Not Repairable
+                </option>
+              </select>
+
+              <div class="form-error"></div>
+            </div>
+
+            <div class="form-group">
+              <label
+                class="form-label-required"
+                for="maintenanceAssetNextStatus"
+              >
+                Asset Status After Completion
+              </label>
+
+              <select
+                id="maintenanceAssetNextStatus"
+                name="asset_status"
+                required
+              >
+                <option value="Available">
+                  Available
+                </option>
+
+                <option value="Allocated">
+                  Allocated
+                </option>
+
+                <option value="UnderMaintenance">
+                  Keep Under Maintenance
+                </option>
+
+                <option value="Retired">
+                  Retired
+                </option>
+
+                <option value="Disposed">
+                  Disposed
+                </option>
+              </select>
+
+              <div class="form-error"></div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="maintenanceWarrantyInformation">
+              Repair Warranty or Follow-up
+            </label>
+
+            <textarea
+              id="maintenanceWarrantyInformation"
+              name="warranty_information"
+              rows="3"
+              maxlength="500"
+              placeholder="Add repair warranty details or recommended follow-up actions..."
+            ></textarea>
+
+            <div class="form-error"></div>
+          </div>
+        </div>
+
+        <footer class="modal-footer">
+          <button
+            type="button"
+            class="btn btn-outline"
+            data-modal-close
+          >
+            Cancel
+          </button>
+
+          <button
+            type="submit"
+            class="btn btn-primary"
+            id="completeMaintenanceSubmitButton"
+          >
+            Complete Maintenance
+          </button>
+        </footer>
+      </form>
+    </section>
+  </div>
+
+  <!-- ====================================================
+       PREVENTIVE MAINTENANCE MODAL
+       ==================================================== -->
+
+  <div
+    class="modal-overlay"
+    id="preventiveMaintenanceModal"
+    aria-hidden="true"
+    data-close-on-overlay="false"
+  >
+    <section
+      class="modal"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="preventiveMaintenanceModalTitle"
+    >
+      <header class="modal-header">
+        <div class="modal-header-content">
+          <h2
+            class="modal-title"
+            id="preventiveMaintenanceModalTitle"
+            data-preventive-form-title
+          >
+            Create Preventive Schedule
+          </h2>
+
+          <p class="modal-subtitle">
+            Configure recurring inspections or planned service for an
+            asset.
+          </p>
+        </div>
+
+        <button
+          type="button"
+          class="modal-close"
+          data-modal-close
+          aria-label="Close preventive maintenance form"
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            aria-hidden="true"
+          >
+            <path d="M18 6 6 18"></path>
+            <path d="m6 6 12 12"></path>
+          </svg>
+        </button>
+      </header>
+
+      <form
+        id="preventiveMaintenanceForm"
+        data-preventive-maintenance-form
+        novalidate
+      >
+        <input
+          type="hidden"
+          id="preventiveScheduleId"
+          name="schedule_id"
+        />
+
+        <div class="modal-body">
+          <div
+            class="alert alert-danger"
+            data-preventive-maintenance-error
+            role="alert"
+            hidden
+          ></div>
+
+          <div class="form-group">
+            <label
+              class="form-label-required"
+              for="preventiveAssetId"
+            >
+              Asset
+            </label>
+
+            <select
+              id="preventiveAssetId"
+              name="asset_id"
+              required
+            >
+              <option value="">
+                Select asset
+              </option>
+            </select>
+
+            <div class="form-error"></div>
+          </div>
+
+          <div class="form-group">
+            <label
+              class="form-label-required"
+              for="preventiveScheduleName"
+            >
+              Schedule Name
+            </label>
+
+            <input
+              class="form-control"
+              type="text"
+              id="preventiveScheduleName"
+              name="name"
+              placeholder="e.g. Quarterly Safety Inspection"
+              maxlength="180"
+              required
+            />
+
+            <div class="form-error"></div>
+          </div>
+
+          <div class="form-grid form-grid-2">
+            <div class="form-group">
+              <label
+                class="form-label-required"
+                for="preventiveFrequency"
+              >
+                Frequency
+              </label>
+
+              <select
+                id="preventiveFrequency"
+                name="frequency"
+                required
+              >
+                <option value="Weekly">
+                  Weekly
+                </option>
+
+                <option value="Monthly">
+                  Monthly
+                </option>
+
+                <option
+                  value="Quarterly"
+                  selected
+                >
+                  Quarterly
+                </option>
+
+                <option value="HalfYearly">
+                  Half-Yearly
+                </option>
+
+                <option value="Yearly">
+                  Yearly
+                </option>
+
+                <option value="Custom">
+                  Custom Interval
+                </option>
+              </select>
+
+              <div class="form-error"></div>
+            </div>
+
+            <div class="form-group">
+              <label
+                class="form-label-required"
+                for="preventiveNextDueDate"
+              >
+                Next Due Date
+              </label>
+
+              <input
+                class="form-control"
+                type="date"
+                id="preventiveNextDueDate"
+                name="next_due_date"
+                required
+              />
+
+              <div class="form-error"></div>
+            </div>
+          </div>
+
+          <div
+            class="form-group"
+            id="preventiveCustomIntervalGroup"
+            hidden
+          >
+            <label for="preventiveCustomIntervalDays">
+              Custom Interval in Days
+            </label>
+
+            <input
+              class="form-control"
+              type="number"
+              id="preventiveCustomIntervalDays"
+              name="custom_interval_days"
+              min="1"
+              max="3650"
+              placeholder="Enter interval in days"
+            />
+
+            <div class="form-error"></div>
+          </div>
+
+          <div class="form-grid form-grid-2">
+            <div class="form-group">
+              <label for="preventiveTechnicianId">
+                Default Technician
+              </label>
+
+              <select
+                id="preventiveTechnicianId"
+                name="technician_id"
+              >
+                <option value="">
+                  Assign when due
+                </option>
+              </select>
+
+              <div class="form-error"></div>
+            </div>
+
+            <div class="form-group">
+              <label for="preventiveEstimatedDuration">
+                Estimated Duration
+              </label>
+
+              <input
+                class="form-control"
+                type="number"
+                id="preventiveEstimatedDuration"
+                name="estimated_duration_hours"
+                min="0.25"
+                step="0.25"
+                placeholder="Hours"
+                inputmode="decimal"
+              />
+
+              <div class="form-error"></div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label
+              class="form-label-required"
+              for="preventiveTaskDescription"
+            >
+              Maintenance Tasks
+            </label>
+
+            <textarea
+              id="preventiveTaskDescription"
+              name="task_description"
+              rows="5"
+              maxlength="1000"
+              placeholder="List the inspection checks, servicing steps or replacement tasks..."
+              required
+            ></textarea>
+
+            <div class="form-character-count">
+              <span data-preventive-task-count>
+                0
+              </span>
+              / 1000
+            </div>
+
+            <div class="form-error"></div>
+          </div>
+
+          <label class="switch-label">
+            <span>
+              <strong>Automatic Request Creation</strong>
+
+              <small>
+                Automatically create a maintenance request when the
+                schedule becomes due.
+              </small>
+            </span>
+
+            <span class="switch">
+              <input
+                type="checkbox"
+                id="preventiveAutoCreate"
+                name="auto_create_request"
+                checked
+              />
+
+              <span class="switch-slider"></span>
+            </span>
+          </label>
+
+          <label class="switch-label">
+            <span>
+              <strong>Reminder Notifications</strong>
+
+              <small>
+                Notify the assigned technician and asset manager
+                before the due date.
+              </small>
+            </span>
+
+            <span class="switch">
+              <input
+                type="checkbox"
+                id="preventiveNotifications"
+                name="notifications_enabled"
+                checked
+              />
+
+              <span class="switch-slider"></span>
+            </span>
+          </label>
+        </div>
+
+        <footer class="modal-footer">
+          <button
+            type="button"
+            class="btn btn-outline"
+            data-modal-close
+          >
+            Cancel
+          </button>
+
+          <button
+            type="submit"
+            class="btn btn-primary"
+            id="preventiveMaintenanceSubmitButton"
+          >
+            Create Schedule
+          </button>
+        </footer>
+      </form>
+    </section>
+  </div>
+
+  <!-- ====================================================
+       MAINTENANCE DETAILS MODAL
+       ==================================================== -->
+
+  <div
+    class="modal-overlay"
+    id="maintenanceDetailsModal"
+    aria-hidden="true"
+    data-close-on-overlay="true"
+  >
+    <section
+      class="modal maintenance-details-modal"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="maintenanceDetailsTitle"
+    >
+      <header class="modal-header">
+        <div class="maintenance-details-heading">
+          <div
+            class="maintenance-details-icon"
+            aria-hidden="true"
+          >
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.9"
+            >
+              <path d="M14.7 6.3a4 4 0 0 0-5-5l2.1 2.1-2.4 2.4-2.1-2.1a4 4 0 0 0 5 5l7.3 7.3"></path>
+              <path d="m5 19 4-4"></path>
+            </svg>
+          </div>
+
+          <div>
+            <h2
+              class="modal-title"
+              id="maintenanceDetailsTitle"
+              data-maintenance-detail-asset
+            >
+              Maintenance Details
+            </h2>
+
+            <p
+              class="modal-subtitle"
+              data-maintenance-detail-reference
+            >
+              Loading maintenance information...
+            </p>
+          </div>
+        </div>
+
+        <button
+          type="button"
+          class="modal-close"
+          data-modal-close
+          aria-label="Close maintenance details"
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            aria-hidden="true"
+          >
+            <path d="M18 6 6 18"></path>
+            <path d="m6 6 12 12"></path>
+          </svg>
+        </button>
+      </header>
+
+      <div class="modal-body">
+        <div class="maintenance-detail-status-row">
+          <span
+            class="badge badge-warning badge-dot"
+            data-maintenance-detail-status
+          >
+            Reported
+          </span>
+
+          <span
+            class="badge badge-danger"
+            data-maintenance-detail-priority
+          >
+            High Priority
+          </span>
+
+          <span
+            class="badge badge-neutral"
+            data-maintenance-detail-issue-type
+          >
+            Hardware Failure
+          </span>
+        </div>
+
+        <div class="maintenance-detail-overview">
+          <div class="maintenance-detail-grid">
+            <div class="maintenance-detail-item">
+              <span class="maintenance-detail-label">
+                Reported By
+              </span>
+
+              <span
+                class="maintenance-detail-value"
+                data-maintenance-detail-reporter
+              >
+                —
+              </span>
+            </div>
+
+            <div class="maintenance-detail-item">
+              <span class="maintenance-detail-label">
+                Technician
+              </span>
+
+              <span
+                class="maintenance-detail-value"
+                data-maintenance-detail-technician
+              >
+                Unassigned
+              </span>
+            </div>
+
+            <div class="maintenance-detail-item">
+              <span class="maintenance-detail-label">
+                Reported On
+              </span>
+
+              <span
+                class="maintenance-detail-value"
+                data-maintenance-detail-reported-date
+              >
+                —
+              </span>
+            </div>
+
+            <div class="maintenance-detail-item">
+              <span class="maintenance-detail-label">
+                Estimated Completion
+              </span>
+
+              <span
+                class="maintenance-detail-value"
+                data-maintenance-detail-estimated-completion
+              >
+                —
+              </span>
+            </div>
+
+            <div class="maintenance-detail-item">
+              <span class="maintenance-detail-label">
+                Asset Location
+              </span>
+
+              <span
+                class="maintenance-detail-value"
+                data-maintenance-detail-location
+              >
+                —
+              </span>
+            </div>
+
+            <div class="maintenance-detail-item">
+              <span class="maintenance-detail-label">
+                Estimated Cost
+              </span>
+
+              <span
+                class="maintenance-detail-value"
+                data-maintenance-detail-estimated-cost
+              >
+                —
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <div class="maintenance-details-section">
+          <h3>
+            Issue
+          </h3>
+
+          <strong data-maintenance-detail-title>
+            Maintenance issue
+          </strong>
+
+          <p data-maintenance-detail-description>
+            —
+          </p>
+        </div>
+
+        <div
+          class="maintenance-risk-banner"
+          data-maintenance-risk-banner
+          hidden
+        >
+          <div
+            class="maintenance-risk-icon"
+            aria-hidden="true"
+          >
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path d="M12 3 2 21h20L12 3Z"></path>
+              <path d="M12 9v4"></path>
+              <path d="M12 17h.01"></path>
+            </svg>
+          </div>
+
+          <div>
+            <strong>
+              Safety-sensitive maintenance
+            </strong>
+
+            <p>
+              This issue has been marked as a potential safety or
+              compliance concern.
+            </p>
+          </div>
+        </div>
+
+        <div class="maintenance-details-section">
+          <div class="maintenance-details-section-header">
+            <h3>
+              Maintenance Activity
+            </h3>
+
+            <span
+              class="text-muted"
+              data-maintenance-activity-count
+            >
+              0 events
+            </span>
+          </div>
+
+          <div
+            class="maintenance-activity-timeline"
+            data-maintenance-activity-timeline
+          >
+            <div class="timeline-item">
+              <div class="skeleton skeleton-avatar"></div>
+
+              <div class="timeline-content">
+                <div class="skeleton skeleton-text"></div>
+                <div class="skeleton skeleton-text-sm mt-2"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <footer class="modal-footer maintenance-details-footer">
+        <button
+          type="button"
+          class="btn btn-outline"
+          data-modal-close
+        >
+          Close
+        </button>
+
+        <button
+          type="button"
+          class="btn btn-outline"
+          data-edit-current-maintenance
+        >
+          Edit Request
+        </button>
+
+        <button
+          type="button"
+          class="btn btn-outline"
+          data-update-current-maintenance
+          data-roles="Admin,AssetManager"
+        >
+          Add Update
+        </button>
+
+        <button
+          type="button"
+          class="btn btn-primary"
+          data-complete-current-maintenance
+          data-roles="Admin,AssetManager"
+        >
+          Complete
+        </button>
+      </footer>
+    </section>
+  </div>
+
+  <!-- ====================================================
+       SHARED COMPONENTS
+       ==================================================== -->
+
+  <div
+    id="loader-container"
+    data-component="loader"
+  ></div>
+
+  <div
+    id="modal-container"
+    data-component="modal"
+  ></div>
+
+  <div
+    class="sidebar-overlay"
+    id="sidebarOverlay"
+    aria-hidden="true"
+  ></div>
+
+  <div
+    class="toast-container"
+    aria-live="polite"
+    aria-label="Notifications"
+  ></div>
+
+  <!-- ====================================================
+       JAVASCRIPT
+       ==================================================== -->
+
+  <script src="../js/api.js"></script>
+  <script src="../js/utils.js"></script>
+  <script src="../js/auth.js"></script>
+  <script src="../js/loader.js"></script>
+  <script src="../js/sidebar.js"></script>
+
+  <script src="maintenance.js"></script>
+</body>
+</html>
