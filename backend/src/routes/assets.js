@@ -106,7 +106,7 @@ router.post(
   }
 );
 
-router.get('/:id', async (req, res, next) => {
+router.get(['/:id', '/:id/detail'], async (req, res, next) => {
   try {
     const id = parseInt(req.params.id, 10);
     const asset = await db('assets as a')

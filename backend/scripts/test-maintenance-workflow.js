@@ -1,12 +1,12 @@
 require('dotenv').config();
 
-const db = require('./src/config/db');
-const AppError = require('./src/utils/AppError');
-const activityLogService = require('./src/services/activityLogService');
+const db = require('../src/config/db');
+const AppError = require('../src/utils/AppError');
+const activityLogService = require('../src/services/activityLogService');
 const {
   createMaintenanceRequest,
   updateMaintenanceStatus,
-} = require('./src/services/maintenanceService');
+} = require('../src/services/maintenanceService');
 
 async function assertThrows(fn, expectedStatus, label) {
   try {

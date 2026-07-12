@@ -9,9 +9,9 @@
     "migrate": "knex migrate:latest",
     "migrate:rollback": "knex migrate:rollback",
     "seed": "node seed.js",
-    "test:booking-overlap": "node test-booking-overlap.js",
-    "test:maintenance-workflow": "node test-maintenance-workflow.js",
-    "test:audit-findings": "node test-audit-findings.js"
+    "test:booking-overlap": "node scripts/test-booking-overlap.js",
+    "test:maintenance-workflow": "node scripts/test-maintenance-workflow.js",
+    "test:audit-findings": "node scripts/test-audit-findings.js"
   },
   "dependencies": {
     "bcrypt": "^5.1.1",
