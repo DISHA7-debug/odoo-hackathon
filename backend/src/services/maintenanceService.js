@@ -2,7 +2,7 @@ const db = require('../config/db');
 const AppError = require('../utils/AppError');
 const { findAssetById } = require('../utils/dbHelpers');
 const { transitionAssetStatus } = require('./assetStatusService');
-const { logActivity } = require('./activityLogService');
+const activityLogService = require('./activityLogService');
 const { notify } = require('./notificationService');
 
 const MAINTENANCE_STATUSES = [
@@ -62,7 +62,7 @@ async function createMaintenanceRequest(
     })
     .returning('*');
 
-  await logActivity(userId, 'MAINTENANCE_REQUESTED', 'maintenance_request', request.id, {
+  await activityLogService.logActivity(userId, 'MAINTENANCE_REQUESTED', 'maintenance_request', request.id, {
     asset_id,
     priority,
   });
@@ -88,42 +88,48 @@ async function updateMaintenanceStatus(requestId, { status, technician }, userId
     );
   }
 
-  const updateData = { status };
+  const updated = await db.transaction(async (trx) => {
+    const updateData = { status };
 
-  if (status === 'Approved') {
-    updateData.approved_by = userId;
-    await transitionAssetStatus(
-      request.asset_id,
-      'Under Maintenance',
-      userId,
-      'Maintenance approved'
-    );
-  } else if (status === 'Rejected') {
-    updateData.approved_by = userId;
-  } else if (status === 'TechnicianAssigned') {
-    if (!technician) {
-      throw new AppError('technician is required when assigning a technician', 400, 'technician');
+    if (status === 'Approved') {
+      updateData.approved_by = userId;
+      await transitionAssetStatus(
+        request.asset_id,
+        'Under Maintenance',
+        userId,
+        'Maintenance approved',
+        trx
+      );
+    } else if (status === 'Rejected') {
+      updateData.approved_by = userId;
+    } else if (status === 'TechnicianAssigned') {
+      if (!technician) {
+        throw new AppError('technician is required when assigning a technician', 400, 'technician');
+      }
+      updateData.technician = technician;
+    } else if (status === 'Resolved') {
+      updateData.resolved_at = trx.fn.now();
+      await transitionAssetStatus(
+        request.asset_id,
+        'Available',
+        userId,
+        'Maintenance resolved',
+        trx
+      );
     }
-    updateData.technician = technician;
-  } else if (status === 'Resolved') {
-    updateData.resolved_at = db.fn.now();
-    await transitionAssetStatus(
-      request.asset_id,
-      'Available',
-      userId,
-      'Maintenance resolved'
-    );
-  }
 
-  const [updated] = await db('maintenance_requests')
-    .where({ id: requestId })
-    .update(updateData)
-    .returning('*');
+    const [row] = await trx('maintenance_requests')
+      .where({ id: requestId })
+      .update(updateData)
+      .returning('*');
 
-  await logActivity(userId, 'MAINTENANCE_STATUS_CHANGED', 'maintenance_request', requestId, {
-    from: request.status,
-    to: status,
-    asset_id: request.asset_id,
+    await activityLogService.logActivity(userId, 'MAINTENANCE_STATUS_CHANGED', 'maintenance_request', requestId, {
+      from: request.status,
+      to: status,
+      asset_id: request.asset_id,
+    }, trx);
+
+    return row;
   });
 
   if (status === 'Approved') {

@@ -148,6 +148,47 @@ async function seed() {
       status: 'Upcoming',
     });
 
+    // === Maintenance Requests ===
+    const pendingAsset = assets.find((a) => a.asset_tag === 'AF-0010');
+    const approvedAsset = assets.find((a) => a.asset_tag === 'AF-0016');
+    const inProgressAsset = assets.find((a) => a.asset_tag === 'AF-0019');
+    const resolvedAsset = assets.find((a) => a.asset_tag === 'AF-0015');
+
+    // Make sure assets match their maintenance status
+    await trx('assets').whereIn('id', [approvedAsset.id, inProgressAsset.id]).update({ status: 'Under Maintenance' });
+
+    await trx('maintenance_requests').insert([
+      { asset_id: pendingAsset.id, raised_by: priya.id, issue_description: 'Drawer stuck', priority: 'Low', status: 'Pending' },
+      { asset_id: approvedAsset.id, raised_by: arjun.id, issue_description: 'Won\'t turn on', priority: 'High', status: 'Approved', approved_by: admin.id },
+      { asset_id: inProgressAsset.id, raised_by: kavya.id, issue_description: 'Surface scratched', priority: 'Medium', status: 'InProgress', approved_by: admin.id, technician: 'Bob Fixit' },
+      { asset_id: resolvedAsset.id, raised_by: priya.id, issue_description: 'Battery dead', priority: 'High', status: 'Resolved', approved_by: admin.id, technician: 'Alice Tech', resolved_at: trx.fn.now() }
+    ]);
+
+    // === Audit Cycles ===
+    const sneha = users.find((u) => u.email === 'sneha.manager@assetflow.com');
+
+    const [cycle] = await trx('audit_cycles').insert({
+      scope_department_id: engineering.id,
+      date_range_start: today.toISOString().slice(0, 10),
+      date_range_end: futureStr,
+      status: 'Open'
+    }).returning('*');
+
+    await trx('audit_assignments').insert({
+      audit_cycle_id: cycle.id,
+      auditor_id: sneha.id
+    });
+
+    const verifiedAsset = assets.find((a) => a.asset_tag === 'AF-0004');
+    const missingAsset = assets.find((a) => a.asset_tag === 'AF-0008');
+    const damagedAsset = assets.find((a) => a.asset_tag === 'AF-0009');
+
+    await trx('audit_findings').insert([
+      { audit_cycle_id: cycle.id, asset_id: verifiedAsset.id, result: 'Verified', recorded_by: sneha.id },
+      { audit_cycle_id: cycle.id, asset_id: missingAsset.id, result: 'Missing', notes: 'Not at desk', recorded_by: sneha.id },
+      { audit_cycle_id: cycle.id, asset_id: damagedAsset.id, result: 'Damaged', notes: 'Screen cracked', recorded_by: sneha.id }
+    ]);
+
     await trx('activity_logs').insert({
       user_id: admin.id,
       action: 'SEED_COMPLETED',

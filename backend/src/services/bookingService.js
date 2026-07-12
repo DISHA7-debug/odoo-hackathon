@@ -65,15 +65,27 @@ async function createBooking({ resource_asset_id, start_time, end_time }, userId
     );
   }
 
-  const [booking] = await db('bookings')
-    .insert({
-      resource_asset_id,
-      booked_by: userId,
-      start_time: startTime,
-      end_time: endTime,
-      status: 'Upcoming',
-    })
-    .returning('*');
+  let booking;
+  try {
+    [booking] = await db('bookings')
+      .insert({
+        resource_asset_id,
+        booked_by: userId,
+        start_time: startTime,
+        end_time: endTime,
+        status: 'Upcoming',
+      })
+      .returning('*');
+  } catch (err) {
+    if (err.code === '23P01') {
+      const dbOverlap = await findOverlappingBooking(resource_asset_id, startTime, endTime);
+      const message = dbOverlap
+        ? `Slot overlaps with an existing booking (${formatTimeRange(dbOverlap.start_time, dbOverlap.end_time)})`
+        : 'Slot overlaps with an existing booking';
+      throw new AppError(message, 409);
+    }
+    throw err;
+  }
 
   await logActivity(userId, 'BOOKING_CREATED', 'booking', booking.id, {
     resource_asset_id,

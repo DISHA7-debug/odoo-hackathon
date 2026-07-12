@@ -24,8 +24,41 @@ async function assertThrows(fn, expectedStatus, label) {
   }
 }
 
+async function assertRawInsertRejected(label, userId) {
+  const baseDate = '2026-07-13';
+
+  try {
+    await db('bookings').insert({
+      resource_asset_id: RESOURCE_ASSET_ID,
+      booked_by: userId,
+      start_time: new Date(`${baseDate}T09:30:00`),
+      end_time: new Date(`${baseDate}T10:30:00`),
+      status: 'Upcoming',
+    });
+    console.error(`FAIL: ${label} — raw insert should have been rejected`);
+    process.exit(1);
+  } catch (err) {
+    if (err.code !== '23P01') {
+      console.error(`FAIL: ${label} — expected Postgres code 23P01, got`, err.code, err.message);
+      process.exit(1);
+    }
+    console.log(`PASS: ${label} — Postgres exclusion constraint rejected overlapping insert`);
+  }
+}
+
 async function runTests() {
   console.log('Running booking overlap tests...');
+
+  const constraint = await db.raw(`
+    SELECT 1
+    FROM pg_constraint
+    WHERE conname = 'bookings_no_time_overlap'
+  `);
+  if (!constraint.rows.length) {
+    console.error('FAIL: bookings_no_time_overlap constraint not found in pg_constraint');
+    process.exit(1);
+  }
+  console.log('PASS: bookings_no_time_overlap exclusion constraint exists');
 
   await db('notifications').where('type', 'BOOKING_CONFIRMED').del();
   await db('activity_logs').where('action', 'BOOKING_CREATED').del();
@@ -77,6 +110,8 @@ async function runTests() {
     process.exit(1);
   }
   console.log('PASS: 10:00-11:00 accepted (adjacent, no overlap)');
+
+  await assertRawInsertRejected('raw overlapping insert blocked by DB constraint', userId);
 
   console.log('\nAll booking overlap tests passed.');
 }

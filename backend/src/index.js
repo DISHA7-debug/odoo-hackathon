@@ -1,4 +1,6 @@
 const express = require('express');
+const helmet = require('helmet');
+const cors = require('cors');
 const env = require('./config/env');
 const errorHandler = require('./middleware/errorHandler');
 
@@ -17,6 +19,9 @@ const reportRoutes = require('./routes/reports');
 
 const app = express();
 
+// TODO: scope CORS to a specific frontend origin before production deployment
+app.use(helmet());
+app.use(cors());
 app.use(express.json());
 
 app.get('/health', (req, res) => {

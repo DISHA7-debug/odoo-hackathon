@@ -2,6 +2,7 @@ require('dotenv').config();
 
 const db = require('./src/config/db');
 const AppError = require('./src/utils/AppError');
+const activityLogService = require('./src/services/activityLogService');
 const {
   createMaintenanceRequest,
   updateMaintenanceStatus,
@@ -64,6 +65,52 @@ async function runTests() {
     process.exit(1);
   }
   console.log('PASS: Resolved transitions asset back to Available');
+
+  // Rollback test: simulate failure inside the transaction after asset transition
+  await db('maintenance_requests').where({ asset_id: asset.id }).del();
+  await db('assets').where({ id: asset.id }).update({ status: 'Available' });
+
+  const rollbackRequest = await createMaintenanceRequest({
+    asset_id: asset.id,
+    issue_description: 'Simulated rollback test',
+    priority: 'Medium',
+  }, employee.id);
+
+  const originalLogActivity = activityLogService.logActivity;
+  activityLogService.logActivity = async (userId, action, entityType, entityId, metadata, trx) => {
+    if (action === 'MAINTENANCE_STATUS_CHANGED') {
+      throw new Error('simulated mid-transaction failure');
+    }
+    return originalLogActivity(userId, action, entityType, entityId, metadata, trx);
+  };
+
+  try {
+    await updateMaintenanceStatus(rollbackRequest.id, { status: 'Approved' }, manager.id);
+    console.error('FAIL: transaction should have rolled back on simulated failure');
+    process.exit(1);
+  } catch (err) {
+    if (err.message !== 'simulated mid-transaction failure') {
+      console.error('FAIL: unexpected error during rollback test', err.message);
+      process.exit(1);
+    }
+  } finally {
+    activityLogService.logActivity = originalLogActivity;
+  }
+
+  const assetAfterRollback = await db('assets').where({ id: asset.id }).first();
+  const requestAfterRollback = await db('maintenance_requests')
+    .where({ id: rollbackRequest.id })
+    .first();
+
+  if (assetAfterRollback.status !== 'Available') {
+    console.error('FAIL: asset status should roll back to Available');
+    process.exit(1);
+  }
+  if (requestAfterRollback.status !== 'Pending') {
+    console.error('FAIL: maintenance request status should roll back to Pending');
+    process.exit(1);
+  }
+  console.log('PASS: transaction rolls back asset and request status together on failure');
 
   console.log('\nAll maintenance workflow tests passed.');
 }

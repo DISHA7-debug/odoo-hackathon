@@ -78,6 +78,16 @@ async function addFinding(cycleId, { asset_id, result, notes }, userId) {
     throw new AppError('Cannot add findings to a closed audit cycle', 400, 'status');
   }
 
+  const user = await findUserById(userId);
+  if (user.role !== 'Admin') {
+    const assignment = await db('audit_assignments')
+      .where({ audit_cycle_id: cycleId, auditor_id: userId })
+      .first();
+    if (!assignment) {
+      throw new AppError('You are not assigned to this audit cycle', 403);
+    }
+  }
+
   if (!AUDIT_FINDING_RESULTS.includes(result)) {
     throw new AppError('Invalid result value', 400, 'result');
   }
